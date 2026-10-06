@@ -1,0 +1,120 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://src/world/level.gd" id="1_level"]
+[ext_resource type="PackedScene" path="res://src/entities/player/player.tscn" id="2_player"]
+[ext_resource type="Script" path="res://src/components/level_warp.gd" id="3_warp"]
+[ext_resource type="PackedScene" path="res://src/entities/npcs/npc.tscn" id="4_npc"]
+[ext_resource type="Script" path="res://src/systems/farming/farm_grid.gd" id="5_farm_grid"]
+[ext_resource type="Script" path="res://src/components/bed.gd" id="6_bed"]
+
+[sub_resource type="WorldBoundaryShape2D" id="Bound_top"]
+normal = Vector2(0, 1)
+
+[sub_resource type="WorldBoundaryShape2D" id="Bound_bottom"]
+distance = -480.0
+
+[sub_resource type="WorldBoundaryShape2D" id="Bound_left"]
+normal = Vector2(1, 0)
+
+[sub_resource type="WorldBoundaryShape2D" id="Bound_right"]
+normal = Vector2(-1, 0)
+distance = -800.0
+
+[sub_resource type="RectangleShape2D" id="Bed_shape"]
+size = Vector2(28, 20)
+
+[sub_resource type="RectangleShape2D" id="Warp_shape"]
+size = Vector2(16, 64)
+
+[node name="Farm" type="Node2D"]
+script = ExtResource("1_level")
+bounds = Rect2i(0, 0, 800, 480)
+
+[node name="Ground" type="ColorRect" parent="."]
+offset_right = 800.0
+offset_bottom = 480.0
+mouse_filter = 2
+color = Color(0.36, 0.55, 0.3, 1)
+
+[node name="FarmGrid" type="Node2D" parent="."]
+position = Vector2(256, 160)
+script = ExtResource("5_farm_grid")
+area = Rect2i(0, 0, 20, 12)
+
+[node name="Entities" type="Node2D" parent="."]
+y_sort_enabled = true
+
+[node name="Player" parent="Entities" instance=ExtResource("2_player")]
+position = Vector2(140, 130)
+
+[node name="Guide" parent="Entities" instance=ExtResource("4_npc")]
+position = Vector2(200, 150)
+npc_name = "Guide"
+dialogue_id = &"welcome"
+
+[node name="Bed" type="Area2D" parent="Entities"]
+position = Vector2(96, 96)
+script = ExtResource("6_bed")
+prompt = "Sleep"
+
+[node name="Placeholder" type="ColorRect" parent="Entities/Bed"]
+offset_left = -12.0
+offset_top = -8.0
+offset_right = 12.0
+offset_bottom = 8.0
+mouse_filter = 2
+color = Color(0.55, 0.3, 0.45, 1)
+
+[node name="Label" type="Label" parent="Entities/Bed"]
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = -9.0
+theme_override_font_sizes/font_size = 8
+text = "Bed"
+horizontal_alignment = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Entities/Bed"]
+shape = SubResource("Bed_shape")
+
+[node name="Warps" type="Node2D" parent="."]
+
+[node name="ToTown" type="Area2D" parent="Warps"]
+position = Vector2(792, 240)
+script = ExtResource("3_warp")
+target_level = "res://src/world/town/town.tscn"
+target_spawn = &"FromFarm"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Warps/ToTown"]
+shape = SubResource("Warp_shape")
+
+[node name="Arrow" type="ColorRect" parent="Warps/ToTown"]
+offset_left = -8.0
+offset_top = -32.0
+offset_right = 8.0
+offset_bottom = 32.0
+mouse_filter = 2
+color = Color(1, 1, 1, 0.15)
+
+[node name="SpawnPoints" type="Node2D" parent="."]
+
+[node name="Default" type="Marker2D" parent="SpawnPoints"]
+position = Vector2(140, 130)
+
+[node name="FromTown" type="Marker2D" parent="SpawnPoints"]
+position = Vector2(760, 240)
+
+[node name="Bounds" type="StaticBody2D" parent="."]
+collision_mask = 0
+
+[node name="Top" type="CollisionShape2D" parent="Bounds"]
+shape = SubResource("Bound_top")
+
+[node name="Bottom" type="CollisionShape2D" parent="Bounds"]
+shape = SubResource("Bound_bottom")
+
+[node name="Left" type="CollisionShape2D" parent="Bounds"]
+shape = SubResource("Bound_left")
+
+[node name="Right" type="CollisionShape2D" parent="Bounds"]
+shape = SubResource("Bound_right")
