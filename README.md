@@ -1,6 +1,6 @@
 # Future Land
 
-A farming and life-sim game in the spirit of *Stardew Valley*, built with **Godot 4.5** and **GDScript** for the MS course *Advanced Game Design*.
+A farming and life-sim game in the spirit of *Stardew Valley*, built with **Godot 4.7** and **GDScript** for the MS course *Advanced Game Design*.
 
 ## Team
 
@@ -15,7 +15,7 @@ Ownership means "reviews changes to", not "only person allowed to touch". See [d
 
 ## Getting started
 
-1. Install **Godot 4.5.x (standard, not .NET)** from <https://godotengine.org/download>. Everyone must use the same minor version.
+1. Install **Godot 4.7.2 (standard, not .NET)** from <https://godotengine.org/download>. Everyone must use the same minor version.
 2. Clone the repo, open Godot, choose **Import** and select `future-land/project.godot`.
 3. Press **F5** to run.
 
