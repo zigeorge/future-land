@@ -1,0 +1,119 @@
+class_name FarmGrid
+extends Node2D
+## Farmable area inside the farm level. Draws GameState.farm and turns the
+## player's tool / seed / harvest actions into FarmState calls.
+##
+## Visuals are placeholder shapes drawn in _draw(). Crops use their
+## CropData.stage_textures automatically once the art exists.
+
+const GROUP := &"farm_grid"
+const CELL_SIZE := 16
+
+const AREA_COLOR := Color(1, 1, 1, 0.05)
+const SOIL_COLOR := Color("6b4a2b")
+const WET_SOIL_COLOR := Color("3f2a19")
+const CROP_COLOR := Color("7bd389")
+const READY_COLOR := Color("ffb703")
+const CURSOR_COLOR := Color(1, 1, 1, 0.6)
+
+## Farmable cells, relative to this node's position.
+@export var area := Rect2i(0, 0, 16, 10)
+
+var _cursor_cell := Vector2i.MAX
+
+
+func _ready() -> void:
+	add_to_group(GROUP)
+	EventBus.farm_changed.connect(func(_cell: Vector2i) -> void: queue_redraw())
+	EventBus.game_loaded.connect(queue_redraw)
+
+
+func _process(_delta: float) -> void:
+	var player := get_tree().get_first_node_in_group("player") as Player
+	var cell := world_to_cell(player.get_target_position()) if player else Vector2i.MAX
+	if not area.has_point(cell):
+		cell = Vector2i.MAX
+	if cell != _cursor_cell:
+		_cursor_cell = cell
+		queue_redraw()
+
+
+func world_to_cell(world_position: Vector2) -> Vector2i:
+	return Vector2i((to_local(world_position) / CELL_SIZE).floor())
+
+
+## Applies the given item to a cell. Returns true if something happened.
+func use_item(item: ItemData, cell: Vector2i) -> bool:
+	if not area.has_point(cell):
+		return false
+	match item.category:
+		ItemData.Category.TOOL:
+			return _use_tool(item, cell)
+		ItemData.Category.SEED:
+			return _plant_seed(item, cell)
+	return false
+
+
+func try_harvest(cell: Vector2i) -> bool:
+	if not area.has_point(cell) or not GameState.farm.can_harvest(cell):
+		return false
+	var crop := GameState.farm.harvest(cell)
+	var leftover := GameState.inventory.add_item(crop.harvest_item, crop.harvest_amount)
+	if leftover > 0:
+		# TODO(gameplay): drop leftover items on the ground instead.
+		EventBus.notification_requested.emit("Inventory full!")
+	EventBus.crop_harvested.emit(cell, crop.id)
+	return true
+
+
+func _use_tool(item: ItemData, cell: Vector2i) -> bool:
+	if GameState.energy < item.energy_cost:
+		EventBus.notification_requested.emit("Too tired...")
+		return false
+	var success := false
+	match item.tool_type:
+		ItemData.ToolType.HOE:
+			success = GameState.farm.till(cell)
+		ItemData.ToolType.WATERING_CAN:
+			success = GameState.farm.water(cell)
+	if success:
+		GameState.spend_energy(item.energy_cost)
+	return success
+
+
+func _plant_seed(item: ItemData, cell: Vector2i) -> bool:
+	var crop := Registry.get_crop(item.crop_id)
+	if crop == null:
+		return false
+	if not crop.grows_in(TimeManager.season):
+		EventBus.notification_requested.emit("%s can't grow in %s." % [crop.display_name, TimeManager.get_season_name()])
+		return false
+	if not GameState.farm.plant(cell, crop.id):
+		return false
+	GameState.inventory.remove_item(item.id, 1)
+	return true
+
+
+func _draw() -> void:
+	draw_rect(Rect2(area.position * CELL_SIZE, area.size * CELL_SIZE), AREA_COLOR)
+	for cell: Vector2i in GameState.farm.tiles:
+		var tile: FarmState.FarmTile = GameState.farm.tiles[cell]
+		var rect := Rect2(cell * CELL_SIZE, Vector2.ONE * CELL_SIZE)
+		draw_rect(rect.grow(-1), WET_SOIL_COLOR if tile.watered else SOIL_COLOR)
+		if tile.has_crop():
+			_draw_crop(tile, rect)
+	if _cursor_cell != Vector2i.MAX:
+		draw_rect(Rect2(_cursor_cell * CELL_SIZE, Vector2.ONE * CELL_SIZE), CURSOR_COLOR, false, 1.0)
+
+
+func _draw_crop(tile: FarmState.FarmTile, rect: Rect2) -> void:
+	var crop := Registry.get_crop(tile.crop_id)
+	if crop == null:
+		return
+	var stage := crop.get_stage(tile.days_grown)
+	if stage < crop.stage_textures.size() and crop.stage_textures[stage] != null:
+		draw_texture(crop.stage_textures[stage], rect.position)
+		return
+	var final_stage := crop.days_per_stage.size()
+	var radius := lerpf(2.0, CELL_SIZE * 0.4, float(stage) / final_stage)
+	draw_circle(rect.get_center(), radius, READY_COLOR if stage == final_stage else CROP_COLOR)

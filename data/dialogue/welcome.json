@@ -1,0 +1,8 @@
+{
+  "lines": [
+    { "speaker": "Guide", "text": "Welcome to Future Land! This farm is yours now." },
+    { "speaker": "Guide", "text": "Select the hoe (1) and press C or left-click to till the soil in front of you." },
+    { "speaker": "Guide", "text": "Plant seeds (3), water them (2), and they'll grow overnight. Press E to harvest when they're ripe." },
+    { "speaker": "Guide", "text": "Sleep in your bed when you're tired. Good luck!", "set_flag": "met_guide" }
+  ]
+}
