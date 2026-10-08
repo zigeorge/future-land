@@ -1,0 +1,74 @@
+name: Deploy web build
+
+# Exports the game for the browser and publishes it to GitHub Pages
+# on every push to main. Can also be run by hand from the Actions tab.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      GODOT_VERSION: 4.7.2
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Cache Godot and web export template
+        id: cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/godot
+            ~/.local/share/godot/export_templates
+          key: godot-${{ env.GODOT_VERSION }}-web-nothreads
+
+      - name: Install Godot and web export template
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: |
+          TEMPLATES=~/.local/share/godot/export_templates/${GODOT_VERSION}.stable
+          RELEASES=https://github.com/godotengine/godot/releases/download/${GODOT_VERSION}-stable
+          mkdir -p ~/godot "$TEMPLATES"
+          cd ~/godot
+          wget -q "$RELEASES/Godot_v${GODOT_VERSION}-stable_linux.x86_64.zip"
+          unzip -q "Godot_v${GODOT_VERSION}-stable_linux.x86_64.zip"
+          mv "Godot_v${GODOT_VERSION}-stable_linux.x86_64" godot
+          rm "Godot_v${GODOT_VERSION}-stable_linux.x86_64.zip"
+          # The full template bundle is ~1.3 GB; keep only the web one.
+          wget -q "$RELEASES/Godot_v${GODOT_VERSION}-stable_export_templates.tpz"
+          unzip -j -q "Godot_v${GODOT_VERSION}-stable_export_templates.tpz" \
+            templates/web_nothreads_release.zip templates/version.txt -d "$TEMPLATES"
+          rm "Godot_v${GODOT_VERSION}-stable_export_templates.tpz"
+
+      - name: Export web build
+        working-directory: future-land
+        run: |
+          mkdir -p ../build/web
+          ~/godot/godot --headless --import
+          ~/godot/godot --headless --export-release "Web" ../build/web/index.html
+          test -f ../build/web/index.pck
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: build/web
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
