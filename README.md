@@ -19,6 +19,15 @@ Ownership means "reviews changes to", not "only person allowed to touch". See [d
 2. Clone the repo, open Godot, choose **Import** and select `future-land/project.godot`.
 3. Press **F5** to run.
 
+### Play in the browser
+
+Every push to `main` builds the game for the web and publishes it to GitHub Pages:
+**https://hzyu-hub.github.io/Advance-Game/** (workflow: `.github/workflows/deploy-web.yml`).
+
+To test a web build locally: **Project → Export → Web → Export Project** into `build/web/` at the repo root (git ignores that folder), then run `python3 -m http.server -d build/web` and open <http://localhost:8000>. Opening `index.html` directly from disk does not work.
+
+The web build is single-threaded (`export_presets.cfg`), because GitHub Pages can't send the special headers Godot's multi-threaded build needs. Saves are stored in the browser.
+
 ### Controls
 
 | Action | Keys |
