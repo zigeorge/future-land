@@ -1,0 +1,16 @@
+# Normalize line endings so Windows/macOS/Linux teammates don't fight over diffs
+* text=auto eol=lf
+
+# Binary assets
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.webp binary
+*.ogg binary
+*.wav binary
+*.mp3 binary
+*.ttf binary
+*.otf binary
+*.aseprite binary
+*.ase binary
+*.psd binary

@@ -1,0 +1,17 @@
+# Godot 4 generated files
+.godot/
+/android/
+
+# Exports
+/build/
+/export/
+*.translation
+
+# Do NOT ignore *.import files — Godot 4 needs them committed.
+
+# OS / editor junk
+.DS_Store
+Thumbs.db
+*.tmp
+.vscode/
+.idea/

@@ -1,5 +1,8 @@
 name: Tests
 
+# Runs in the game repo (zigeorge/future-land), where this folder is the
+# repo root. In the team repo this file sits in future-land/ and is ignored.
+
 on:
   push:
   pull_request:
@@ -9,9 +12,6 @@ jobs:
     runs-on: ubuntu-latest
     env:
       GODOT_VERSION: 4.7.2
-    defaults:
-      run:
-        working-directory: future-land
     steps:
       - uses: actions/checkout@v4
 

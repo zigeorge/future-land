@@ -9,7 +9,7 @@ godot --headless --import            # first time only (builds the class cache)
 godot --headless -s tests/run_tests.gd
 ```
 
-GitHub Actions also runs the tests on every push and pull request (`.github/workflows/tests.yml`).
+GitHub Actions also runs the tests on every push to the public mirror repo, [zigeorge/future-land](https://github.com/zigeorge/future-land/actions) (`.github/workflows/tests.yml`). It doesn't run in the team repo.
 
 ### Writing a test
 

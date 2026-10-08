@@ -21,8 +21,9 @@ Ownership means "reviews changes to", not "only person allowed to touch". See [d
 
 ### Play in the browser
 
-Every push to `main` builds the game for the web and publishes it to GitHub Pages:
-**https://hzyu-hub.github.io/Advance-Game/** (workflow: `.github/workflows/deploy-web.yml`).
+**Play it: https://zigeorge.github.io/future-land/**
+
+Development happens in the team repo (`hzyu-hub/Advance-Game`). The `future-land/` folder is also mirrored to a separate public repo, [zigeorge/future-land](https://github.com/zigeorge/future-land), where GitHub Actions runs the tests and publishes the web build to GitHub Pages on every push to `main`. The workflows are in `future-land/.github/workflows/`. They only run in the mirror (GitHub ignores workflows outside the repo root), so they use none of the team repo's Actions minutes. **Don't commit directly to the mirror**: it is overwritten from the team repo.
 
 To test a web build locally: **Project → Export → Web → Export Project** into `build/web/` at the repo root (git ignores that folder), then run `python3 -m http.server -d build/web` and open <http://localhost:8000>. Opening `index.html` directly from disk does not work.
 

@@ -48,6 +48,6 @@ Follow the official [GDScript style guide](https://docs.godotengine.org/en/stabl
 ## Definition of done for a feature
 
 - [ ] Runs without errors or warnings in the Output panel
-- [ ] `godot --headless -s tests/run_tests.gd` (run inside `future-land/`) passes (CI checks this on every PR)
+- [ ] `godot --headless -s tests/run_tests.gd` (run inside `future-land/`) passes (the mirror repo's CI also runs it on every push)
 - [ ] New logic in `systems/` or `core/` has a test, where practical
 - [ ] Docs updated if you added a system, autoload, input action or folder

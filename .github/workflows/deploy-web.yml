@@ -2,6 +2,8 @@ name: Deploy web build
 
 # Exports the game for the browser and publishes it to GitHub Pages
 # on every push to main. Can also be run by hand from the Actions tab.
+# Runs in the game repo (zigeorge/future-land), where this folder is the
+# repo root. In the team repo this file sits in future-land/ and is ignored.
 
 on:
   push:
@@ -52,12 +54,12 @@ jobs:
           rm "Godot_v${GODOT_VERSION}-stable_export_templates.tpz"
 
       - name: Export web build
-        working-directory: future-land
         run: |
-          mkdir -p ../build/web
+          # .gdignore stops Godot from importing the exported files as assets.
+          mkdir -p build/web && touch build/.gdignore
           ~/godot/godot --headless --import
-          ~/godot/godot --headless --export-release "Web" ../build/web/index.html
-          test -f ../build/web/index.pck
+          ~/godot/godot --headless --export-release "Web" build/web/index.html
+          test -f build/web/index.pck
 
       - uses: actions/upload-pages-artifact@v3
         with:
