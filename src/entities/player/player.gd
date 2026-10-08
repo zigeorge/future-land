@@ -4,7 +4,8 @@ extends CharacterBody2D
 ##
 ## Art hookup: give $Sprite a SpriteFrames with animations named
 ## idle_down / idle_up / idle_left / idle_right and
-## walk_down / walk_up / walk_left / walk_right, then delete $Placeholder.
+## walk_down / walk_up / walk_left / walk_right. Frames are 16x32 with the
+## feet at the bottom; $Placeholder hides itself once frames are assigned.
 
 const INTERACT_REACH := 12.0
 
@@ -15,10 +16,12 @@ var facing := Vector2.DOWN
 @onready var sprite: AnimatedSprite2D = $Sprite
 @onready var interact_area: Area2D = $InteractArea
 @onready var camera: Camera2D = $Camera2D
+@onready var placeholder: CanvasItem = $Placeholder
 
 
 func _ready() -> void:
 	add_to_group("player")
+	placeholder.visible = sprite.sprite_frames == null
 	interact_area.position = facing * INTERACT_REACH
 
 

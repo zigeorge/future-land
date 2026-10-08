@@ -5,6 +5,12 @@ extends Control
 const SLOT_SIZE := Vector2(26, 26)
 const MESSAGE_SECONDS := 2.0
 
+## 26x26 hotbar slot frames (assets/art/ui/hotbar_slot.png and
+## hotbar_slot_selected.png). Without them, slots use the theme's panel style
+## and the selected slot is tinted.
+@export var slot_texture: Texture2D
+@export var selected_slot_texture: Texture2D
+
 var _slots: Array[PanelContainer] = []
 var _message_tween: Tween
 
@@ -109,4 +115,16 @@ func _update_hotbar() -> void:
 			label.text = item.display_name.left(5) + ("\n%d" % count if count > 1 else "")
 		else:
 			label.text = str(count) if count > 1 else ""
-		slot.self_modulate = Color(2.0, 1.7, 0.6) if i == GameState.selected_hotbar_slot else Color.WHITE
+		_style_slot(slot, i == GameState.selected_hotbar_slot)
+
+
+func _style_slot(slot: PanelContainer, selected: bool) -> void:
+	var texture := selected_slot_texture if selected else slot_texture
+	if texture:
+		var style := StyleBoxTexture.new()
+		style.texture = texture
+		slot.add_theme_stylebox_override("panel", style)
+		slot.self_modulate = Color.WHITE
+	else:
+		slot.remove_theme_stylebox_override("panel")
+		slot.self_modulate = Color(2.0, 1.7, 0.6) if selected else Color.WHITE

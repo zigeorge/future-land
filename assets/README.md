@@ -2,17 +2,21 @@
 
 Everything players see or hear goes here. Code never needs to change for you to replace a placeholder. Swap the texture or stream in the Inspector.
 
+**Graphics to-do list, file names and step-by-step setup: [ASSET_CHECKLIST.md](ASSET_CHECKLIST.md).**
+
 ## Folders
 
 ```
 art/characters/   player & NPC sprite sheets
 art/tilesets/     ground, paths, buildings (16×16 tiles)
 art/items/        inventory icons (16×16)
-art/environment/  trees, rocks, props, crops
+art/crops/        crop growth stages (16×16)
+art/environment/  trees, rocks, buildings, furniture, props
 art/ui/           panels, buttons, hotbar frames
 audio/music/      background music loops
 audio/sfx/        sound effects
-fonts/            pixel fonts
+fonts/            pixel fonts (+ license)
+branding/         loading screen, game icon
 themes/           main_theme.tres (UI look, applied project-wide)
 ```
 
@@ -27,14 +31,11 @@ themes/           main_theme.tres (UI look, applied project-wide)
 | Image format | PNG (source files like `.aseprite` can be committed too) |
 | Music | `.ogg`, looping enabled in the Import dock |
 | Sound effects | `.wav` (short) or `.ogg` |
-| Naming | `snake_case`, e.g. `player_walk.png`, `carrot_stage_2.png`, `hoe_swing.wav` |
+| Naming | `snake_case`, e.g. `player.png`, `carrot_2.png`, `hoe_swing.wav`. Full rules in [ASSET_CHECKLIST.md](ASSET_CHECKLIST.md#naming-rules) |
 
-## Hooking art up
+## Hooking assets up
 
-- **Player / NPCs:** select the `Sprite` (AnimatedSprite2D) node in `player.tscn` or `npc.tscn`, create a SpriteFrames, and add animations named `idle_down`, `idle_up`, `idle_left`, `idle_right`, `walk_down`, `walk_up`, `walk_left` and `walk_right`. Then delete the coloured `Placeholder` node.
-- **Item icons:** open `data/items/<item>.tres` and set `icon`.
-- **Crops:** open `data/crops/<crop>.tres` and fill `stage_textures`, one per growth stage plus a final "ready" texture.
-- **UI:** edit `themes/main_theme.tres` (fonts, panel styles, colours). It applies to every menu.
+- **Graphics:** see [How to add an asset](ASSET_CHECKLIST.md#how-to-add-an-asset).
 - **Music:** set the `music` property on a level's root node (e.g. `farm.tscn`).
 - **Audio buses:** `audio/default_bus_layout.tres` has `Music` and `SFX` buses for the volume sliders.
 

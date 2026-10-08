@@ -3,8 +3,9 @@ extends Node2D
 ## Farmable area inside the farm level. Draws GameState.farm and turns the
 ## player's tool / seed / harvest actions into FarmState calls.
 ##
-## Visuals are placeholder shapes drawn in _draw(). Crops use their
-## CropData.stage_textures automatically once the art exists.
+## Soil uses dry_soil_texture / wet_soil_texture and crops use their
+## CropData.stage_textures; anything without art falls back to placeholder
+## shapes drawn in _draw().
 
 const GROUP := &"farm_grid"
 const CELL_SIZE := 16
@@ -18,6 +19,9 @@ const CURSOR_COLOR := Color(1, 1, 1, 0.6)
 
 ## Farmable cells, relative to this node's position.
 @export var area := Rect2i(0, 0, 16, 10)
+## 16x16 tilled-soil tiles (assets/art/tilesets/soil_dry.png, soil_wet.png).
+@export var dry_soil_texture: Texture2D
+@export var wet_soil_texture: Texture2D
 
 var _cursor_cell := Vector2i.MAX
 
@@ -99,7 +103,11 @@ func _draw() -> void:
 	for cell: Vector2i in GameState.farm.tiles:
 		var tile: FarmState.FarmTile = GameState.farm.tiles[cell]
 		var rect := Rect2(cell * CELL_SIZE, Vector2.ONE * CELL_SIZE)
-		draw_rect(rect.grow(-1), WET_SOIL_COLOR if tile.watered else SOIL_COLOR)
+		var soil_texture := wet_soil_texture if tile.watered else dry_soil_texture
+		if soil_texture:
+			draw_texture(soil_texture, rect.position)
+		else:
+			draw_rect(rect.grow(-1), WET_SOIL_COLOR if tile.watered else SOIL_COLOR)
 		if tile.has_crop():
 			_draw_crop(tile, rect)
 	if _cursor_cell != Vector2i.MAX:
