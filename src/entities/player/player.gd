@@ -2,16 +2,16 @@ class_name Player
 extends CharacterBody2D
 ## Top-down player: movement, facing, interacting and using the selected item.
 ##
-## Art hookup: give $Sprite a SpriteFrames with animations named
-## idle_down / idle_up / idle_left / idle_right and
-## walk_down / walk_up / walk_left / walk_right. Frames are 16x32 with the
-## feet at the bottom; $Placeholder hides itself once frames are assigned.
+## The look comes from the avatar chosen at the start (GameState.avatar_id,
+## data/avatars/). $Placeholder shows until an avatar is applied.
 
 const INTERACT_REACH := 12.0
 
 @export var speed := 90.0
 
 var facing := Vector2.DOWN
+
+var _avatar: AvatarData
 
 @onready var sprite: AnimatedSprite2D = $Sprite
 @onready var interact_area: Area2D = $InteractArea
@@ -21,8 +21,9 @@ var facing := Vector2.DOWN
 
 func _ready() -> void:
 	add_to_group("player")
-	placeholder.visible = sprite.sprite_frames == null
 	interact_area.position = facing * INTERACT_REACH
+	EventBus.avatar_changed.connect(_on_avatar_changed)
+	_on_avatar_changed(GameState.avatar_id)
 
 
 func _physics_process(_delta: float) -> void:
@@ -66,6 +67,17 @@ func get_target_position() -> Vector2:
 	return global_position + facing * FarmGrid.CELL_SIZE
 
 
+func apply_avatar(avatar: AvatarData) -> void:
+	_avatar = avatar
+	sprite.sprite_frames = avatar.build_sprite_frames() if avatar else null
+	placeholder.visible = sprite.sprite_frames == null
+	_update_animation(false)
+
+
+func _on_avatar_changed(avatar_id: StringName) -> void:
+	apply_avatar(Registry.get_avatar(avatar_id) if avatar_id != &"" else null)
+
+
 func _interact_with_nearest() -> bool:
 	var nearest: Interactable = null
 	var nearest_distance := INF
@@ -99,9 +111,11 @@ func _get_farm_grid() -> FarmGrid:
 
 
 func _update_animation(moving: bool) -> void:
-	var animation := ("walk_" if moving else "idle_") + _direction_name(facing)
+	var direction := _direction_name(facing)
+	var animation := ("walk_" if moving else "idle_") + direction
 	if sprite.sprite_frames and sprite.sprite_frames.has_animation(animation):
 		sprite.play(animation)
+		sprite.flip_h = _avatar != null and _avatar.is_mirrored(direction)
 
 
 static func _to_cardinal(direction: Vector2) -> Vector2:

@@ -43,6 +43,11 @@ func get_minute() -> int:
 	return minutes % 60
 
 
+## Days since the game started: 1 on the first day, 29 on Summer 1, ...
+func get_day_number() -> int:
+	return ((year - 1) * SEASON_NAMES.size() + season) * DAYS_PER_SEASON + day
+
+
 func get_season_name() -> String:
 	return SEASON_NAMES[season]
 

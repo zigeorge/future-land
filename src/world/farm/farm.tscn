@@ -1,120 +1,571 @@
-[gd_scene format=3]
+[gd_scene format=4]
 
-[ext_resource type="Script" path="res://src/world/level.gd" id="1_level"]
-[ext_resource type="PackedScene" path="res://src/entities/player/player.tscn" id="2_player"]
-[ext_resource type="Script" path="res://src/components/level_warp.gd" id="3_warp"]
-[ext_resource type="PackedScene" path="res://src/entities/npcs/npc.tscn" id="4_npc"]
-[ext_resource type="Script" path="res://src/systems/farming/farm_grid.gd" id="5_farm_grid"]
-[ext_resource type="Script" path="res://src/components/bed.gd" id="6_bed"]
+[ext_resource type="Script" path="res://src/world/level.gd" id="1_qi3oq"]
+[ext_resource type="TileSet" path="res://assets/art/tilesets/world_tileset.tres" id="2_ld28u"]
+[ext_resource type="Script" path="res://src/systems/farming/farm_grid.gd" id="3_u0f21"]
+[ext_resource type="PackedScene" path="res://src/entities/player/player.tscn" id="4_fxiao"]
+[ext_resource type="PackedScene" path="res://src/world/props/house_farm.tscn" id="5_qvand"]
+[ext_resource type="Script" path="res://src/components/bed.gd" id="6_t2gwj"]
+[ext_resource type="PackedScene" path="res://src/world/props/fence.tscn" id="7_nan7k"]
+[ext_resource type="PackedScene" path="res://src/world/props/scarecrow.tscn" id="8_g0ef8"]
+[ext_resource type="PackedScene" path="res://src/world/props/sign.tscn" id="9_8gqyq"]
+[ext_resource type="PackedScene" path="res://src/world/props/solar_panel.tscn" id="10_d5bhp"]
+[ext_resource type="PackedScene" path="res://src/world/props/tree_pine.tscn" id="11_j2obx"]
+[ext_resource type="PackedScene" path="res://src/world/props/tree_oak.tscn" id="12_k7kl0"]
+[ext_resource type="PackedScene" path="res://src/world/props/tree_maple.tscn" id="13_hdmu7"]
+[ext_resource type="PackedScene" path="res://src/entities/npcs/npc.tscn" id="14_tn3wy"]
+[ext_resource type="Texture2D" path="res://assets/art/characters/government_official1.png" id="15_ow8c4"]
+[ext_resource type="Texture2D" path="res://assets/art/characters/inventor.png" id="16_nl26v"]
+[ext_resource type="Script" path="res://src/components/level_warp.gd" id="17_4es2c"]
 
-[sub_resource type="WorldBoundaryShape2D" id="Bound_top"]
-normal = Vector2(0, 1)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_x4imo"]
+size = Vector2(24, 12)
 
-[sub_resource type="WorldBoundaryShape2D" id="Bound_bottom"]
-distance = -480.0
-
-[sub_resource type="WorldBoundaryShape2D" id="Bound_left"]
-normal = Vector2(1, 0)
-
-[sub_resource type="WorldBoundaryShape2D" id="Bound_right"]
-normal = Vector2(-1, 0)
-distance = -800.0
-
-[sub_resource type="RectangleShape2D" id="Bed_shape"]
-size = Vector2(28, 20)
-
-[sub_resource type="RectangleShape2D" id="Warp_shape"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_gel7q"]
 size = Vector2(16, 64)
 
-[node name="Farm" type="Node2D"]
-script = ExtResource("1_level")
-bounds = Rect2i(0, 0, 800, 480)
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_c2vg4"]
+normal = Vector2(0, 1)
 
-[node name="Ground" type="ColorRect" parent="."]
-offset_right = 800.0
-offset_bottom = 480.0
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_qfxpc"]
+distance = -1040.0
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_o3ome"]
+normal = Vector2(1, 0)
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_n3rbs"]
+normal = Vector2(-1, 0)
+distance = -1280.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4on1d"]
+size = Vector2(176, 144)
+
+[node name="Farm" type="Node2D" unique_id=655423247]
+script = ExtResource("1_qi3oq")
+bounds = Rect2i(0, 0, 1280, 1040)
+
+[node name="Ground" type="ColorRect" parent="." unique_id=1788131867]
+offset_right = 1280.0
+offset_bottom = 1040.0
 mouse_filter = 2
-color = Color(0.36, 0.55, 0.3, 1)
+color = Color(0.3647059, 0.56078434, 0.29411766, 1)
 
-[node name="FarmGrid" type="Node2D" parent="."]
-position = Vector2(256, 160)
-script = ExtResource("5_farm_grid")
-area = Rect2i(0, 0, 20, 12)
+[node name="GroundTiles" type="TileMapLayer" parent="." unique_id=2083915262]
+tile_map_data = PackedByteArray("AAA9AA8AAAAAAAAAAAA9ABAAAAAAAAAAAAA9ABEAAAAAAAAAAAA9ABIAAAAAAAAAAAA+AA8AAAAAAAAAAAA+ABAAAAAAAAAAAAA+ABEAAAAAAAAAAAA+ABIAAAAAAAAAAAA/AA8AAAAAAAAAAAA/ABAAAAAAAAAAAAA/ABEAAAAAAAAAAAA/ABIAAAAAAAAAAAA9ABMAAAAAAAAAAAA+ABMAAAAAAAAAAAA/ABMAAAAAAAAAAABAABEAAAAAAAAAAABAABIAAAAAAAAAAABAABMAAAAAAAAAAABBABEAAAAAAAAAAABBABIAAAAAAAAAAABBABMAAAAAAAAAAABCABEAAAAAAAAAAABCABIAAAAAAAAAAABCABMAAAAAAAAAAABDABEAAAAAAAAAAABDABIAAAAAAAAAAABDABMAAAAAAAAAAABEABEAAAAAAAAAAABEABIAAAAAAAAAAABEABMAAAAAAAAAAABFABEAAAAAAAAAAABFABIAAAAAAAAAAABFABMAAAAAAAAAAABGABEAAAAAAAAAAABGABIAAAAAAAAAAABGABMAAAAAAAAAAABHABEAAAAAAAAAAABHABIAAAAAAAAAAABHABMAAAAAAAAAAABIABEAAAAAAAAAAABIABIAAAAAAAAAAABIABMAAAAAAAAAAABJABEAAAAAAAAAAABJABIAAAAAAAAAAABJABMAAAAAAAAAAABKABEAAAAAAAAAAABKABIAAAAAAAAAAABKABMAAAAAAAAAAABLABEAAAAAAAAAAABLABIAAAAAAAAAAABLABMAAAAAAAAAAABMABEAAAAAAAAAAABMABIAAAAAAAAAAABMABMAAAAAAAAAAABNABEAAAAAAAAAAABNABIAAAAAAAAAAABNABMAAAAAAAAAAABOABEAAAAAAAAAAABOABIAAAAAAAAAAABOABMAAAAAAAAAAABPABEAAAAAAAAAAABPABIAAAAAAAAAAABPABMAAAAAAAAAAAAGADAAAQADAAAAAAAGADEAAQAFAAAAAAAGADIAAQAEAAAAAAAGADMAAQAFAAEAAAAGADQAAQABAAAAAAAGADUAAQADAAAAAAAGADYAAQAGAAEAAAAGADcAAQAFAAAAAAAGADgAAQAFAAIAAAAHADAAAQAGAAAAAAAHADEAAQACAAEAAAAHADIAAQAEAAAAAAAHADMAAQAGAAAAAAAHADQAAQAFAAAAAAAHADUAAQADAAAAAAAHADYAAQAAAAEAAAAHADcAAQACAAAAAAAHADgAAQADAAIAAAAIADAAAQAEAAAAAAAIADEAAQACAAAAAAAIADIAAQABAAEAAAAIADMAAQAHAAAAAAAIADQAAQAFAAAAAAAIADUAAQAGAAEAAAAIADYAAQAEAAAAAAAIADcAAQAFAAEAAAAIADgAAQAHAAIAAAAJADAAAQAEAAEAAAAJADEAAQABAAEAAAAJADIAAQAGAAEAAAAJADMAAQAFAAAAAAAJADQAAQABAAAAAAAJADUAAQAEAAAAAAAJADYAAQAGAAAAAAAJADcAAQACAAAAAAAJADgAAQAHAAIAAAAKADAAAQABAAAAAAAKADEAAQACAAAAAAAKADIAAQAGAAEAAAAKADMAAQAFAAEAAAAKADQAAQAEAAAAAAAKADUAAQAEAAEAAAAKADYAAQACAAEAAAAKADcAAQAAAAEAAAAKADgAAQAGAAIAAAALADAAAQABAAEAAAALADEAAQABAAEAAAALADIAAQAEAAAAAAALADMAAQAFAAEAAAALADQAAQAAAAEAAAALADUAAQACAAAAAAALADYAAQABAAAAAAALADcAAQAFAAAAAAALADgAAQADAAIAAAAMADAAAQACAAAAAAAMADEAAQABAAAAAAAMADIAAQAGAAAAAAAMADMAAQADAAAAAAAMADQAAQABAAAAAAAMADUAAQAAAAEAAAAMADYAAQADAAEAAAAMADcAAQAAAAEAAAAMADgAAQACAAIAAAANADAAAQABAAAAAAANADEAAQAHAAAAAAANADIAAQACAAEAAAANADMAAQADAAAAAAANADQAAQAEAAEAAAANADUAAQAEAAEAAAANADYAAQAAAAAAAAANADcAAQAGAAEAAAANADgAAQAEAAIAAAAOADAAAQABAAEAAAAOADEAAQAAAAEAAAAOADIAAQAFAAEAAAAOADMAAQAEAAEAAAAOADQAAQADAAEAAAAOADUAAQAEAAEAAAAOADYAAQABAAEAAAAOADcAAQABAAEAAAAOADgAAQAAAAIAAAAPADAAAQAFAAAAAAAPADEAAQACAAEAAAAPADIAAQAFAAEAAAAPADMAAQAFAAEAAAAPADQAAQAEAAEAAAAPADUAAQAAAAEAAAAPADYAAQABAAAAAAAPADcAAQAEAAAAAAAPADgAAQADAAIAAAAQADAAAQACAAAAAAAQADEAAQAAAAAAAAAQADIAAQABAAAAAAAQADMAAQACAAEAAAAQADQAAQAHAAAAAAAQADUAAQAEAAEAAAAQADYAAQABAAEAAAAQADcAAQACAAEAAAAQADgAAQAEAAIAAAA=")
+tile_set = ExtResource("2_ld28u")
 
-[node name="Entities" type="Node2D" parent="."]
+[node name="Decor" type="TileMapLayer" parent="." unique_id=397643742]
+tile_map_data = PackedByteArray("AAACAAgAAgADAAMAAAACADkAAwACAAEAAAAEABUAAgAAAAAAAAAEADkAAgACAAAAAAAFAAUAAwADAAAAAAAFABIAAgACAAIAAAAFABUAAwADAAIAAAAFACAAAgADAAAAAAAFACsAAgACAAAAAAAGABUAAgADAAMAAAAGACMAAwADAAMAAAAHAAgAAgAAAAIAAAAHAAwAAgADAAMAAAAHABAAAgADAAIAAAAHACMAAgAAAAMAAAAIABQAAgADAAAAAAAJAAwAAwADAAMAAAAJABkAAwADAAIAAAAKABkAAgABAAAAAAAKAD8AAwACAAAAAAALAAEAAwACAAAAAAALAA8AAwABAAIAAAAMABkAAgACAAIAAAANAD0AAgAAAAEAAAAOAAwAAgADAAAAAAAOABoAAgADAAEAAAAOACIAAwADAAAAAAAOACcAAgACAAMAAAAPAB0AAgADAAEAAAAPAC4AAwAAAAAAAAAQAAYAAgADAAIAAAAQAA0AAgACAAAAAAAQACkAAgACAAIAAAARABkAAgACAAAAAAARABsAAgACAAIAAAARACsAAwADAAEAAAASAAoAAgAAAAMAAAASABAAAgAAAAIAAAASADUAAgAAAAEAAAATAAcAAgAAAAEAAAATAAoAAgABAAIAAAATAAwAAgAAAAMAAAATABAAAgAAAAIAAAATABcAAgAAAAEAAAATABkAAwAAAAIAAAATACMAAwADAAEAAAATAD4AAwACAAIAAAAUAAcAAgACAAEAAAAUABAAAgAAAAAAAAAUABEAAgAAAAAAAAAUAB4AAgACAAMAAAAUACMAAgACAAEAAAAVAAwAAgAAAAMAAAAVACgAAgAAAAEAAAAVAC0AAgADAAMAAAAVADMAAgACAAIAAAAWACQAAgACAAEAAAAXABMAAgADAAAAAAAXACwAAgACAAMAAAAXADAAAgADAAMAAAAYAB0AAgAAAAIAAAAYAB8AAwACAAAAAAAZAAcAAgABAAAAAAAZAAoAAgACAAMAAAAZABcAAgAAAAAAAAAZACIAAgADAAIAAAAZADEAAgABAAAAAAAZADwAAwADAAAAAAAaAAgAAgADAAAAAAAbAB4AAgABAAAAAAAbADAAAgAAAAMAAAAbAD0AAwABAAMAAAAdAC4AAgADAAIAAAAeADEAAgADAAIAAAAfADgAAgABAAAAAAAgAAsAAgADAAAAAAAhAAgAAgABAAAAAAAhAAoAAwACAAAAAAAhAA4AAgABAAIAAAAhACsAAwABAAMAAAAhADUAAgABAAAAAAAiAC0AAgABAAMAAAAiADEAAgADAAAAAAAiADMAAgADAAEAAAAiADsAAgACAAMAAAAjACoAAwABAAEAAAAkAA4AAgAAAAEAAAAkACsAAwACAAEAAAAkADEAAgABAAAAAAAlAAkAAgABAAIAAAAmACwAAgACAAEAAAAnAC4AAgAAAAMAAAAnADoAAgACAAIAAAAoAAwAAgACAAAAAAAoACsAAgACAAMAAAAoAC8AAgADAAMAAAApAAkAAgABAAMAAAApAAwAAgACAAAAAAApABEAAgAAAAEAAAApACwAAgADAAIAAAApADIAAgACAAIAAAApADwAAgABAAIAAAArADMAAgACAAAAAAAsAC8AAgAAAAEAAAAtAD8AAwAAAAEAAAAuADUAAgABAAMAAAAvAAgAAgABAAEAAAAvADcAAgACAAMAAAAwADQAAwADAAMAAAAxACkAAgABAAAAAAAxAC0AAgABAAAAAAAxADgAAwADAAMAAAAxADoAAgACAAAAAAAzABAAAgADAAMAAAAzADkAAgAAAAMAAAA0AAcAAgACAAIAAAA1AAUAAwADAAEAAAA1AAwAAgABAAMAAAA1ADAAAgACAAMAAAA2AA0AAwADAAIAAAA2ADQAAwAAAAEAAAA3AA4AAwABAAMAAAA4ABEAAgACAAAAAAA4ADIAAgAAAAMAAAA4ADwAAgABAAAAAAA5ABEAAgADAAMAAAA5ABUAAwACAAMAAAA5ACIAAgABAAEAAAA5ACsAAwAAAAMAAAA5ADwAAgABAAIAAAA6ABEAAgABAAIAAAA6AB4AAgACAAMAAAA7ACYAAwADAAAAAAA7ADYAAgADAAEAAAA8AB0AAgADAAMAAAA9ABwAAgABAAEAAAA+AB0AAwABAAMAAAA+AC4AAgACAAMAAAA/ADUAAwABAAAAAABBAAgAAgAAAAIAAABBABcAAgABAAIAAABBABkAAgAAAAEAAABCAAYAAwABAAEAAABCAAgAAgAAAAIAAABCADMAAwABAAIAAABDAAQAAwADAAMAAABDADwAAgACAAAAAABEAAcAAgABAAIAAABEABoAAgABAAEAAABEACoAAgADAAIAAABFAB0AAgADAAEAAABGABcAAgAAAAIAAABGACEAAgAAAAMAAABHAA4AAgACAAIAAABHABoAAgADAAEAAABHAB8AAgABAAIAAABHACQAAwABAAAAAABHACkAAgADAAMAAABIACQAAgADAAIAAABIACgAAgABAAAAAABIACoAAwAAAAAAAABIADMAAgADAAAAAABIADkAAwACAAMAAABJAA4AAgACAAIAAABJACwAAgACAAEAAABJAD4AAwADAAMAAABKAAsAAgADAAAAAABKADkAAwACAAAAAABLABYAAwABAAIAAABLAB8AAgABAAAAAABLACwAAwAAAAIAAABMACEAAgAAAAAAAABMACYAAwACAAMAAABMADEAAgADAAAAAABNAA0AAwADAAEAAAA=")
+tile_set = ExtResource("2_ld28u")
+
+[node name="FarmGrid" type="Node2D" parent="." unique_id=1843307094]
+script = ExtResource("3_u0f21")
+area = Rect2i(30, 20, 26, 20)
+
+[node name="Entities" type="Node2D" parent="." unique_id=2034488462]
 y_sort_enabled = true
 
-[node name="Player" parent="Entities" instance=ExtResource("2_player")]
-position = Vector2(140, 130)
+[node name="Player" parent="Entities" unique_id=1082676348 instance=ExtResource("4_fxiao")]
 
-[node name="Guide" parent="Entities" instance=ExtResource("4_npc")]
-position = Vector2(200, 150)
-npc_name = "Guide"
-dialogue_id = &"welcome"
+[node name="HouseFarm" parent="Entities" unique_id=1621275700 instance=ExtResource("5_qvand")]
+position = Vector2(1000, 232)
 
-[node name="Bed" type="Area2D" parent="Entities"]
-position = Vector2(96, 96)
-script = ExtResource("6_bed")
+[node name="FarmhouseDoor" type="Area2D" parent="Entities" unique_id=1396478462]
+position = Vector2(1000, 228)
+script = ExtResource("6_t2gwj")
 prompt = "Sleep"
 
-[node name="Placeholder" type="ColorRect" parent="Entities/Bed"]
-offset_left = -12.0
-offset_top = -8.0
-offset_right = 12.0
-offset_bottom = 8.0
-mouse_filter = 2
-color = Color(0.55, 0.3, 0.45, 1)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Entities/FarmhouseDoor" unique_id=294318637]
+shape = SubResource("RectangleShape2D_x4imo")
 
-[node name="Label" type="Label" parent="Entities/Bed"]
-offset_left = -20.0
-offset_top = -20.0
-offset_right = 20.0
-offset_bottom = -9.0
-theme_override_font_sizes/font_size = 8
-text = "Bed"
-horizontal_alignment = 1
+[node name="Fence" parent="Entities" unique_id=1809513594 instance=ExtResource("7_nan7k")]
+position = Vector2(488, 318)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Entities/Bed"]
-shape = SubResource("Bed_shape")
+[node name="Fence2" parent="Entities" unique_id=854358336 instance=ExtResource("7_nan7k")]
+position = Vector2(504, 318)
 
-[node name="Warps" type="Node2D" parent="."]
+[node name="Fence3" parent="Entities" unique_id=1885859557 instance=ExtResource("7_nan7k")]
+position = Vector2(520, 318)
 
-[node name="ToTown" type="Area2D" parent="Warps"]
-position = Vector2(792, 240)
-script = ExtResource("3_warp")
-target_level = "res://src/world/town/town.tscn"
+[node name="Fence4" parent="Entities" unique_id=1484424766 instance=ExtResource("7_nan7k")]
+position = Vector2(536, 318)
+
+[node name="Fence5" parent="Entities" unique_id=1062547824 instance=ExtResource("7_nan7k")]
+position = Vector2(552, 318)
+
+[node name="Fence6" parent="Entities" unique_id=171184347 instance=ExtResource("7_nan7k")]
+position = Vector2(568, 318)
+
+[node name="Fence7" parent="Entities" unique_id=1518610179 instance=ExtResource("7_nan7k")]
+position = Vector2(584, 318)
+
+[node name="Fence8" parent="Entities" unique_id=1234619587 instance=ExtResource("7_nan7k")]
+position = Vector2(600, 318)
+
+[node name="Fence9" parent="Entities" unique_id=239569720 instance=ExtResource("7_nan7k")]
+position = Vector2(616, 318)
+
+[node name="Fence10" parent="Entities" unique_id=1653695206 instance=ExtResource("7_nan7k")]
+position = Vector2(632, 318)
+
+[node name="Fence11" parent="Entities" unique_id=1446020845 instance=ExtResource("7_nan7k")]
+position = Vector2(648, 318)
+
+[node name="Fence12" parent="Entities" unique_id=1468774733 instance=ExtResource("7_nan7k")]
+position = Vector2(664, 318)
+
+[node name="Fence13" parent="Entities" unique_id=1131262402 instance=ExtResource("7_nan7k")]
+position = Vector2(680, 318)
+
+[node name="Fence14" parent="Entities" unique_id=732290134 instance=ExtResource("7_nan7k")]
+position = Vector2(712, 318)
+
+[node name="Fence15" parent="Entities" unique_id=1456595632 instance=ExtResource("7_nan7k")]
+position = Vector2(728, 318)
+
+[node name="Fence16" parent="Entities" unique_id=749201193 instance=ExtResource("7_nan7k")]
+position = Vector2(744, 318)
+
+[node name="Fence17" parent="Entities" unique_id=204450729 instance=ExtResource("7_nan7k")]
+position = Vector2(760, 318)
+
+[node name="Fence18" parent="Entities" unique_id=864195892 instance=ExtResource("7_nan7k")]
+position = Vector2(776, 318)
+
+[node name="Fence19" parent="Entities" unique_id=307098860 instance=ExtResource("7_nan7k")]
+position = Vector2(792, 318)
+
+[node name="Fence20" parent="Entities" unique_id=815920851 instance=ExtResource("7_nan7k")]
+position = Vector2(808, 318)
+
+[node name="Fence21" parent="Entities" unique_id=567894188 instance=ExtResource("7_nan7k")]
+position = Vector2(824, 318)
+
+[node name="Fence22" parent="Entities" unique_id=1372938628 instance=ExtResource("7_nan7k")]
+position = Vector2(840, 318)
+
+[node name="Fence23" parent="Entities" unique_id=1895003791 instance=ExtResource("7_nan7k")]
+position = Vector2(856, 318)
+
+[node name="Fence24" parent="Entities" unique_id=861493894 instance=ExtResource("7_nan7k")]
+position = Vector2(872, 318)
+
+[node name="Fence25" parent="Entities" unique_id=2008523575 instance=ExtResource("7_nan7k")]
+position = Vector2(888, 318)
+
+[node name="Scarecrow" parent="Entities" unique_id=1036730967 instance=ExtResource("8_g0ef8")]
+position = Vector2(696, 318)
+
+[node name="Sign" parent="Entities" unique_id=1304972835 instance=ExtResource("9_8gqyq")]
+position = Vector2(912, 308)
+
+[node name="SolarPanel" parent="Entities" unique_id=1325879781 instance=ExtResource("10_d5bhp")]
+position = Vector2(1056, 228)
+
+[node name="SolarPanel2" parent="Entities" unique_id=943684338 instance=ExtResource("10_d5bhp")]
+position = Vector2(1074, 228)
+
+[node name="TreePine" parent="Entities" unique_id=2003065443 instance=ExtResource("11_j2obx")]
+position = Vector2(38, 45)
+
+[node name="TreeOak" parent="Entities" unique_id=1928925170 instance=ExtResource("12_k7kl0")]
+position = Vector2(77, 41)
+
+[node name="TreePine2" parent="Entities" unique_id=1981184299 instance=ExtResource("11_j2obx")]
+position = Vector2(114, 37)
+
+[node name="TreeMaple" parent="Entities" unique_id=195267480 instance=ExtResource("13_hdmu7")]
+position = Vector2(143, 37)
+
+[node name="TreePine3" parent="Entities" unique_id=299235374 instance=ExtResource("11_j2obx")]
+position = Vector2(171, 42)
+
+[node name="TreePine4" parent="Entities" unique_id=1198151994 instance=ExtResource("11_j2obx")]
+position = Vector2(213, 35)
+
+[node name="TreeMaple2" parent="Entities" unique_id=50629972 instance=ExtResource("13_hdmu7")]
+position = Vector2(243, 45)
+
+[node name="TreeMaple3" parent="Entities" unique_id=513967673 instance=ExtResource("13_hdmu7")]
+position = Vector2(278, 42)
+
+[node name="TreeOak2" parent="Entities" unique_id=1611818942 instance=ExtResource("12_k7kl0")]
+position = Vector2(315, 34)
+
+[node name="TreeMaple4" parent="Entities" unique_id=1325862531 instance=ExtResource("13_hdmu7")]
+position = Vector2(347, 41)
+
+[node name="TreeMaple5" parent="Entities" unique_id=835575027 instance=ExtResource("13_hdmu7")]
+position = Vector2(381, 35)
+
+[node name="TreeOak3" parent="Entities" unique_id=1366443480 instance=ExtResource("12_k7kl0")]
+position = Vector2(411, 45)
+
+[node name="TreeOak4" parent="Entities" unique_id=1201632388 instance=ExtResource("12_k7kl0")]
+position = Vector2(455, 38)
+
+[node name="TreeMaple6" parent="Entities" unique_id=1831698380 instance=ExtResource("13_hdmu7")]
+position = Vector2(481, 40)
+
+[node name="TreePine5" parent="Entities" unique_id=921803621 instance=ExtResource("11_j2obx")]
+position = Vector2(525, 36)
+
+[node name="TreeMaple7" parent="Entities" unique_id=1771441869 instance=ExtResource("13_hdmu7")]
+position = Vector2(551, 44)
+
+[node name="TreeMaple8" parent="Entities" unique_id=374580594 instance=ExtResource("13_hdmu7")]
+position = Vector2(584, 38)
+
+[node name="TreeMaple9" parent="Entities" unique_id=147796838 instance=ExtResource("13_hdmu7")]
+position = Vector2(627, 39)
+
+[node name="TreeOak5" parent="Entities" unique_id=1073429653 instance=ExtResource("12_k7kl0")]
+position = Vector2(661, 45)
+
+[node name="TreePine6" parent="Entities" unique_id=568600610 instance=ExtResource("11_j2obx")]
+position = Vector2(692, 42)
+
+[node name="TreePine7" parent="Entities" unique_id=1035340825 instance=ExtResource("11_j2obx")]
+position = Vector2(723, 35)
+
+[node name="TreeOak6" parent="Entities" unique_id=69869715 instance=ExtResource("12_k7kl0")]
+position = Vector2(756, 37)
+
+[node name="TreePine8" parent="Entities" unique_id=1199358236 instance=ExtResource("11_j2obx")]
+position = Vector2(794, 45)
+
+[node name="TreePine9" parent="Entities" unique_id=1797731533 instance=ExtResource("11_j2obx")]
+position = Vector2(830, 38)
+
+[node name="TreeMaple10" parent="Entities" unique_id=630393821 instance=ExtResource("13_hdmu7")]
+position = Vector2(862, 41)
+
+[node name="TreeOak7" parent="Entities" unique_id=350878818 instance=ExtResource("12_k7kl0")]
+position = Vector2(897, 40)
+
+[node name="TreePine10" parent="Entities" unique_id=966479600 instance=ExtResource("11_j2obx")]
+position = Vector2(928, 41)
+
+[node name="TreeMaple11" parent="Entities" unique_id=1271442692 instance=ExtResource("13_hdmu7")]
+position = Vector2(963, 37)
+
+[node name="TreeMaple12" parent="Entities" unique_id=1525372977 instance=ExtResource("13_hdmu7")]
+position = Vector2(1006, 37)
+
+[node name="TreeOak8" parent="Entities" unique_id=757738041 instance=ExtResource("12_k7kl0")]
+position = Vector2(1033, 38)
+
+[node name="TreePine11" parent="Entities" unique_id=1391543291 instance=ExtResource("11_j2obx")]
+position = Vector2(1067, 37)
+
+[node name="TreeMaple13" parent="Entities" unique_id=191504406 instance=ExtResource("13_hdmu7")]
+position = Vector2(1107, 35)
+
+[node name="TreeOak9" parent="Entities" unique_id=837518066 instance=ExtResource("12_k7kl0")]
+position = Vector2(1136, 41)
+
+[node name="TreePine12" parent="Entities" unique_id=70477017 instance=ExtResource("11_j2obx")]
+position = Vector2(1166, 36)
+
+[node name="TreeOak10" parent="Entities" unique_id=247920615 instance=ExtResource("12_k7kl0")]
+position = Vector2(1206, 35)
+
+[node name="TreePine13" parent="Entities" unique_id=1492026281 instance=ExtResource("11_j2obx")]
+position = Vector2(1240, 39)
+
+[node name="TreeOak11" parent="Entities" unique_id=21480964 instance=ExtResource("12_k7kl0")]
+position = Vector2(55, 81)
+
+[node name="TreeMaple14" parent="Entities" unique_id=587328206 instance=ExtResource("13_hdmu7")]
+position = Vector2(121, 82)
+
+[node name="TreeMaple15" parent="Entities" unique_id=2088395699 instance=ExtResource("13_hdmu7")]
+position = Vector2(179, 88)
+
+[node name="TreePine14" parent="Entities" unique_id=664070521 instance=ExtResource("11_j2obx")]
+position = Vector2(238, 88)
+
+[node name="TreePine15" parent="Entities" unique_id=668703112 instance=ExtResource("11_j2obx")]
+position = Vector2(294, 84)
+
+[node name="TreeOak12" parent="Entities" unique_id=1699223235 instance=ExtResource("12_k7kl0")]
+position = Vector2(359, 88)
+
+[node name="TreeMaple16" parent="Entities" unique_id=560241444 instance=ExtResource("13_hdmu7")]
+position = Vector2(422, 81)
+
+[node name="TreePine16" parent="Entities" unique_id=366386959 instance=ExtResource("11_j2obx")]
+position = Vector2(482, 89)
+
+[node name="TreePine17" parent="Entities" unique_id=1105356405 instance=ExtResource("11_j2obx")]
+position = Vector2(540, 90)
+
+[node name="TreeMaple17" parent="Entities" unique_id=1661790384 instance=ExtResource("13_hdmu7")]
+position = Vector2(604, 87)
+
+[node name="TreePine18" parent="Entities" unique_id=1781450952 instance=ExtResource("11_j2obx")]
+position = Vector2(661, 82)
+
+[node name="TreeOak13" parent="Entities" unique_id=2039714341 instance=ExtResource("12_k7kl0")]
+position = Vector2(724, 87)
+
+[node name="TreeMaple18" parent="Entities" unique_id=1744058516 instance=ExtResource("13_hdmu7")]
+position = Vector2(778, 78)
+
+[node name="TreeMaple19" parent="Entities" unique_id=1182750665 instance=ExtResource("13_hdmu7")]
+position = Vector2(842, 84)
+
+[node name="TreePine19" parent="Entities" unique_id=1821807002 instance=ExtResource("11_j2obx")]
+position = Vector2(1140, 86)
+
+[node name="TreeOak14" parent="Entities" unique_id=366868239 instance=ExtResource("12_k7kl0")]
+position = Vector2(1196, 89)
+
+[node name="TreeOak15" parent="Entities" unique_id=1672848822 instance=ExtResource("12_k7kl0")]
+position = Vector2(27, 114)
+
+[node name="TreeOak16" parent="Entities" unique_id=587852823 instance=ExtResource("12_k7kl0")]
+position = Vector2(28, 155)
+
+[node name="TreeMaple20" parent="Entities" unique_id=1699984112 instance=ExtResource("13_hdmu7")]
+position = Vector2(20, 190)
+
+[node name="TreePine20" parent="Entities" unique_id=858968177 instance=ExtResource("11_j2obx")]
+position = Vector2(21, 225)
+
+[node name="TreeOak17" parent="Entities" unique_id=2006406154 instance=ExtResource("12_k7kl0")]
+position = Vector2(26, 256)
+
+[node name="TreeMaple21" parent="Entities" unique_id=1365640663 instance=ExtResource("13_hdmu7")]
+position = Vector2(20, 290)
+
+[node name="TreePine21" parent="Entities" unique_id=540780356 instance=ExtResource("11_j2obx")]
+position = Vector2(29, 331)
+
+[node name="TreePine22" parent="Entities" unique_id=672665948 instance=ExtResource("11_j2obx")]
+position = Vector2(24, 360)
+
+[node name="TreePine23" parent="Entities" unique_id=941582149 instance=ExtResource("11_j2obx")]
+position = Vector2(23, 399)
+
+[node name="TreePine24" parent="Entities" unique_id=1134344777 instance=ExtResource("11_j2obx")]
+position = Vector2(25, 430)
+
+[node name="TreeMaple22" parent="Entities" unique_id=939522571 instance=ExtResource("13_hdmu7")]
+position = Vector2(22, 460)
+
+[node name="TreeMaple23" parent="Entities" unique_id=1615945479 instance=ExtResource("13_hdmu7")]
+position = Vector2(23, 500)
+
+[node name="TreePine25" parent="Entities" unique_id=1426483438 instance=ExtResource("11_j2obx")]
+position = Vector2(30, 540)
+
+[node name="TreeOak18" parent="Entities" unique_id=724525136 instance=ExtResource("12_k7kl0")]
+position = Vector2(20, 568)
+
+[node name="TreeMaple24" parent="Entities" unique_id=983360990 instance=ExtResource("13_hdmu7")]
+position = Vector2(27, 604)
+
+[node name="TreeMaple25" parent="Entities" unique_id=1136310612 instance=ExtResource("13_hdmu7")]
+position = Vector2(28, 636)
+
+[node name="TreeOak19" parent="Entities" unique_id=687144021 instance=ExtResource("12_k7kl0")]
+position = Vector2(29, 680)
+
+[node name="TreePine26" parent="Entities" unique_id=1808875207 instance=ExtResource("11_j2obx")]
+position = Vector2(23, 708)
+
+[node name="TreeOak20" parent="Entities" unique_id=1451451727 instance=ExtResource("12_k7kl0")]
+position = Vector2(24, 739)
+
+[node name="TreeMaple26" parent="Entities" unique_id=1806517341 instance=ExtResource("13_hdmu7")]
+position = Vector2(19, 782)
+
+[node name="TreePine27" parent="Entities" unique_id=1462802099 instance=ExtResource("11_j2obx")]
+position = Vector2(21, 811)
+
+[node name="TreePine28" parent="Entities" unique_id=1266420730 instance=ExtResource("11_j2obx")]
+position = Vector2(27, 847)
+
+[node name="TreePine29" parent="Entities" unique_id=1485166162 instance=ExtResource("11_j2obx")]
+position = Vector2(29, 883)
+
+[node name="TreePine30" parent="Entities" unique_id=141440873 instance=ExtResource("11_j2obx")]
+position = Vector2(23, 917)
+
+[node name="TreePine31" parent="Entities" unique_id=836808882 instance=ExtResource("11_j2obx")]
+position = Vector2(28, 948)
+
+[node name="TreeOak21" parent="Entities" unique_id=1825648161 instance=ExtResource("12_k7kl0")]
+position = Vector2(24, 986)
+
+[node name="TreeOak22" parent="Entities" unique_id=1279085662 instance=ExtResource("12_k7kl0")]
+position = Vector2(19, 1017)
+
+[node name="TreePine32" parent="Entities" unique_id=452176325 instance=ExtResource("11_j2obx")]
+position = Vector2(64, 137)
+
+[node name="TreePine33" parent="Entities" unique_id=991546337 instance=ExtResource("11_j2obx")]
+position = Vector2(55, 201)
+
+[node name="TreeMaple27" parent="Entities" unique_id=1255975709 instance=ExtResource("13_hdmu7")]
+position = Vector2(65, 257)
+
+[node name="TreeOak23" parent="Entities" unique_id=508087116 instance=ExtResource("12_k7kl0")]
+position = Vector2(54, 317)
+
+[node name="TreeOak24" parent="Entities" unique_id=884489946 instance=ExtResource("12_k7kl0")]
+position = Vector2(61, 384)
+
+[node name="TreePine34" parent="Entities" unique_id=230469250 instance=ExtResource("11_j2obx")]
+position = Vector2(63, 436)
+
+[node name="TreeOak25" parent="Entities" unique_id=661630237 instance=ExtResource("12_k7kl0")]
+position = Vector2(65, 505)
+
+[node name="TreeMaple28" parent="Entities" unique_id=1011641998 instance=ExtResource("13_hdmu7")]
+position = Vector2(58, 559)
+
+[node name="TreePine35" parent="Entities" unique_id=1893330724 instance=ExtResource("11_j2obx")]
+position = Vector2(65, 623)
+
+[node name="TreeOak26" parent="Entities" unique_id=1011204480 instance=ExtResource("12_k7kl0")]
+position = Vector2(66, 676)
+
+[node name="TreePine36" parent="Entities" unique_id=1348823246 instance=ExtResource("11_j2obx")]
+position = Vector2(64, 740)
+
+[node name="TreePine37" parent="Entities" unique_id=1548589947 instance=ExtResource("11_j2obx")]
+position = Vector2(295, 1034)
+
+[node name="TreeOak27" parent="Entities" unique_id=853110688 instance=ExtResource("12_k7kl0")]
+position = Vector2(395, 1028)
+
+[node name="TreeOak28" parent="Entities" unique_id=137001824 instance=ExtResource("12_k7kl0")]
+position = Vector2(489, 1029)
+
+[node name="TreeMaple29" parent="Entities" unique_id=1780934051 instance=ExtResource("13_hdmu7")]
+position = Vector2(588, 1029)
+
+[node name="TreeMaple30" parent="Entities" unique_id=1960650077 instance=ExtResource("13_hdmu7")]
+position = Vector2(680, 1030)
+
+[node name="TreeMaple31" parent="Entities" unique_id=909086387 instance=ExtResource("13_hdmu7")]
+position = Vector2(772, 1035)
+
+[node name="TreePine38" parent="Entities" unique_id=71325363 instance=ExtResource("11_j2obx")]
+position = Vector2(869, 1031)
+
+[node name="TreePine39" parent="Entities" unique_id=2099719704 instance=ExtResource("11_j2obx")]
+position = Vector2(962, 1025)
+
+[node name="TreeOak29" parent="Entities" unique_id=749382205 instance=ExtResource("12_k7kl0")]
+position = Vector2(1064, 1028)
+
+[node name="TreeMaple32" parent="Entities" unique_id=2116137242 instance=ExtResource("13_hdmu7")]
+position = Vector2(1154, 1033)
+
+[node name="TreeOak30" parent="Entities" unique_id=707038509 instance=ExtResource("12_k7kl0")]
+position = Vector2(1256, 1029)
+
+[node name="TreePine40" parent="Entities" unique_id=491854057 instance=ExtResource("11_j2obx")]
+position = Vector2(1259, 119)
+
+[node name="TreeMaple33" parent="Entities" unique_id=443393685 instance=ExtResource("13_hdmu7")]
+position = Vector2(1263, 170)
+
+[node name="TreeMaple34" parent="Entities" unique_id=789704651 instance=ExtResource("13_hdmu7")]
+position = Vector2(1267, 227)
+
+[node name="TreePine41" parent="Entities" unique_id=420793145 instance=ExtResource("11_j2obx")]
+position = Vector2(1258, 363)
+
+[node name="TreeMaple35" parent="Entities" unique_id=1816582036 instance=ExtResource("13_hdmu7")]
+position = Vector2(1256, 419)
+
+[node name="TreeOak31" parent="Entities" unique_id=123989767 instance=ExtResource("12_k7kl0")]
+position = Vector2(1265, 484)
+
+[node name="TreeOak32" parent="Entities" unique_id=598630366 instance=ExtResource("12_k7kl0")]
+position = Vector2(1260, 550)
+
+[node name="TreePine42" parent="Entities" unique_id=968553060 instance=ExtResource("11_j2obx")]
+position = Vector2(1264, 613)
+
+[node name="TreePine43" parent="Entities" unique_id=272299646 instance=ExtResource("11_j2obx")]
+position = Vector2(1261, 679)
+
+[node name="TreeOak33" parent="Entities" unique_id=1566204265 instance=ExtResource("12_k7kl0")]
+position = Vector2(1266, 744)
+
+[node name="TreeOak34" parent="Entities" unique_id=1482280444 instance=ExtResource("12_k7kl0")]
+position = Vector2(1261, 807)
+
+[node name="TreeMaple36" parent="Entities" unique_id=1286094300 instance=ExtResource("13_hdmu7")]
+position = Vector2(1268, 869)
+
+[node name="TreePine44" parent="Entities" unique_id=356504035 instance=ExtResource("11_j2obx")]
+position = Vector2(1260, 940)
+
+[node name="TreePine45" parent="Entities" unique_id=198147273 instance=ExtResource("11_j2obx")]
+position = Vector2(1265, 997)
+
+[node name="NPC" parent="Entities" unique_id=965672133 instance=ExtResource("14_tn3wy")]
+position = Vector2(1044, 262)
+npc_name = "Government Official"
+dialogue_id = &"land_requisition_notice"
+done_flag = &"main_quest_started"
+auto_talk = true
+hidden_by_flag = &"main_quest_started"
+sprite_texture = ExtResource("15_ow8c4")
+
+[node name="NPC2" parent="Entities" unique_id=276363524 instance=ExtResource("14_tn3wy")]
+position = Vector2(1150, 300)
+npc_name = "Inventor"
+dialogue_id = &"inventor_visit"
+done_flag = &"inventor_deal_accepted"
+auto_talk = true
+appear_from_day = 4
+hidden_by_flag = &"inventor_deal_accepted"
+sprite_texture = ExtResource("16_nl26v")
+
+[node name="Warps" type="Node2D" parent="." unique_id=885226508]
+
+[node name="ToVillage" type="Area2D" parent="Warps" unique_id=149453631]
+position = Vector2(1272, 288)
+script = ExtResource("17_4es2c")
+target_level = "res://src/world/village/village.tscn"
 target_spawn = &"FromFarm"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Warps/ToTown"]
-shape = SubResource("Warp_shape")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Warps/ToVillage" unique_id=626088113]
+shape = SubResource("RectangleShape2D_gel7q")
 
-[node name="Arrow" type="ColorRect" parent="Warps/ToTown"]
-offset_left = -8.0
-offset_top = -32.0
-offset_right = 8.0
-offset_bottom = 32.0
-mouse_filter = 2
-color = Color(1, 1, 1, 0.15)
+[node name="SpawnPoints" type="Node2D" parent="." unique_id=551897616]
 
-[node name="SpawnPoints" type="Node2D" parent="."]
+[node name="Default" type="Marker2D" parent="SpawnPoints" unique_id=823047565]
+position = Vector2(1000, 250)
 
-[node name="Default" type="Marker2D" parent="SpawnPoints"]
-position = Vector2(140, 130)
+[node name="FromVillage" type="Marker2D" parent="SpawnPoints" unique_id=1873509507]
+position = Vector2(1236, 296)
 
-[node name="FromTown" type="Marker2D" parent="SpawnPoints"]
-position = Vector2(760, 240)
-
-[node name="Bounds" type="StaticBody2D" parent="."]
+[node name="Bounds" type="StaticBody2D" parent="." unique_id=638284964]
 collision_mask = 0
 
-[node name="Top" type="CollisionShape2D" parent="Bounds"]
-shape = SubResource("Bound_top")
+[node name="Top" type="CollisionShape2D" parent="Bounds" unique_id=480969095]
+shape = SubResource("WorldBoundaryShape2D_c2vg4")
 
-[node name="Bottom" type="CollisionShape2D" parent="Bounds"]
-shape = SubResource("Bound_bottom")
+[node name="Bottom" type="CollisionShape2D" parent="Bounds" unique_id=1447468163]
+shape = SubResource("WorldBoundaryShape2D_qfxpc")
 
-[node name="Left" type="CollisionShape2D" parent="Bounds"]
-shape = SubResource("Bound_left")
+[node name="Left" type="CollisionShape2D" parent="Bounds" unique_id=473718048]
+shape = SubResource("WorldBoundaryShape2D_o3ome")
 
-[node name="Right" type="CollisionShape2D" parent="Bounds"]
-shape = SubResource("Bound_right")
+[node name="Right" type="CollisionShape2D" parent="Bounds" unique_id=966923233]
+shape = SubResource("WorldBoundaryShape2D_n3rbs")
+
+[node name="PondCollision" type="StaticBody2D" parent="." unique_id=1214168244]
+position = Vector2(184, 840)
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PondCollision" unique_id=818127522]
+shape = SubResource("RectangleShape2D_4on1d")

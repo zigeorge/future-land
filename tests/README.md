@@ -37,15 +37,18 @@ Debug builds have shortcuts that make playtesting faster:
 
 ### Smoke test checklist (run before merging into `main`)
 
-- [ ] Game starts on the farm with a hoe, a watering can and 15 carrot seeds
-- [ ] Movement works in all 4 directions, and the player can't leave the map
-- [ ] Hotbar selection works with 1–0 and the mouse wheel
-- [ ] Hoe tills, watering can waters, seeds plant (seed count goes down), energy goes down
-- [ ] Talking to the Guide shows all lines, and the player can't move during dialogue
-- [ ] Sleeping in the bed advances the day, refills energy, and watered crops grow
+- [ ] The avatar screen appears, all four looks can be picked (keys and mouse), and the game waits until one is chosen
+- [ ] The chosen avatar walks correctly in all 4 directions (faces the way it moves), and can't leave the map or walk through houses, trees, fences or the pond
+- [ ] The Government Official starts talking right away; the choice ("I need time to think.") works; afterwards he is gone, "Start main quest" appears, and the HUD shows "112 days left" and "Buy back: 100,000 g"
+- [ ] Game starts with a hoe, a watering can and 15 carrot seeds; hotbar selection works with 1–0 and the mouse wheel
+- [ ] Hoe tills, watering can waters (soil darkens), seeds plant (seed count goes down), energy goes down
+- [ ] Reading the signpost by the farm shows the farming tips
+- [ ] Sleeping at the farmhouse door advances the day, refills energy, lowers the days left, and watered crops grow (carrot art changes per stage)
 - [ ] A crop is harvestable (E) after 3 watered days, and a carrot appears in the hotbar
-- [ ] Walking off the right edge goes to town, and the left edge of town returns to the farm
-- [ ] F5 then F9 restores money, inventory, farm and date
+- [ ] The path off the right edge of the farm leads to the village, and the left edge of the village returns to the farm
+- [ ] Village Chief: full introduction the first time, a short line after that. Same for the Merchant
+- [ ] On day 4 (F6 three times) the Inventor is on the farm and starts talking; after the deal he is at the workshop in the village
+- [ ] F5 then F9 restores money, inventory, farm, date, story progress and the avatar
 
 ## Reporting bugs
 

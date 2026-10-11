@@ -1,5 +1,6 @@
 extends Control
-## Always-visible game UI: date, clock, money, energy, hotbar, messages.
+## Always-visible game UI: date, clock, money, story deadline and buy-back
+## goal (once the story has revealed them), energy, hotbar, messages.
 ## Restyle freely in hud.tscn; the script only needs the %UniqueName nodes.
 
 const SLOT_SIZE := Vector2(26, 26)
@@ -17,6 +18,8 @@ var _message_tween: Tween
 @onready var date_label: Label = %DateLabel
 @onready var clock_label: Label = %ClockLabel
 @onready var money_label: Label = %MoneyLabel
+@onready var deadline_label: Label = %DeadlineLabel
+@onready var goal_label: Label = %GoalLabel
 @onready var energy_bar: ProgressBar = %EnergyBar
 @onready var hotbar: HBoxContainer = %Hotbar
 @onready var message_label: Label = %MessageLabel
@@ -32,6 +35,7 @@ func _ready() -> void:
 	EventBus.inventory_changed.connect(_update_hotbar)
 	EventBus.hotbar_selection_changed.connect(func(_i: int) -> void: _update_hotbar())
 	EventBus.notification_requested.connect(show_message)
+	EventBus.story_flag_changed.connect(func(_f: StringName, _v: Variant) -> void: _update_story())
 	EventBus.game_loaded.connect(_refresh_all)
 	_refresh_all()
 
@@ -61,6 +65,7 @@ func show_message(text: String) -> void:
 
 func _refresh_all() -> void:
 	_update_time()
+	_update_story()
 	_update_money(GameState.money)
 	_update_energy(GameState.energy, GameState.MAX_ENERGY)
 	_update_hotbar()
@@ -69,6 +74,24 @@ func _refresh_all() -> void:
 func _update_time() -> void:
 	date_label.text = TimeManager.get_date_text()
 	clock_label.text = TimeManager.get_clock_text()
+	deadline_label.text = "%d days left" % GameState.get_days_remaining()
+
+
+func _update_story() -> void:
+	deadline_label.visible = GameState.has_story_flag(&"main_quest_started")
+	deadline_label.text = "%d days left" % GameState.get_days_remaining()
+	goal_label.visible = GameState.has_story_flag(&"buyback_goal_unlocked")
+	goal_label.text = "Buy back: %s g" % _with_commas(GameState.BUYBACK_PRICE)
+
+
+static func _with_commas(amount: int) -> String:
+	var digits := str(amount)
+	var result := ""
+	for i in digits.length():
+		if i > 0 and (digits.length() - i) % 3 == 0:
+			result += ","
+		result += digits[i]
+	return result
 
 
 func _update_money(amount: int) -> void:

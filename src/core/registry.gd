@@ -6,6 +6,10 @@ class_name Registry
 
 const ITEMS_DIR := "res://data/items/"
 const CROPS_DIR := "res://data/crops/"
+const AVATARS_DIR := "res://data/avatars/"
+
+## Order shown on the avatar selection screen.
+const AVATAR_IDS: Array[StringName] = [&"avatar_1", &"avatar_2", &"avatar_3", &"avatar_4"]
 
 
 static func get_item(id: StringName) -> ItemData:
@@ -14,6 +18,10 @@ static func get_item(id: StringName) -> ItemData:
 
 static func get_crop(id: StringName) -> CropData:
 	return _load(CROPS_DIR, id) as CropData
+
+
+static func get_avatar(id: StringName) -> AvatarData:
+	return _load(AVATARS_DIR, id) as AvatarData
 
 
 static func _load(dir: String, id: StringName) -> Resource:

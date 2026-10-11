@@ -15,6 +15,7 @@ signal time_ticked(day: int, hour: int, minute: int)
 signal day_started(day: int, season: int, year: int)
 
 # --- Player / economy ---------------------------------------------------
+signal avatar_changed(avatar_id: StringName)
 signal money_changed(amount: int)
 signal energy_changed(current: int, maximum: int)
 
@@ -29,6 +30,8 @@ signal crop_harvested(cell: Vector2i, crop_id: StringName)
 # --- Dialogue / story ---------------------------------------------------
 signal dialogue_started(dialogue_id: StringName)
 signal dialogue_line_shown(speaker: String, text: String)
+## Shown after the current line; answer with DialogueManager.choose(index).
+signal dialogue_choices_shown(choices: Array[String])
 signal dialogue_finished(dialogue_id: StringName)
 signal story_flag_changed(flag: StringName, value: Variant)
 

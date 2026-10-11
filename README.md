@@ -35,13 +35,15 @@ The web build is single-threaded (`export_presets.cfg`), because GitHub Pages ca
 |---|---|
 | Move | WASD / arrow keys |
 | Use selected tool or seed | C / left mouse |
-| Interact (talk, sleep, harvest) | E / right mouse |
+| Interact (talk, read, sleep at the farmhouse door, harvest) | E / right mouse |
 | Advance dialogue | E / Space / left mouse |
 | Select hotbar slot | 1–0 / mouse wheel |
 | Quick save / load | F5 / F9 |
 | Skip to next day (debug builds only) | F6 |
 
-Try this: select the hoe (1), till a tile with C, plant carrot seeds (3), water them (2), sleep in the bed, and repeat. After 3 watered days, press E to harvest.
+**How a new game starts:** choose one of four looks, then a government official at your door explains that the city will take the land unless you buy it back within a year (112 in-game days, 100,000 g). Walk east to the village to meet the chief and the merchant. On day 4 the inventor visits your farm.
+
+**Farming:** select the hoe (1), till a tile with C, plant carrot seeds (3), water them (2), sleep at the farmhouse door, and repeat. After 3 watered days, press E to harvest. The signpost next to the farm has these tips too.
 
 ## Project layout
 
@@ -54,11 +56,11 @@ docs/          Architecture and team workflow (team docs are in the repo-level d
 src/           All code and scenes                  (programmer)
   autoload/    Global singletons (EventBus, TimeManager, GameState, ...)
   core/        Shared classes: Registry, resource definitions
-  components/  Reusable building blocks (Interactable, LevelWarp, Bed)
+  components/  Reusable building blocks (Interactable, DialogueSpot, LevelWarp, Bed)
   entities/    Player, NPCs
-  systems/     Gameplay logic (farming, inventory)
-  world/       Levels / maps (farm, town)
-  ui/          HUD, dialogue box, menus
+  systems/     Gameplay logic (farming, inventory, dialogue)
+  world/       Maps (farm, village) and props (trees, houses, ...)
+  ui/          HUD, dialogue box, avatar selection
   main.tscn    Entry scene
 tests/         Automated tests + test plan          (tester)
 ```

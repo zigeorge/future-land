@@ -8,7 +8,7 @@ anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = 60.0
-offset_top = -100.0
+offset_top = -110.0
 offset_right = -60.0
 offset_bottom = -40.0
 grow_horizontal = 2
@@ -39,7 +39,14 @@ size_flags_vertical = 3
 text = "Dialogue text goes here."
 autowrap_mode = 3
 
+[node name="Choices" type="VBoxContainer" parent="Margin/VBox"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 0
+
 [node name="HintLabel" type="Label" parent="Margin/VBox"]
+unique_name_in_owner = true
 layout_mode = 2
 theme_override_font_sizes/font_size = 7
 text = "E / Space / Click"

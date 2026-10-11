@@ -9,6 +9,11 @@ const MAX_ENERGY := 270
 const INVENTORY_SIZE := 30
 const HOTBAR_SIZE := 10
 
+## Story: the land must be bought back within one in-game year
+## (docs/Future_Land_NPC_Dialogue.xlsx, sheet "Game Variables").
+const DEADLINE_DAYS := 4 * 28
+const BUYBACK_PRICE := 100000
+
 const STARTING_ITEMS := {
 	&"hoe": 1,
 	&"watering_can": 1,
@@ -30,10 +35,18 @@ var selected_hotbar_slot := 0:
 		selected_hotbar_slot = posmod(value, HOTBAR_SIZE)
 		EventBus.hotbar_selection_changed.emit(selected_hotbar_slot)
 
+## Chosen on the avatar selection screen (data/avatars/<id>.tres). Empty = not chosen yet.
+var avatar_id: StringName = &"":
+	set(value):
+		avatar_id = value
+		EventBus.avatar_changed.emit(avatar_id)
+
 var inventory := Inventory.new(INVENTORY_SIZE)
 var farm := FarmState.new()
 ## Story progress, set from dialogue files or gameplay (e.g. &"met_mayor": true).
 var story_flags: Dictionary = {}
+## NPC name -> friendship points, changed by dialogue.
+var relationships: Dictionary = {}
 
 
 func _ready() -> void:
@@ -47,6 +60,8 @@ func new_game() -> void:
 	money = STARTING_MONEY
 	energy = MAX_ENERGY
 	story_flags.clear()
+	relationships.clear()
+	avatar_id = &""
 	farm.clear()
 	inventory.clear()
 	for item_id: StringName in STARTING_ITEMS:
@@ -75,6 +90,14 @@ func has_story_flag(flag: StringName) -> bool:
 	return bool(story_flags.get(flag, false))
 
 
+func change_relationship(npc_name: String, amount: int) -> void:
+	relationships[npc_name] = int(relationships.get(npc_name, 0)) + amount
+
+
+func get_days_remaining() -> int:
+	return maxi(DEADLINE_DAYS - TimeManager.get_day_number() + 1, 0)
+
+
 func _on_day_started(_day: int, season: int, _year: int) -> void:
 	energy = MAX_ENERGY
 	farm.advance_day(season)
@@ -88,6 +111,8 @@ func get_save_data() -> Dictionary:
 		"inventory": inventory.to_data(),
 		"farm": farm.to_data(),
 		"story_flags": story_flags,
+		"relationships": relationships,
+		"avatar_id": String(avatar_id),
 	}
 
 
@@ -98,3 +123,5 @@ func load_save_data(data: Dictionary) -> void:
 	inventory.from_data(data.get("inventory", []))
 	farm.from_data(data.get("farm", {}))
 	story_flags = data.get("story_flags", {})
+	relationships = data.get("relationships", {})
+	avatar_id = StringName(data.get("avatar_id", ""))

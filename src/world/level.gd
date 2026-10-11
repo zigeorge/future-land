@@ -1,6 +1,6 @@
 class_name Level
 extends Node2D
-## Base script for every map (farm, town, ...).
+## Base script for every map (farm, village, ...).
 ##
 ## Expected children:
 ##   Entities/Player     - the player instance (Entities should be y-sorted)

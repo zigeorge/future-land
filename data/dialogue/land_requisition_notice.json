@@ -1,0 +1,85 @@
+{
+  "generated_from": "docs/Future_Land_NPC_Dialogue.xlsx (scene \"Land Requisition Notice\"); edit the spreadsheet, then run tools/dialogue_from_xlsx.py",
+  "start": "GOV_001",
+  "nodes": {
+    "GOV_001": {
+      "speaker": "Government Official",
+      "text": "Good morning. I am here on behalf of the city government. I have an official notice regarding this village and your property.",
+      "next": "GOV_002",
+      "set_flag": "land_notice_received"
+    },
+    "GOV_002": {
+      "speaker": "Government Official",
+      "text": "Because the city is expanding, the government plans to requisition this land for future development.",
+      "next": "GOV_003"
+    },
+    "GOV_003": {
+      "speaker": "Government Official",
+      "text": "Residents are being given one year to decide what they will do. You have two legal options.",
+      "next": "GOV_004"
+    },
+    "GOV_004": {
+      "speaker": "Government Official",
+      "text": "Option one: leave within one year. During that time, you may deal with your house, farm, and belongings. After the deadline, the government will provide financial compensation. If the property is not vacated, forced demolition may be carried out.",
+      "next": "GOV_005"
+    },
+    "GOV_005": {
+      "speaker": "Government Official",
+      "text": "Option two: buy the land back. If you can pay the required repurchase amount before the deadline, you may keep the property and remain here.",
+      "next": "GOV_006"
+    },
+    "GOV_006": {
+      "speaker": "Government Official",
+      "text": "I understand this is a difficult decision. What would you like to say?",
+      "choices": [
+        {
+          "text": "I need time to think.",
+          "next": "PLAYER_001"
+        }
+      ]
+    },
+    "PLAYER_001": {
+      "speaker": "{player}",
+      "text": "I need some time to understand all of this. A year sounds long, but this place is my home.",
+      "next": "GOV_007"
+    },
+    "GOV_007": {
+      "speaker": "Government Official",
+      "text": "Of course. You do not have to make the final decision today. The deadline is one year from the date of this notice.",
+      "next": "GOV_008"
+    },
+    "GOV_008": {
+      "speaker": "Government Official",
+      "text": "The repurchase price has been set by the city. You must pay the full amount before the one-year deadline.",
+      "next": "GOV_009"
+    },
+    "GOV_009": {
+      "speaker": "Government Official",
+      "text": "If the payment is completed in time, the requisition order for your property will be withdrawn and the land will remain yours.",
+      "next": "PLAYER_002"
+    },
+    "PLAYER_002": {
+      "speaker": "{player}",
+      "text": "Then I still have a chance. If I can earn enough money before the deadline, I can protect this place.",
+      "next": "GOV_009_2",
+      "set_flag": "buyback_goal_unlocked"
+    },
+    "GOV_009_2": {
+      "speaker": "Government Official",
+      "text": "I understand your anger, but ignoring the notice will not stop the process. I strongly recommend that you use this year to prepare.",
+      "next": "GOV_END_001"
+    },
+    "GOV_END_001": {
+      "speaker": "Government Official",
+      "text": "Everything you need is written in the notice. I will return later to check your decision. I hope you use your time wisely.",
+      "next": "PLAYER_END_001"
+    },
+    "PLAYER_END_001": {
+      "speaker": "{player}",
+      "text": "One year... I need to decide whether to leave, earn enough to buy the land back, or find another way to save our home.",
+      "next": "END",
+      "notify": "Start main quest: Save the Land",
+      "set_flag": "main_quest_started"
+    }
+  }
+}

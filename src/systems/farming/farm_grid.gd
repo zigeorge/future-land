@@ -24,12 +24,16 @@ const CURSOR_COLOR := Color(1, 1, 1, 0.6)
 @export var wet_soil_texture: Texture2D
 
 var _cursor_cell := Vector2i.MAX
+## crop id -> CropData, loaded outside _draw(): a texture loaded for the first
+## time inside _draw() renders as a white box.
+var _crops: Dictionary = {}
 
 
 func _ready() -> void:
 	add_to_group(GROUP)
-	EventBus.farm_changed.connect(func(_cell: Vector2i) -> void: queue_redraw())
-	EventBus.game_loaded.connect(queue_redraw)
+	EventBus.farm_changed.connect(func(_cell: Vector2i) -> void: _refresh())
+	EventBus.game_loaded.connect(_refresh)
+	_refresh()
 
 
 func _process(_delta: float) -> void:
@@ -114,8 +118,15 @@ func _draw() -> void:
 		draw_rect(Rect2(_cursor_cell * CELL_SIZE, Vector2.ONE * CELL_SIZE), CURSOR_COLOR, false, 1.0)
 
 
+func _refresh() -> void:
+	for tile: FarmState.FarmTile in GameState.farm.tiles.values():
+		if tile.has_crop() and not _crops.has(tile.crop_id):
+			_crops[tile.crop_id] = Registry.get_crop(tile.crop_id)
+	queue_redraw()
+
+
 func _draw_crop(tile: FarmState.FarmTile, rect: Rect2) -> void:
-	var crop := Registry.get_crop(tile.crop_id)
+	var crop: CropData = _crops.get(tile.crop_id)
 	if crop == null:
 		return
 	var stage := crop.get_stage(tile.days_grown)

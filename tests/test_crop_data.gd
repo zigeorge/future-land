@@ -18,3 +18,10 @@ func test_seasons_flags() -> void:
 	assert_true(crop.grows_in(0))
 	assert_false(crop.grows_in(1))
 	assert_true(crop.grows_in(2))
+
+
+func test_carrot_has_a_texture_per_stage() -> void:
+	var crop := Registry.get_crop(&"carrot")
+	assert_eq(crop.stage_textures.size(), crop.days_per_stage.size() + 1, "growing stages + ripe")
+	for texture in crop.stage_textures:
+		assert_eq(texture.get_size(), Vector2(16, 16))

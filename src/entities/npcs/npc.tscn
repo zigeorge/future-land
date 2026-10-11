@@ -29,9 +29,9 @@ position = Vector2(0, -3)
 shape = SubResource("RectangleShape2D_body")
 
 [node name="NameLabel" type="Label" parent="."]
-offset_left = -40.0
+offset_left = -60.0
 offset_top = -44.0
-offset_right = 40.0
+offset_right = 60.0
 offset_bottom = -33.0
 theme_override_font_sizes/font_size = 8
 text = "Villager"

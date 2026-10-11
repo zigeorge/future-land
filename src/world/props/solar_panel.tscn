@@ -1,0 +1,19 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://src/world/props/prop.gd" id="1_prop"]
+[ext_resource type="Texture2D" path="res://assets/art/environment/solar_panel.png" id="tex_0"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_base"]
+size = Vector2(8, 4)
+
+[node name="SolarPanel" type="StaticBody2D"]
+collision_mask = 0
+script = ExtResource("1_prop")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("tex_0")
+offset = Vector2(0, -16)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -2)
+shape = SubResource("RectangleShape2D_base")

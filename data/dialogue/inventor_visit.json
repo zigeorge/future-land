@@ -1,0 +1,62 @@
+{
+  "generated_from": "docs/Future_Land_NPC_Dialogue.xlsx (scene \"Inventor Visit\"); edit the spreadsheet, then run tools/dialogue_from_xlsx.py",
+  "start": "INV_001",
+  "nodes": {
+    "INV_001": {
+      "speaker": "Technological Inventor",
+      "text": "Hey. I live next to your farm. I heard about the government's plan to take this land.",
+      "next": "INV_002"
+    },
+    "INV_002": {
+      "speaker": "Technological Inventor",
+      "text": "I was planning to focus on my research and inventions, but if this land is taken, my work here could be affected too.",
+      "next": "INV_003"
+    },
+    "INV_003": {
+      "speaker": "Technological Inventor",
+      "text": "The problem is, research does not make me much money. So I thought maybe we could make a deal.",
+      "next": "PLAYER_003"
+    },
+    "PLAYER_003": {
+      "speaker": "{player}",
+      "text": "What kind of deal?",
+      "next": "INV_004"
+    },
+    "INV_004": {
+      "speaker": "Technological Inventor",
+      "text": "I can build better technological equipment for your farm. Better tools and machines could help you work faster and earn more money.",
+      "next": "INV_005"
+    },
+    "INV_005": {
+      "speaker": "Technological Inventor",
+      "text": "In return, you give me money to support my research. If my equipment improves your farm, you may be able to earn enough to buy the land back sooner.",
+      "next": "PLAYER_004"
+    },
+    "PLAYER_004": {
+      "speaker": "{player}",
+      "text": "So I help fund your research, and you help me improve the farm.",
+      "next": "INV_006"
+    },
+    "INV_006": {
+      "speaker": "Technological Inventor",
+      "text": "Exactly. We both need money, and we both want to stay here. Working together gives us a better chance.",
+      "next": "PLAYER_005"
+    },
+    "PLAYER_005": {
+      "speaker": "{player}",
+      "text": "All right. If your inventions can help me save this farm, I am willing to work with you.",
+      "next": "INV_007",
+      "set_flag": "inventor_deal_accepted"
+    },
+    "INV_007": {
+      "speaker": "Technological Inventor",
+      "text": "Good. I will prepare some upgrades. When you have enough money, come find me and I will show you what I can build.",
+      "next": "PLAYER_006"
+    },
+    "PLAYER_006": {
+      "speaker": "{player}",
+      "text": "Then I have another way to make this farm stronger. Maybe buying the land back is possible after all.",
+      "next": "END"
+    }
+  }
+}

@@ -1,6 +1,8 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://src/ui/hud/hud.gd" id="1_hud"]
+[ext_resource type="Texture2D" path="res://assets/art/ui/hotbar_slot.png" id="2_slot"]
+[ext_resource type="Texture2D" path="res://assets/art/ui/hotbar_slot_selected.png" id="3_slot_selected"]
 
 [node name="HUD" type="Control"]
 layout_mode = 3
@@ -11,13 +13,15 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("1_hud")
+slot_texture = ExtResource("2_slot")
+selected_slot_texture = ExtResource("3_slot_selected")
 
 [node name="InfoPanel" type="PanelContainer" parent="."]
 layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -116.0
+offset_left = -130.0
 offset_top = 6.0
 offset_right = -6.0
 offset_bottom = 52.0
@@ -44,6 +48,22 @@ horizontal_alignment = 2
 unique_name_in_owner = true
 layout_mode = 2
 text = "500 g"
+horizontal_alignment = 2
+
+[node name="DeadlineLabel" type="Label" parent="InfoPanel/VBox"]
+unique_name_in_owner = true
+visible = false
+modulate = Color(1, 0.75, 0.55, 1)
+layout_mode = 2
+text = "112 days left"
+horizontal_alignment = 2
+
+[node name="GoalLabel" type="Label" parent="InfoPanel/VBox"]
+unique_name_in_owner = true
+visible = false
+modulate = Color(1, 0.75, 0.55, 1)
+layout_mode = 2
+text = "Buy back: 100,000 g"
 horizontal_alignment = 2
 
 [node name="EnergyBar" type="ProgressBar" parent="."]

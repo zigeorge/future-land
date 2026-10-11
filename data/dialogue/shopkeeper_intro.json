@@ -1,6 +1,0 @@
-{
-  "lines": [
-    { "speaker": "Shopkeeper", "text": "Oh, a new face! You must be the one who took over the old farm." },
-    { "speaker": "Shopkeeper", "text": "The shop isn't open yet, but come back soon.", "set_flag": "met_shopkeeper" }
-  ]
-}

@@ -1,0 +1,57 @@
+{
+  "generated_from": "docs/Future_Land_NPC_Dialogue.xlsx (scene \"Merchant Introduction\"); edit the spreadsheet, then run tools/dialogue_from_xlsx.py",
+  "start": "MERCH_D1_001",
+  "nodes": {
+    "MERCH_D1_001": {
+      "speaker": "Merchant",
+      "text": "Welcome! You must be the new farmer. I run the village shop. Come in whenever you need supplies.",
+      "next": "PLAYER_MERCH_D1_001"
+    },
+    "PLAYER_MERCH_D1_001": {
+      "speaker": "{player}",
+      "text": "Nice to meet you! What can I find here?",
+      "next": "MERCH_D1_002"
+    },
+    "MERCH_D1_002": {
+      "speaker": "Merchant",
+      "text": "I sell seeds, farming supplies, and useful everyday materials. You can also sell me the crops and resources you collect.",
+      "next": "PLAYER_MERCH_D1_002"
+    },
+    "PLAYER_MERCH_D1_002": {
+      "speaker": "{player}",
+      "text": "That will help. I need to get my farm working again.",
+      "next": "MERCH_D1_003"
+    },
+    "MERCH_D1_003": {
+      "speaker": "Merchant",
+      "text": "Start small. Plant a few seeds, water them every day, and bring your harvest here when it is ready. A steady income adds up!",
+      "next": "PLAYER_MERCH_D1_003"
+    },
+    "PLAYER_MERCH_D1_003": {
+      "speaker": "{player}",
+      "text": "I heard the city wants to take this land. Is the shop affected too?",
+      "next": "MERCH_D1_004"
+    },
+    "MERCH_D1_004": {
+      "speaker": "Merchant",
+      "text": "Yes, and I am worried. This shop depends on the village. I hope we can keep our homes and businesses here.",
+      "next": "MERCH_D1_005"
+    },
+    "MERCH_D1_005": {
+      "speaker": "Merchant",
+      "text": "For now, focus on building up your farm. If you need seeds or want to sell something, my door is open.",
+      "next": "PLAYER_MERCH_D1_004"
+    },
+    "PLAYER_MERCH_D1_004": {
+      "speaker": "{player}",
+      "text": "Thank you. I will be back when I have my first harvest!",
+      "next": "MERCH_D1_006"
+    },
+    "MERCH_D1_006": {
+      "speaker": "Merchant",
+      "text": "I look forward to it! Good luck, and welcome to the village.",
+      "next": "END",
+      "set_flag": "merchant_introduction_complete"
+    }
+  }
+}

@@ -1,0 +1,66 @@
+{
+  "generated_from": "docs/Future_Land_NPC_Dialogue.xlsx (scene \"Village Introduction\"); edit the spreadsheet, then run tools/dialogue_from_xlsx.py",
+  "start": "CHIEF_D1_001",
+  "nodes": {
+    "CHIEF_D1_001": {
+      "speaker": "Village Chief",
+      "text": "Oh, hello! You must be the farmer from the house west of the village. Welcome! I am the village chief.",
+      "next": "CHIEF_D1_002"
+    },
+    "CHIEF_D1_002": {
+      "speaker": "Village Chief",
+      "text": "Our village may be small, but everyone here looks out for one another. This square is where we meet, share news, and celebrate together.",
+      "next": "PLAYER_CHIEF_D1_001"
+    },
+    "PLAYER_CHIEF_D1_001": {
+      "speaker": "{player}",
+      "text": "It seems like a nice place. Could you show me where everything is?",
+      "next": "CHIEF_D1_003"
+    },
+    "CHIEF_D1_003": {
+      "speaker": "Village Chief",
+      "text": "Of course! The merchant runs the shop near the square. You can buy seeds and supplies there, and sell the crops you grow.",
+      "next": "CHIEF_D1_004"
+    },
+    "CHIEF_D1_004": {
+      "speaker": "Village Chief",
+      "text": "You will also find an inventor working in a workshop nearby. Their machines might help you improve your farm, once you get to know each other.",
+      "next": "CHIEF_D1_005"
+    },
+    "CHIEF_D1_005": {
+      "speaker": "Village Chief",
+      "text": "The path to the west takes you back to your farm. Head farther west from there and you will reach the beach. It is a peaceful spot to explore.",
+      "next": "PLAYER_CHIEF_D1_002"
+    },
+    "PLAYER_CHIEF_D1_002": {
+      "speaker": "{player}",
+      "text": "I received a notice about the city taking our land. Is everyone here affected?",
+      "next": "CHIEF_D1_006"
+    },
+    "CHIEF_D1_006": {
+      "speaker": "Village Chief",
+      "text": "Yes. The city expansion plan worries all of us. Families have built their lives here for generations, and we do not want to lose this place.",
+      "next": "CHIEF_D1_007"
+    },
+    "CHIEF_D1_007": {
+      "speaker": "Village Chief",
+      "text": "For now, learn the village, meet your neighbors, and get your farm running. A strong community will matter in the days ahead.",
+      "next": "PLAYER_CHIEF_D1_003"
+    },
+    "PLAYER_CHIEF_D1_003": {
+      "speaker": "{player}",
+      "text": "Thank you. I will introduce myself to the merchant and the inventor, and do what I can to help.",
+      "next": "CHIEF_D1_008"
+    },
+    "CHIEF_D1_008": {
+      "speaker": "Village Chief",
+      "text": "You are always welcome here. Check the notice board in the square for village news. Good luck with your first day!",
+      "next": "END",
+      "notify": "Unlock objective: Explore the Village",
+      "set_flag": "village_introduction_complete",
+      "relationship": {
+        "Village Chief": 1
+      }
+    }
+  }
+}

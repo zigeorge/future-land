@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="AvatarData" format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/avatar_data.gd" id="1_avatar"]
+[ext_resource type="Texture2D" path="res://assets/art/characters/player1.png" id="2_sheet"]
+
+[resource]
+script = ExtResource("1_avatar")
+id = &"avatar_1"
+display_name = "Farmer"
+sheet = ExtResource("2_sheet")
+row_down = 0
+row_up = 1
+row_left = 2
+row_right = 2
+mirror_left = false
+mirror_right = true
