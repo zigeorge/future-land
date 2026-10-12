@@ -7,6 +7,10 @@ const CHARACTERS_PER_SECOND := 40.0
 
 var _typing_tween: Tween
 var _pending_choices: Array[String] = []
+## Highlighted choice. Tracked here rather than read from GUI focus, because
+## focus is lost if the player clicks elsewhere.
+var _choice_index := 0
+var _choice_texts: Array[String] = []
 
 @onready var speaker_label: Label = %SpeakerLabel
 @onready var text_label: Label = %TextLabel
@@ -57,37 +61,45 @@ func _on_choices_shown(choices: Array[String]) -> void:
 func _show_pending_choices() -> void:
 	if _pending_choices.is_empty():
 		return
+	_choice_texts = _pending_choices
 	for i in _pending_choices.size():
 		var button := Button.new()
-		button.text = "> " + _pending_choices[i]
 		button.flat = true
 		button.alignment = HORIZONTAL_ALIGNMENT_LEFT
+		button.focus_mode = Control.FOCUS_NONE
 		button.pressed.connect(DialogueManager.choose.bind(i))
+		button.mouse_entered.connect(_highlight_choice.bind(i))
 		choices_box.add_child(button)
 	_pending_choices = []
 	choices_box.show()
 	hint_label.hide()
-	(choices_box.get_child(0) as Button).grab_focus()
+	_highlight_choice(0)
 
 
 func _handle_choice_input(event: InputEvent) -> void:
-	var buttons := choices_box.get_children()
-	var focused := buttons.find(get_viewport().gui_get_focus_owner())
-	var step := 0
 	if event.is_action_pressed("move_down"):
-		step = 1
+		_highlight_choice(_choice_index + 1)
 	elif event.is_action_pressed("move_up"):
-		step = -1
-	if step != 0:
-		(buttons[posmod(focused + step, buttons.size())] as Button).grab_focus()
-		get_viewport().set_input_as_handled()
-	elif event.is_action_pressed("advance_dialogue") and focused >= 0:
-		get_viewport().set_input_as_handled()
-		DialogueManager.choose(focused)
+		_highlight_choice(_choice_index - 1)
+	elif event.is_action_pressed("advance_dialogue") or event.is_action_pressed("ui_accept"):
+		DialogueManager.choose(_choice_index)
+	else:
+		return
+	get_viewport().set_input_as_handled()
+
+
+func _highlight_choice(index: int) -> void:
+	var buttons := choices_box.get_children()
+	_choice_index = posmod(index, buttons.size())
+	for i in buttons.size():
+		var button := buttons[i] as Button
+		button.text = ("> " if i == _choice_index else "   ") + _choice_texts[i]
+		button.modulate = Color(1, 0.85, 0.4) if i == _choice_index else Color.WHITE
 
 
 func _clear_choices() -> void:
 	for child in choices_box.get_children():
+		choices_box.remove_child(child)
 		child.queue_free()
 	choices_box.hide()
 	hint_label.show()

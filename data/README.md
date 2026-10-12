@@ -92,6 +92,8 @@ The current story setup:
 
 The four looks offered on the start screen, in the order of `Registry.AVATAR_IDS`. Each points at an 80×128 sheet in `assets/art/characters/` and says which sheet row holds each direction. If a sheet has only one side-facing row, `mirror_left` or `mirror_right` reuses it flipped. Rename them by changing `display_name`.
 
+`auto_walk_cycle` (on by default) rebuilds the walk because the current sheets' walk frames don't alternate feet: front and back views alternate the step frame with its mirror image, and side views alternate the widest stride with the idle pose. Turn it off for a sheet that has a real 4-frame walk cycle.
+
 ## Items (`items/*.tres`) and crops (`crops/*.tres`)
 
 Create these in the Godot editor: right-click the folder → **New Resource** → `ItemData` / `CropData`. The file name **must** match the `id` field. Step-by-step instructions are in [docs/ARCHITECTURE.md](../docs/ARCHITECTURE.md#how-to).

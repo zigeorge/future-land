@@ -60,7 +60,7 @@ tile_set = ExtResource("2_ld28u")
 
 [node name="FarmGrid" type="Node2D" parent="." unique_id=1843307094]
 script = ExtResource("3_u0f21")
-area = Rect2i(30, 20, 26, 20)
+area = Rect2i(2, 4, 76, 59)
 
 [node name="Entities" type="Node2D" parent="." unique_id=2034488462]
 y_sort_enabled = true

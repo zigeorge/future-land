@@ -38,10 +38,10 @@ Debug builds have shortcuts that make playtesting faster:
 ### Smoke test checklist (run before merging into `main`)
 
 - [ ] The avatar screen appears, all four looks can be picked (keys and mouse), and the game waits until one is chosen
-- [ ] The chosen avatar walks correctly in all 4 directions (faces the way it moves), and can't leave the map or walk through houses, trees, fences or the pond
-- [ ] The Government Official starts talking right away; the choice ("I need time to think.") works; afterwards he is gone, "Start main quest" appears, and the HUD shows "112 days left" and "Buy back: 100,000 g"
+- [ ] The chosen avatar walks correctly in all 4 directions (faces the way it moves, feet alternate), and can't leave the map or walk through houses, trees, fences or the pond
+- [ ] The Government Official starts talking right away; the choice ("I need time to think.") works with E, Space and a mouse click, even after clicking elsewhere first; afterwards he is gone, "Start main quest" appears, and the HUD shows "112 days left" and "Buy back: 100,000 g"
 - [ ] Game starts with a hoe, a watering can and 15 carrot seeds; hotbar selection works with 1–0 and the mouse wheel
-- [ ] Hoe tills, watering can waters (soil darkens), seeds plant (seed count goes down), energy goes down
+- [ ] Hoe (C) tills any open grass on the farm, not paths, water or under objects; the white square shows where. Watering can waters (soil darkens), seeds plant (seed count goes down), energy goes down
 - [ ] Reading the signpost by the farm shows the farming tips
 - [ ] Sleeping at the farmhouse door advances the day, refills energy, lowers the days left, and watered crops grow (carrot art changes per stage)
 - [ ] A crop is harvestable (E) after 3 watered days, and a carrot appears in the hotbar

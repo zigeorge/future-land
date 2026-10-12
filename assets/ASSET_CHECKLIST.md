@@ -35,6 +35,7 @@ Art for the game, with its status. Paths are relative to `future-land/assets/`.
   - [ ] `player1`: both side rows face **left**. The game mirrors one for now; a real right-facing row would be better.
   - [ ] `player3` (Nova): both side rows face **right**. The game mirrors one for now.
   - `player4`: rows are right, left, down, up (others are down, up, left, right). Fine, the avatar data handles it.
+  - [ ] **Walk cycles (all four sheets):** the 4 walk frames should be: right foot forward, passing, left foot forward, passing. In the current sheets the frames are almost identical (only one foot ever moves), so the game rebuilds a simple cycle from one step frame (`auto_walk_cycle` in `data/avatars/`). With real cycles, turn that off.
 - [x] **Government Official:** `art/characters/government_official1.png`
 - [x] **Village Chief:** `art/characters/village_chief.png`
 - [x] **Merchant:** `art/characters/shopkeeper1.png` (2-frame idle)

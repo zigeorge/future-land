@@ -112,7 +112,7 @@ Conversations are `DialogueGraph`s (`src/systems/dialogue/`): lines linked by id
 
 | Scene | Design doc | Size | Contents |
 |---|---|---|---|
-| `src/world/farm/farm.tscn` | Map 01 Starting Farm | 80×65 tiles | Farmhouse (upper right; its door is where you sleep), farming area (`FarmGrid`), pond (lower left), forest along the north and west, path to the eastern exit, farming-tips signpost |
+| `src/world/farm/farm.tscn` | Map 01 Starting Farm | 80×65 tiles | Farmhouse (upper right; its door is where you sleep), `FarmGrid` (any open grass can be tilled: not path/water tiles or cells with a collider), pond (lower left), forest along the north and west, path to the eastern exit, farming-tips signpost |
 | `src/world/village/village.tscn` | Map 03 Villager Residential Area | 70×55 tiles | Western entrance, central square, chief's house (north), shop (east), inventor's workshop (south-east), blocked road east |
 
 Map 02 (Western Beach) isn't built yet: it needs sand, cliff and pier art.

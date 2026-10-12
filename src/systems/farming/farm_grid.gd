@@ -1,7 +1,10 @@
 class_name FarmGrid
 extends Node2D
-## Farmable area inside the farm level. Draws GameState.farm and turns the
-## player's tool / seed / harvest actions into FarmState calls.
+## The farm's soil. Draws GameState.farm and turns the player's tool / seed /
+## harvest actions into FarmState calls.
+##
+## Any open ground inside `area` can be tilled: not paths or water (tiles on
+## the sibling GroundTiles layer) and not under a building, tree, fence or NPC.
 ##
 ## Soil uses dry_soil_texture / wet_soil_texture and crops use their
 ## CropData.stage_textures; anything without art falls back to placeholder
@@ -10,23 +13,28 @@ extends Node2D
 const GROUP := &"farm_grid"
 const CELL_SIZE := 16
 
-const AREA_COLOR := Color(1, 1, 1, 0.05)
+## Physics layers that make a cell untillable: 1 "world" and 3 "npc".
+const OBSTACLE_MASK := (1 << 0) | (1 << 2)
 const SOIL_COLOR := Color("6b4a2b")
 const WET_SOIL_COLOR := Color("3f2a19")
 const CROP_COLOR := Color("7bd389")
 const READY_COLOR := Color("ffb703")
 const CURSOR_COLOR := Color(1, 1, 1, 0.6)
 
-## Farmable cells, relative to this node's position.
+## Cells where farming is allowed, relative to this node's position.
 @export var area := Rect2i(0, 0, 16, 10)
 ## 16x16 tilled-soil tiles (assets/art/tilesets/soil_dry.png, soil_wet.png).
 @export var dry_soil_texture: Texture2D
 @export var wet_soil_texture: Texture2D
 
 var _cursor_cell := Vector2i.MAX
+var _target_cell := Vector2i.MAX
 ## crop id -> CropData, loaded outside _draw(): a texture loaded for the first
 ## time inside _draw() renders as a white box.
 var _crops: Dictionary = {}
+
+
+@onready var _ground_tiles: TileMapLayer = get_node_or_null("../GroundTiles")
 
 
 func _ready() -> void:
@@ -38,9 +46,12 @@ func _ready() -> void:
 
 func _process(_delta: float) -> void:
 	var player := get_tree().get_first_node_in_group("player") as Player
-	var cell := world_to_cell(player.get_target_position()) if player else Vector2i.MAX
-	if not area.has_point(cell):
-		cell = Vector2i.MAX
+	var target := world_to_cell(player.get_target_position()) if player else Vector2i.MAX
+	if target == _target_cell:
+		return
+	_target_cell = target
+	# Only highlight cells where the hoe (or seeds, water) would do something.
+	var cell := target if GameState.farm.is_tilled(target) or can_till(target) else Vector2i.MAX
 	if cell != _cursor_cell:
 		_cursor_cell = cell
 		queue_redraw()
@@ -48,6 +59,17 @@ func _process(_delta: float) -> void:
 
 func world_to_cell(world_position: Vector2) -> Vector2i:
 	return Vector2i((to_local(world_position) / CELL_SIZE).floor())
+
+
+func can_till(cell: Vector2i) -> bool:
+	if not area.has_point(cell) or GameState.farm.is_tilled(cell):
+		return false
+	if _ground_tiles and _ground_tiles.get_cell_source_id(cell) != -1:
+		return false
+	var query := PhysicsPointQueryParameters2D.new()
+	query.position = to_global((Vector2(cell) + Vector2(0.5, 0.5)) * CELL_SIZE)
+	query.collision_mask = OBSTACLE_MASK
+	return get_world_2d().direct_space_state.intersect_point(query, 1).is_empty()
 
 
 ## Applies the given item to a cell. Returns true if something happened.
@@ -81,7 +103,7 @@ func _use_tool(item: ItemData, cell: Vector2i) -> bool:
 	var success := false
 	match item.tool_type:
 		ItemData.ToolType.HOE:
-			success = GameState.farm.till(cell)
+			success = can_till(cell) and GameState.farm.till(cell)
 		ItemData.ToolType.WATERING_CAN:
 			success = GameState.farm.water(cell)
 	if success:
@@ -103,7 +125,6 @@ func _plant_seed(item: ItemData, cell: Vector2i) -> bool:
 
 
 func _draw() -> void:
-	draw_rect(Rect2(area.position * CELL_SIZE, area.size * CELL_SIZE), AREA_COLOR)
 	for cell: Vector2i in GameState.farm.tiles:
 		var tile: FarmState.FarmTile = GameState.farm.tiles[cell]
 		var rect := Rect2(cell * CELL_SIZE, Vector2.ONE * CELL_SIZE)
@@ -119,6 +140,7 @@ func _draw() -> void:
 
 
 func _refresh() -> void:
+	_target_cell = Vector2i.MAX  # Re-check the cursor cell.
 	for tile: FarmState.FarmTile in GameState.farm.tiles.values():
 		if tile.has_crop() and not _crops.has(tile.crop_id):
 			_crops[tile.crop_id] = Registry.get_crop(tile.crop_id)

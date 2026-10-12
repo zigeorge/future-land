@@ -43,7 +43,7 @@ The web build is single-threaded (`export_presets.cfg`), because GitHub Pages ca
 
 **How a new game starts:** choose one of four looks, then a government official at your door explains that the city will take the land unless you buy it back within a year (112 in-game days, 100,000 g). Walk east to the village to meet the chief and the merchant. On day 4 the inventor visits your farm.
 
-**Farming:** select the hoe (1), till a tile with C, plant carrot seeds (3), water them (2), sleep at the farmhouse door, and repeat. After 3 watered days, press E to harvest. The signpost next to the farm has these tips too.
+**Farming:** select the hoe (1), face any open grass on the farm (a white square shows where the tool will act) and till it with C, plant carrot seeds (3), water them (2), sleep at the farmhouse door, and repeat. After 3 watered days, press E to harvest. The signpost next to the farm has these tips too.
 
 ## Project layout
 
