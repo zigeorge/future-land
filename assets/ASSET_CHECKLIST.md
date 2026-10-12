@@ -29,6 +29,12 @@ Art for the game, with its status. Paths are relative to `future-land/assets/`.
 
 ## Checklist
 
+### 0. Portraits (most visible improvement)
+The selection screen and the dialogue box show a portrait when one exists. Without one, the selection screen enlarges the 16×32 sprite, which can only look blocky.
+- [ ] **Avatar portraits:** `art/portraits/avatar_1.png` … `avatar_4.png` (Farmer, Builder, Nova, Pilot), matching the four sprite sheets.
+- [ ] **NPC portraits:** `art/portraits/government_official.png`, `village_chief.png`, `merchant.png`, `technological_inventor.png`. The file name is the speaker's name in the dialogue sheet, lowercase with underscores.
+- Size: **square, 256×256 px** (shown at about 112 px on the selection screen and 64 px in dialogue, at 2–3× on screen), transparent or simple background, head and shoulders, facing slightly toward the viewer. They can be painted/detailed (smoothed when shown) or pixel art at exactly 64×64 (kept sharp).
+
 ### 1. Characters
 - [x] **Player avatars:** `art/characters/player1.png`–`player4.png`, 80×128 sheets of 16×32 frames (columns: idle, walk 1–4). The player picks one at the start. See `data/avatars/`.
   - `player1`–`player3` were re-aligned so each frame sits in its 16×32 cell with the feet on the bottom row. Please draw future sheets that way.
@@ -61,7 +67,8 @@ Art for the game, with its status. Paths are relative to `future-land/assets/`.
 ### 4. Buildings and objects
 - [x] `art/environment/house_farm.png`: player's farmhouse and the chief's house
 - [x] `art/environment/house_shop.png`: merchant's shop
-- [ ] **Chief's house** and **inventor's workshop** (design doc Map 03): the chief currently reuses the farmhouse, and the workshop is solar panels and a scarecrow.
+- [ ] **Chief's house:** `art/environment/house_chief.png`, about 80×64, "larger traditional cottage, porch, flag or community emblem" (design doc Map 03). Stand-in: `house_chief_placeholder.png` (the farmhouse mirrored, with a blue roof).
+- [ ] **Inventor's workshop:** `art/environment/house_workshop.png`, about 80×64, "metal roof accents, gears, pipes, solar panel prototype". Currently only solar panels and a scarecrow.
 - [ ] **Signpost:** `art/environment/sign.png`, about 16×16. Currently drawn with rectangles.
 - [ ] `art/environment/bed.png`: not used yet (sleeping happens at the farmhouse door until there's an interior).
 

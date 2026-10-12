@@ -94,6 +94,10 @@ The four looks offered on the start screen, in the order of `Registry.AVATAR_IDS
 
 `auto_walk_cycle` (on by default) rebuilds the walk because the current sheets' walk frames don't alternate feet: front and back views alternate the step frame with its mirror image, and side views alternate the widest stride with the idle pose. Turn it off for a sheet that has a real 4-frame walk cycle.
 
+## Portraits
+
+Put a PNG in `assets/art/portraits/` named after an avatar id (`avatar_1.png`) or a speaker as written in the dialogue sheet (`Village Chief` → `village_chief.png`). The selection screen and dialogue box use it automatically; player lines ("You") use the chosen avatar's portrait.
+
 ## Items (`items/*.tres`) and crops (`crops/*.tres`)
 
 Create these in the Godot editor: right-click the folder → **New Resource** → `ItemData` / `CropData`. The file name **must** match the `id` field. Step-by-step instructions are in [docs/ARCHITECTURE.md](../docs/ARCHITECTURE.md#how-to).

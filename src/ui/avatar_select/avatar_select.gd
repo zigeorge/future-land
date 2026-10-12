@@ -4,8 +4,12 @@ extends Control
 
 signal avatar_chosen(avatar_id: StringName)
 
-## Pictures are shown at exactly 4x so every sprite pixel stays square.
-const PICTURE_SIZE := Vector2(16, 32) * 4
+## Without a portrait the sprite is shown at exactly 5x so its pixels stay
+## square. Portraits (assets/art/portraits/avatar_<n>.png) are shown at
+## PORTRAIT_SIZE and the walking sprite is shown under them.
+const SPRITE_SIZE := Vector2(16, 32) * 5
+const PORTRAIT_SIZE := Vector2(112, 112)
+const SMALL_SPRITE_SIZE := Vector2(16, 32) * 2
 const WALK_FRAME_SECONDS := 0.15
 
 var _avatars: Array[AvatarData] = []
@@ -53,19 +57,31 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func _make_card(index: int) -> PanelContainer:
 	var card := PanelContainer.new()
-	var picture := TextureRect.new()
-	picture.name = "Picture"
-	picture.custom_minimum_size = PICTURE_SIZE
-	picture.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
-	picture.size_flags_vertical = Control.SIZE_SHRINK_CENTER
-	picture.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	picture.stretch_mode = TextureRect.STRETCH_SCALE
-	picture.texture = _frames[index].get_frame_texture(&"idle_down", 0)
-	picture.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	card.add_child(picture)
+	var column := VBoxContainer.new()
+	column.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	card.add_child(column)
+	var portrait := Registry.get_portrait(String(_avatars[index].id))
+	if portrait:
+		var portrait_rect := _texture_rect("Portrait", portrait, PORTRAIT_SIZE, TextureRect.STRETCH_KEEP_ASPECT_CENTERED)
+		portrait_rect.texture_filter = Registry.portrait_filter(portrait)
+		column.add_child(portrait_rect)
+	var sprite_size := SMALL_SPRITE_SIZE if portrait else SPRITE_SIZE
+	column.add_child(_texture_rect("Picture", _frames[index].get_frame_texture(&"idle_down", 0), sprite_size, TextureRect.STRETCH_SCALE))
 	card.gui_input.connect(_on_card_input.bind(index))
 	cards_box.add_child(card)
 	return card
+
+
+func _texture_rect(node_name: String, texture: Texture2D, size: Vector2, stretch: TextureRect.StretchMode) -> TextureRect:
+	var rect := TextureRect.new()
+	rect.name = node_name
+	rect.texture = texture
+	rect.custom_minimum_size = size
+	rect.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	rect.stretch_mode = stretch
+	rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	return rect
 
 
 func _on_card_input(event: InputEvent, index: int) -> void:
@@ -87,7 +103,7 @@ func _select(index: int) -> void:
 
 func _show_frame(index: int, animation: StringName, frame: int) -> void:
 	if index < _cards.size():
-		(_cards[index].get_node("Picture") as TextureRect).texture = _frames[index].get_frame_texture(animation, frame)
+		(_cards[index].find_child("Picture", true, false) as TextureRect).texture = _frames[index].get_frame_texture(animation, frame)
 
 
 func _confirm() -> void:

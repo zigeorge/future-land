@@ -7,6 +7,7 @@ class_name Registry
 const ITEMS_DIR := "res://data/items/"
 const CROPS_DIR := "res://data/crops/"
 const AVATARS_DIR := "res://data/avatars/"
+const PORTRAITS_DIR := "res://assets/art/portraits/"
 
 ## Order shown on the avatar selection screen.
 const AVATAR_IDS: Array[StringName] = [&"avatar_1", &"avatar_2", &"avatar_3", &"avatar_4"]
@@ -22,6 +23,22 @@ static func get_crop(id: StringName) -> CropData:
 
 static func get_avatar(id: StringName) -> AvatarData:
 	return _load(AVATARS_DIR, id) as AvatarData
+
+
+## Portrait for an avatar id or a speaker name, e.g. "Village Chief" ->
+## assets/art/portraits/village_chief.png. Null if there is none (yet).
+static func get_portrait(name: String) -> Texture2D:
+	var file := name.to_snake_case().replace(" ", "_")
+	var path := PORTRAITS_DIR + file + ".png"
+	return load(path) if ResourceLoader.exists(path) else null
+
+
+## Pixel-art portraits (up to 64 px) stay sharp; larger painted ones are
+## smoothed when shown smaller.
+static func portrait_filter(texture: Texture2D) -> CanvasItem.TextureFilter:
+	if texture and texture.get_width() > 64:
+		return CanvasItem.TEXTURE_FILTER_LINEAR
+	return CanvasItem.TEXTURE_FILTER_NEAREST
 
 
 static func _load(dir: String, id: StringName) -> Resource:

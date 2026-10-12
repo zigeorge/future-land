@@ -8,9 +8,9 @@ anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = 60.0
-offset_top = -110.0
+offset_top = -128.0
 offset_right = -60.0
-offset_bottom = -40.0
+offset_bottom = -52.0
 grow_horizontal = 2
 grow_vertical = 0
 mouse_filter = 2
@@ -23,29 +23,43 @@ theme_override_constants/margin_top = 4
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = 4
 
-[node name="VBox" type="VBoxContainer" parent="Margin"]
+[node name="HBox" type="HBoxContainer" parent="Margin"]
 layout_mode = 2
+theme_override_constants/separation = 8
 
-[node name="SpeakerLabel" type="Label" parent="Margin/VBox"]
+[node name="Portrait" type="TextureRect" parent="Margin/HBox"]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+size_flags_vertical = 4
+expand_mode = 1
+stretch_mode = 5
+
+[node name="VBox" type="VBoxContainer" parent="Margin/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="SpeakerLabel" type="Label" parent="Margin/HBox/VBox"]
 unique_name_in_owner = true
 modulate = Color(1, 0.85, 0.4, 1)
 layout_mode = 2
 text = "Speaker"
 
-[node name="TextLabel" type="Label" parent="Margin/VBox"]
+[node name="TextLabel" type="Label" parent="Margin/HBox/VBox"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
 text = "Dialogue text goes here."
 autowrap_mode = 3
 
-[node name="Choices" type="VBoxContainer" parent="Margin/VBox"]
+[node name="Choices" type="VBoxContainer" parent="Margin/HBox/VBox"]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="HintLabel" type="Label" parent="Margin/VBox"]
+[node name="HintLabel" type="Label" parent="Margin/HBox/VBox"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_font_sizes/font_size = 7

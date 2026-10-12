@@ -163,7 +163,9 @@ Give it `get_save_data() -> Dictionary` and `load_save_data(data: Dictionary)`, 
 
 ## Display
 
-The base resolution is 640×360, upscaled to the window (1280×720 by default) with the `canvas_items` stretch mode, nearest-neighbour filtering and pixel snapping, which suits pixel art. The tile size is **16×16**.
+The base resolution is 640×360, upscaled to the window (1280×720 by default) with the `canvas_items` stretch mode in **integer** steps (2×, 3×…; other window sizes get thin borders), nearest-neighbour filtering and pixel snapping, so pixel art stays sharp. The tile size is **16×16**.
+
+The world camera (`Player.camera_zoom`, default 2) zooms in on top of that, so about 20×11 tiles are visible, the same scale as Stardew Valley. The HUD and menus are on canvas layers and aren't zoomed. Keep the zoom a whole number.
 
 ## Placeholders still in use
 

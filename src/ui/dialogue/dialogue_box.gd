@@ -12,6 +12,7 @@ var _pending_choices: Array[String] = []
 var _choice_index := 0
 var _choice_texts: Array[String] = []
 
+@onready var portrait: TextureRect = %Portrait
 @onready var speaker_label: Label = %SpeakerLabel
 @onready var text_label: Label = %TextLabel
 @onready var choices_box: VBoxContainer = %Choices
@@ -41,6 +42,7 @@ func _unhandled_input(event: InputEvent) -> void:
 func _on_line_shown(speaker: String, text: String) -> void:
 	speaker_label.text = speaker
 	speaker_label.visible = speaker != ""
+	_show_portrait(speaker)
 	text_label.text = text
 	text_label.visible_ratio = 0.0
 	_clear_choices()
@@ -50,6 +52,18 @@ func _on_line_shown(speaker: String, text: String) -> void:
 	_typing_tween = create_tween()
 	_typing_tween.tween_property(text_label, "visible_ratio", 1.0, text.length() / CHARACTERS_PER_SECOND)
 	_typing_tween.finished.connect(_show_pending_choices)
+
+
+## assets/art/portraits/<speaker>.png; the player ("You") uses the avatar's.
+func _show_portrait(speaker: String) -> void:
+	var texture: Texture2D = null
+	if speaker == "You":
+		texture = Registry.get_portrait(String(GameState.avatar_id))
+	elif speaker != "":
+		texture = Registry.get_portrait(speaker)
+	portrait.texture = texture
+	portrait.texture_filter = Registry.portrait_filter(texture)
+	portrait.visible = texture != null
 
 
 func _on_choices_shown(choices: Array[String]) -> void:

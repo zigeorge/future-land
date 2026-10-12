@@ -8,6 +8,13 @@ extends CharacterBody2D
 const INTERACT_REACH := 12.0
 
 @export var speed := 90.0
+## World zoom: 2 shows about 20 x 11 tiles, like Stardew Valley. Keep it a
+## whole number so pixel art stays sharp. The HUD isn't affected.
+@export var camera_zoom := 2:
+	set(value):
+		camera_zoom = maxi(value, 1)
+		if is_node_ready():
+			camera.zoom = Vector2.ONE * camera_zoom
 
 var facing := Vector2.DOWN
 
@@ -21,6 +28,7 @@ var _avatar: AvatarData
 
 func _ready() -> void:
 	add_to_group("player")
+	camera.zoom = Vector2.ONE * camera_zoom
 	interact_area.position = facing * INTERACT_REACH
 	EventBus.avatar_changed.connect(_on_avatar_changed)
 	_on_avatar_changed(GameState.avatar_id)
