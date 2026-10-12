@@ -79,6 +79,8 @@ func apply_avatar(avatar: AvatarData) -> void:
 	_avatar = avatar
 	sprite.sprite_frames = avatar.build_sprite_frames() if avatar else null
 	placeholder.visible = sprite.sprite_frames == null
+	if avatar:
+		Art.fit_sprite(sprite, Vector2(avatar.get_frame_size()), AvatarData.WORLD_FRAME_SIZE)
 	_update_animation(false)
 
 

@@ -136,6 +136,7 @@ func _update_hotbar() -> void:
 		var item := GameState.inventory.get_item_at(i)
 		var count := GameState.inventory.slots[i].count
 		icon.texture = item.icon if item else null
+		icon.texture_filter = Art.filter_for(icon.texture, 16)
 		if item == null:
 			label.text = ""
 		elif item.icon == null:

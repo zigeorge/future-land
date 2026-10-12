@@ -9,6 +9,7 @@ size = Vector2(8, 6)
 [node name="TreeOak" type="StaticBody2D"]
 collision_mask = 0
 script = ExtResource("1_prop")
+world_size = Vector2(32, 48)
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("tex_0")

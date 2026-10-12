@@ -130,7 +130,7 @@ func _draw() -> void:
 		var rect := Rect2(cell * CELL_SIZE, Vector2.ONE * CELL_SIZE)
 		var soil_texture := wet_soil_texture if tile.watered else dry_soil_texture
 		if soil_texture:
-			draw_texture(soil_texture, rect.position)
+			draw_texture_rect(soil_texture, rect, false)
 		else:
 			draw_rect(rect.grow(-1), WET_SOIL_COLOR if tile.watered else SOIL_COLOR)
 		if tile.has_crop():
@@ -143,7 +143,10 @@ func _refresh() -> void:
 	_target_cell = Vector2i.MAX  # Re-check the cursor cell.
 	for tile: FarmState.FarmTile in GameState.farm.tiles.values():
 		if tile.has_crop() and not _crops.has(tile.crop_id):
-			_crops[tile.crop_id] = Registry.get_crop(tile.crop_id)
+			var crop := Registry.get_crop(tile.crop_id)
+			_crops[tile.crop_id] = crop
+			if crop and not crop.stage_textures.is_empty():
+				texture_filter = Art.filter_for(crop.stage_textures[0], CELL_SIZE)
 	queue_redraw()
 
 
@@ -153,7 +156,7 @@ func _draw_crop(tile: FarmState.FarmTile, rect: Rect2) -> void:
 		return
 	var stage := crop.get_stage(tile.days_grown)
 	if stage < crop.stage_textures.size() and crop.stage_textures[stage] != null:
-		draw_texture(crop.stage_textures[stage], rect.position)
+		draw_texture_rect(crop.stage_textures[stage], rect, false)
 		return
 	var final_stage := crop.days_per_stage.size()
 	var radius := lerpf(2.0, CELL_SIZE * 0.4, float(stage) / final_stage)

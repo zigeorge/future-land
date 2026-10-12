@@ -9,6 +9,7 @@ size = Vector2(16, 4)
 [node name="Fence" type="StaticBody2D"]
 collision_mask = 0
 script = ExtResource("1_prop")
+world_size = Vector2(16, 16)
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("tex_0")

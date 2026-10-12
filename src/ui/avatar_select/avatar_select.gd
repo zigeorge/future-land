@@ -63,7 +63,7 @@ func _make_card(index: int) -> PanelContainer:
 	var portrait := Registry.get_portrait(String(_avatars[index].id))
 	if portrait:
 		var portrait_rect := _texture_rect("Portrait", portrait, PORTRAIT_SIZE, TextureRect.STRETCH_KEEP_ASPECT_CENTERED)
-		portrait_rect.texture_filter = Registry.portrait_filter(portrait)
+		portrait_rect.texture_filter = Art.filter_for(portrait, 64)
 		column.add_child(portrait_rect)
 	var sprite_size := SMALL_SPRITE_SIZE if portrait else SPRITE_SIZE
 	column.add_child(_texture_rect("Picture", _frames[index].get_frame_texture(&"idle_down", 0), sprite_size, TextureRect.STRETCH_SCALE))
@@ -76,6 +76,7 @@ func _texture_rect(node_name: String, texture: Texture2D, size: Vector2, stretch
 	var rect := TextureRect.new()
 	rect.name = node_name
 	rect.texture = texture
+	rect.texture_filter = Art.filter_for(texture, size.x / 5.0) if node_name == "Picture" else Art.filter_for(texture, 64)
 	rect.custom_minimum_size = size
 	rect.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE

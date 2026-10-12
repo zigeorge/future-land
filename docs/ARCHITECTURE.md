@@ -106,7 +106,7 @@ The story follows `docs/Game story.docx` and the dialogue spreadsheet (repo-leve
 
 Story progress is stored as **story flags** (`GameState.story_flags`), set by dialogue lines and saved with the game. NPCs use flags and the day number (`TimeManager.get_day_number()`) to decide whether they're present and what they say; see [data/README.md](../data/README.md#when-npcs-say-what).
 
-Conversations are `DialogueGraph`s (`src/systems/dialogue/`): lines linked by id, optional choices, and effects (flags, friendship, notifications). `DialogueManager` plays them, and the dialogue box shows lines and choices.
+Conversations are `DialogueGraph`s (`src/systems/dialogue/`): lines linked by id, optional choices, and effects (flags, friendship, notifications). `DialogueManager` plays them. The dialogue box shows the line with the speaker's portrait, and answers appear in a separate box above its right side, Animal Crossing style.
 
 ## Maps
 
@@ -164,6 +164,8 @@ Give it `get_save_data() -> Dictionary` and `load_save_data(data: Dictionary)`, 
 ## Display
 
 The base resolution is 640×360, upscaled to the window (1280×720 by default) with the `canvas_items` stretch mode in **integer** steps (2×, 3×…; other window sizes get thin borders), nearest-neighbour filtering and pixel snapping, so pixel art stays sharp. The tile size is **16×16**.
+
+**Art resolution.** Gameplay sizes are fixed (a tile is 16 units, a character 16×32), but art may be drawn at any multiple. The art direction is HD anime art at 8×. `Art.fit_sprite()` scales avatars, NPCs and props to their world size and switches to smooth filtering (with mipmaps; new textures get mipmaps by default via `[importer_defaults]` in `project.godot`) when art is bigger than its world size, while 1× pixel art keeps nearest-neighbour. Props declare their `world_size`; crops, soil, icons and portraits are drawn into fixed rectangles. **Tiles** are the exception: when 128 px tiles arrive, set the TileSet's tile size to 128 and scale the `GroundTiles`/`Decor` layers to 0.125 (a TileSet can't mix sizes). Once all art is HD, `window/stretch/scale_mode` can go back to fractional.
 
 The world camera (`Player.camera_zoom`, default 2) zooms in on top of that, so about 20×11 tiles are visible, the same scale as Stardew Valley. The HUD and menus are on canvas layers and aren't zoomed. Keep the zoom a whole number.
 

@@ -9,7 +9,8 @@ extends StaticBody2D
 ## requires_flag is set and until hidden_by_flag is set. Changes wait until
 ## any running conversation has ended.
 
-const FRAME_SIZE := Vector2i(16, 32)
+## Size of an NPC in the world; the art may be any multiple of it (see Art).
+const WORLD_FRAME_SIZE := Vector2(16, 32)
 const AUTO_TALK_DELAY := 0.6
 
 @export var npc_name := "Villager"
@@ -32,7 +33,8 @@ const AUTO_TALK_DELAY := 0.6
 @export_group("Sprite")
 ## Either a SpriteFrames (plays "idle_down", else the first animation)...
 @export var sprite_frames: SpriteFrames
-## ...or a horizontal strip of 16x32 idle frames, e.g. assets/art/characters/banker.png.
+## ...or a horizontal strip of idle frames, each twice as tall as wide
+## (16x32 pixel art or 128x256 HD), e.g. assets/art/characters/banker.png.
 @export var sprite_texture: Texture2D
 @export var idle_fps := 2.0
 
@@ -109,18 +111,22 @@ func _try_auto_talk() -> void:
 func _setup_sprite() -> void:
 	var frames := sprite_frames
 	if frames == null and sprite_texture:
+		var frame_size := Vector2(sprite_texture.get_height() / 2.0, sprite_texture.get_height())
 		frames = SpriteFrames.new()
 		frames.rename_animation(&"default", &"idle_down")
 		frames.set_animation_speed(&"idle_down", idle_fps)
-		for i in sprite_texture.get_width() / FRAME_SIZE.x:
+		for i in int(sprite_texture.get_width() / frame_size.x):
 			var atlas := AtlasTexture.new()
 			atlas.atlas = sprite_texture
-			atlas.region = Rect2(Vector2(i * FRAME_SIZE.x, 0), FRAME_SIZE)
+			atlas.region = Rect2(Vector2(i * frame_size.x, 0), frame_size)
 			frames.add_frame(&"idle_down", atlas)
 	placeholder.visible = frames == null
 	if frames == null:
 		return
 	sprite.sprite_frames = frames
+	var first := frames.get_frame_texture(frames.get_animation_names()[0], 0)
+	if first:
+		Art.fit_sprite(sprite, first.get_size(), WORLD_FRAME_SIZE)
 	var names := frames.get_animation_names()
 	if not names.is_empty():
 		sprite.play(&"idle_down" if frames.has_animation(&"idle_down") else StringName(names[0]))

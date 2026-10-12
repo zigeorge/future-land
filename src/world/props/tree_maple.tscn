@@ -12,6 +12,7 @@ size = Vector2(8, 6)
 [node name="TreeMaple" type="StaticBody2D"]
 collision_mask = 0
 script = ExtResource("1_prop")
+world_size = Vector2(32, 48)
 seasonal_textures = Array[Texture2D]([ExtResource("tex_0"), ExtResource("tex_1"), ExtResource("tex_2"), ExtResource("tex_3")])
 
 [node name="Sprite2D" type="Sprite2D" parent="."]

@@ -4,13 +4,31 @@ Art for the game, with its status. Paths are relative to `future-land/assets/`.
 
 `[x]` = in the game. `[ ]` = still needed or needs a fix (the reason is given).
 
-## Format rules (all images)
+## Art direction: HD anime 2D
 
-- **PNG with transparency.** Not JPG: it has no transparency and its compression blurs pixel art.
-- **Draw at 1× size.** The game is 640×360 and scales itself up, so a 16×16 tile is 16×16 pixels in the file.
-- **16×16 grid.** Tiles are 16×16, characters 16×32. Larger objects should be multiples of 16.
-- **Hard pixel edges.** No anti-aliasing or soft brushes, and no semi-transparent edges except deliberate shadows.
-- Leave the background transparent, not white.
+Stardew Valley gameplay and camera (top-down, slightly from the front), with **clean anime-style art**: crisp line art, cel shading (2–3 flat tones per colour), bright readable colours, light coming from the top-left in every asset.
+
+**Draw at 8× the world size.** The game works in a grid of 16 units per tile; art is delivered 8× bigger and the game scales it down smoothly, so it stays sharp on any screen. Every size in the checklist below is a *world* size: multiply by 8 for the file.
+
+| Asset | World size | **File size (8×)** | Notes |
+|---|---|---|---|
+| Ground tile | 16×16 | **128×128** | Seamless on all four sides |
+| Character frame | 16×32 | **128×256** | Sheet: 5 columns × 4 rows = **640×1024** |
+| NPC idle strip | 16×32 per frame | **128×256** per frame | 1–4 frames side by side, e.g. 256×256 for 2 |
+| Tree | 32×48 | **256×384** | |
+| House / building | 80×64 | **640×512** | Shop: 64×64 → 512×512 |
+| Fence, small prop | 16×16 | **128×128** | |
+| Crop stages | 16×16 per stage | **128×128** per stage | Strip of 4: **512×128** |
+| Item icon | 16×16 | **128×128** | |
+| Portrait | — | **512×512** | Shown on the selection screen and in dialogue |
+
+Rules for every file:
+- **PNG with real transparency** (no white or checkerboard background), never JPG.
+- **Exactly the file size in the table**, with the object filling its frame (feet on the bottom edge for characters, base on the bottom edge for trees and buildings).
+- **Sharp at its own size.** Look at it at 100% zoom: line art should be crisp. Don't draw small and enlarge, or generate large and shrink until it blurs.
+- **One consistent style** across all assets: same line thickness, shading, palette and light direction. Make one reference sheet (a character, a tree, a tile) first and match everything to it.
+
+Current art is 1× pixel art. It keeps working, and each file can be replaced with its 8× version at any time: same name, same place. The game detects the bigger size by itself.
 
 ## Naming rules
 
@@ -30,10 +48,10 @@ Art for the game, with its status. Paths are relative to `future-land/assets/`.
 ## Checklist
 
 ### 0. Portraits (most visible improvement)
-The selection screen and the dialogue box show a portrait when one exists. Without one, the selection screen enlarges the 16×32 sprite, which can only look blocky.
+The selection screen and the dialogue box show a portrait when one exists. Without one, the selection screen enlarges the character sprite.
 - [ ] **Avatar portraits:** `art/portraits/avatar_1.png` … `avatar_4.png` (Farmer, Builder, Nova, Pilot), matching the four sprite sheets.
 - [ ] **NPC portraits:** `art/portraits/government_official.png`, `village_chief.png`, `merchant.png`, `technological_inventor.png`. The file name is the speaker's name in the dialogue sheet, lowercase with underscores.
-- Size: **square, 256×256 px** (shown at about 112 px on the selection screen and 64 px in dialogue, at 2–3× on screen), transparent or simple background, head and shoulders, facing slightly toward the viewer. They can be painted/detailed (smoothed when shown) or pixel art at exactly 64×64 (kept sharp).
+- Size: **square, 512×512 px**, anime style matching the sprites, transparent or simple background, head and shoulders, facing slightly toward the viewer. A few expressions (e.g. `village_chief_happy.png`) can come later.
 
 ### 1. Characters
 - [x] **Player avatars:** `art/characters/player1.png`–`player4.png`, 80×128 sheets of 16×32 frames (columns: idle, walk 1–4). The player picks one at the start. See `data/avatars/`.

@@ -1,6 +1,7 @@
-extends PanelContainer
-## Displays dialogue lines from DialogueManager with a typewriter effect, and
-## the player's choices when a line offers some.
+extends Control
+## Displays dialogue lines from DialogueManager with a typewriter effect. When a
+## line offers answers they appear in a separate box above the dialogue's
+## right side, Animal Crossing style.
 ## Restyle freely in dialogue_box.tscn; keep the %UniqueName nodes.
 
 const CHARACTERS_PER_SECOND := 40.0
@@ -15,6 +16,7 @@ var _choice_texts: Array[String] = []
 @onready var portrait: TextureRect = %Portrait
 @onready var speaker_label: Label = %SpeakerLabel
 @onready var text_label: Label = %TextLabel
+@onready var choices_panel: PanelContainer = %ChoicesPanel
 @onready var choices_box: VBoxContainer = %Choices
 @onready var hint_label: Label = %HintLabel
 
@@ -29,7 +31,7 @@ func _ready() -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	if not visible:
 		return
-	if choices_box.visible:
+	if choices_panel.visible:
 		_handle_choice_input(event)
 	elif event.is_action_pressed("advance_dialogue"):
 		get_viewport().set_input_as_handled()
@@ -62,7 +64,7 @@ func _show_portrait(speaker: String) -> void:
 	elif speaker != "":
 		texture = Registry.get_portrait(speaker)
 	portrait.texture = texture
-	portrait.texture_filter = Registry.portrait_filter(texture)
+	portrait.texture_filter = Art.filter_for(texture, 64)
 	portrait.visible = texture != null
 
 
@@ -85,7 +87,7 @@ func _show_pending_choices() -> void:
 		button.mouse_entered.connect(_highlight_choice.bind(i))
 		choices_box.add_child(button)
 	_pending_choices = []
-	choices_box.show()
+	choices_panel.show()
 	hint_label.hide()
 	_highlight_choice(0)
 
@@ -115,7 +117,7 @@ func _clear_choices() -> void:
 	for child in choices_box.get_children():
 		choices_box.remove_child(child)
 		child.queue_free()
-	choices_box.hide()
+	choices_panel.hide()
 	hint_label.show()
 
 

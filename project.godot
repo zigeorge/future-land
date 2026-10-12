@@ -46,6 +46,12 @@ window/stretch/scale_mode="integer"
 
 theme/custom="res://assets/themes/main_theme.tres"
 
+[importer_defaults]
+
+texture={
+"mipmaps/generate": true
+}
+
 [input]
 
 move_up={

@@ -33,13 +33,6 @@ static func get_portrait(name: String) -> Texture2D:
 	return load(path) if ResourceLoader.exists(path) else null
 
 
-## Pixel-art portraits (up to 64 px) stay sharp; larger painted ones are
-## smoothed when shown smaller.
-static func portrait_filter(texture: Texture2D) -> CanvasItem.TextureFilter:
-	if texture and texture.get_width() > 64:
-		return CanvasItem.TEXTURE_FILTER_LINEAR
-	return CanvasItem.TEXTURE_FILTER_NEAREST
-
 
 static func _load(dir: String, id: StringName) -> Resource:
 	var path := dir + String(id) + ".tres"
