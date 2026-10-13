@@ -102,4 +102,4 @@ Put a PNG in `assets/art/portraits/` named after an avatar id (`avatar_1.png`) o
 
 Create these in the Godot editor: right-click the folder → **New Resource** → `ItemData` / `CropData`. The file name **must** match the `id` field. Step-by-step instructions are in [docs/ARCHITECTURE.md](../docs/ARCHITECTURE.md#how-to).
 
-A crop's `stage_textures` can point at parts of a single strip image (AtlasTexture), as `carrot.tres` does with `assets/art/tilesets/crops/carrot.png`.
+A crop's art is either `stage_strip` (one image with every stage as a square, side by side, at any resolution, as `carrot.tres` does with `assets/art/tilesets/crops/carrot.png`) or a list of `stage_textures`.

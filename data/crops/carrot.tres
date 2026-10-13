@@ -4,28 +4,12 @@
 [ext_resource type="Resource" path="res://data/items/carrot.tres" id="2_carrot"]
 [ext_resource type="Texture2D" path="res://assets/art/tilesets/crops/carrot.png" id="3_stages"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_stage0"]
-atlas = ExtResource("3_stages")
-region = Rect2(0, 0, 16, 16)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_stage1"]
-atlas = ExtResource("3_stages")
-region = Rect2(16, 0, 16, 16)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_stage2"]
-atlas = ExtResource("3_stages")
-region = Rect2(32, 0, 16, 16)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_stage3"]
-atlas = ExtResource("3_stages")
-region = Rect2(48, 0, 16, 16)
-
 [resource]
 script = ExtResource("1_crop")
 id = &"carrot"
 display_name = "Carrot"
 days_per_stage = Array[int]([1, 1, 1])
-stage_textures = Array[Texture2D]([SubResource("AtlasTexture_stage0"), SubResource("AtlasTexture_stage1"), SubResource("AtlasTexture_stage2"), SubResource("AtlasTexture_stage3")])
+stage_strip = ExtResource("3_stages")
 harvest_item = ExtResource("2_carrot")
 harvest_amount = 1
 seasons = 1

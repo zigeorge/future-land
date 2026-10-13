@@ -7,7 +7,7 @@ extends Node2D
 ## the sibling GroundTiles layer) and not under a building, tree, fence or NPC.
 ##
 ## Soil uses dry_soil_texture / wet_soil_texture and crops use their
-## CropData.stage_textures; anything without art falls back to placeholder
+## CropData stage art; anything without art falls back to placeholder
 ## shapes drawn in _draw().
 
 const GROUP := &"farm_grid"
@@ -145,8 +145,8 @@ func _refresh() -> void:
 		if tile.has_crop() and not _crops.has(tile.crop_id):
 			var crop := Registry.get_crop(tile.crop_id)
 			_crops[tile.crop_id] = crop
-			if crop and not crop.stage_textures.is_empty():
-				texture_filter = Art.filter_for(crop.stage_textures[0], CELL_SIZE)
+			if crop and crop.get_stage_count() > 0:
+				texture_filter = Art.filter_for(crop.get_stage_texture(0), CELL_SIZE)
 	queue_redraw()
 
 
@@ -155,8 +155,9 @@ func _draw_crop(tile: FarmState.FarmTile, rect: Rect2) -> void:
 	if crop == null:
 		return
 	var stage := crop.get_stage(tile.days_grown)
-	if stage < crop.stage_textures.size() and crop.stage_textures[stage] != null:
-		draw_texture_rect(crop.stage_textures[stage], rect, false)
+	var texture := crop.get_stage_texture(stage)
+	if texture:
+		draw_texture_rect(texture, rect, false)
 		return
 	var final_stage := crop.days_per_stage.size()
 	var radius := lerpf(2.0, CELL_SIZE * 0.4, float(stage) / final_stage)
