@@ -8,9 +8,10 @@ const SLOT_SIZE := Vector2(40, 40)
 const ICON_SIZE := Vector2(32, 32)
 const MESSAGE_SECONDS := 2.0
 
-## 26x26 hotbar slot frames (assets/art/ui/hotbar_slot.png and
-## hotbar_slot_selected.png). Without them, slots use the theme's panel style
-## and the selected slot is tinted.
+## Hotbar slot frames (assets/art/ui/hotbar_frame.png and
+## hotbar_frame_selected.png). Small pixel-art frames are 9-sliced; large HD
+## frames are scaled whole into the slot. Without them, slots use the theme's
+## panel style and the selected slot is tinted.
 @export var slot_texture: Texture2D
 @export var selected_slot_texture: Texture2D
 
@@ -22,7 +23,7 @@ var _message_tween: Tween
 @onready var money_label: Label = %MoneyLabel
 @onready var deadline_label: Label = %DeadlineLabel
 @onready var goal_label: Label = %GoalLabel
-@onready var energy_bar: ProgressBar = %EnergyBar
+@onready var energy_bar: EnergyBar = %EnergyBar
 @onready var hotbar: HBoxContainer = %Hotbar
 @onready var message_label: Label = %MessageLabel
 
@@ -101,8 +102,7 @@ func _update_money(amount: int) -> void:
 
 
 func _update_energy(current: int, maximum: int) -> void:
-	energy_bar.max_value = maximum
-	energy_bar.value = current
+	energy_bar.ratio = float(current) / maximum
 
 
 func _build_hotbar() -> void:
@@ -157,8 +157,9 @@ func _style_slot(slot: PanelContainer, selected: bool) -> void:
 	if texture:
 		var style := StyleBoxTexture.new()
 		style.texture = texture
-		style.set_texture_margin_all(5)
+		style.set_texture_margin_all(5 if texture.get_width() <= 32 else 0)
 		style.set_content_margin_all(4)
+		slot.texture_filter = Art.filter_for(texture, SLOT_SIZE.x)
 		slot.add_theme_stylebox_override("panel", style)
 		slot.self_modulate = Color.WHITE
 	else:

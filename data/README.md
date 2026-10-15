@@ -96,7 +96,7 @@ The four looks offered on the start screen, in the order of `Registry.AVATAR_IDS
 
 ## Portraits
 
-Put a PNG in `assets/art/portraits/` named after an avatar id (`avatar_1.png`) or a speaker as written in the dialogue sheet (`Village Chief` → `village_chief.png`). The selection screen and dialogue box use it automatically; player lines ("You") use the chosen avatar's portrait.
+Put a PNG in `assets/art/portraits/` named like the player's sprite sheet (`player1.png` for `characters/player1.png`) or like a speaker in the dialogue sheet (`Village Chief` → `village_chief.png`). The selection screen and dialogue box use it automatically; player lines ("You") use the chosen avatar's portrait.
 
 ## Items (`items/*.tres`) and crops (`crops/*.tres`)
 

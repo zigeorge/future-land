@@ -1,7 +1,7 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://src/world/props/prop.gd" id="1_prop"]
-[ext_resource type="Texture2D" path="res://assets/art/environment/house_chief_placeholder.png" id="tex_0"]
+[ext_resource type="Texture2D" path="res://assets/art/environment/house_chief.png" id="tex_0"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_base"]
 size = Vector2(60, 28)

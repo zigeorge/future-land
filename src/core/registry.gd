@@ -25,10 +25,10 @@ static func get_avatar(id: StringName) -> AvatarData:
 	return _load(AVATARS_DIR, id) as AvatarData
 
 
-## Portrait for an avatar id or a speaker name, e.g. "Village Chief" ->
+## Portrait for a file name or a speaker name, e.g. "Village Chief" ->
 ## assets/art/portraits/village_chief.png. Null if there is none (yet).
 static func get_portrait(name: String) -> Texture2D:
-	var file := name.to_snake_case().replace(" ", "_")
+	var file := name.to_lower().replace(" ", "_")
 	var path := PORTRAITS_DIR + file + ".png"
 	return load(path) if ResourceLoader.exists(path) else null
 

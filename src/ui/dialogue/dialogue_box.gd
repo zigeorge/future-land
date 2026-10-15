@@ -60,7 +60,8 @@ func _on_line_shown(speaker: String, text: String) -> void:
 func _show_portrait(speaker: String) -> void:
 	var texture: Texture2D = null
 	if speaker == "You":
-		texture = Registry.get_portrait(String(GameState.avatar_id))
+		var avatar := Registry.get_avatar(GameState.avatar_id) if GameState.avatar_id != &"" else null
+		texture = avatar.get_portrait() if avatar else null
 	elif speaker != "":
 		texture = Registry.get_portrait(speaker)
 	portrait.texture = texture

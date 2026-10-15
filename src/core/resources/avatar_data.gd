@@ -48,6 +48,11 @@ func is_mirrored(direction: String) -> bool:
 	return (direction == "left" and mirror_left) or (direction == "right" and mirror_right)
 
 
+## Portrait with the same file name as the sheet (assets/art/portraits/), or null.
+func get_portrait() -> Texture2D:
+	return Registry.get_portrait(sheet.resource_path.get_file().get_basename()) if sheet else null
+
+
 ## Pixel size of one frame on the sheet.
 func get_frame_size() -> Vector2i:
 	if sheet == null:

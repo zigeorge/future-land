@@ -34,7 +34,8 @@ var _target_cell := Vector2i.MAX
 var _crops: Dictionary = {}
 
 
-@onready var _ground_tiles: TileMapLayer = get_node_or_null("../GroundTiles")
+## Sibling tile layers whose tiles can't be farmed on (water, paths).
+@onready var _blocking_layers: Array[TileMapLayer] = _find_layers(["../GroundTiles"])
 
 
 func _ready() -> void:
@@ -64,8 +65,9 @@ func world_to_cell(world_position: Vector2) -> Vector2i:
 func can_till(cell: Vector2i) -> bool:
 	if not area.has_point(cell) or GameState.farm.is_tilled(cell):
 		return false
-	if _ground_tiles and _ground_tiles.get_cell_source_id(cell) != -1:
-		return false
+	for layer in _blocking_layers:
+		if layer.get_cell_source_id(cell) != -1:
+			return false
 	var query := PhysicsPointQueryParameters2D.new()
 	query.position = to_global((Vector2(cell) + Vector2(0.5, 0.5)) * CELL_SIZE)
 	query.collision_mask = OBSTACLE_MASK
@@ -162,3 +164,12 @@ func _draw_crop(tile: FarmState.FarmTile, rect: Rect2) -> void:
 	var final_stage := crop.days_per_stage.size()
 	var radius := lerpf(2.0, CELL_SIZE * 0.4, float(stage) / final_stage)
 	draw_circle(rect.get_center(), radius, READY_COLOR if stage == final_stage else CROP_COLOR)
+
+
+func _find_layers(paths: Array) -> Array[TileMapLayer]:
+	var layers: Array[TileMapLayer] = []
+	for path: String in paths:
+		var layer := get_node_or_null(path) as TileMapLayer
+		if layer:
+			layers.append(layer)
+	return layers

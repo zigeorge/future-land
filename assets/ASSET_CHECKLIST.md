@@ -47,61 +47,66 @@ Current art is 1× pixel art. It keeps working, and each file can be replaced wi
 
 ## Checklist
 
-In priority order. Sizes are **file sizes** (already 8×). Keep the file names, so each new file replaces the current pixel-art version. Tick a box (`- [x]`) when the file is pushed.
+In priority order. Sizes are **file sizes** (already 8×). `[x]` = in the game. Keep the file names, so each new file replaces the old one.
 
-Map tiles are the one exception: new files in `art/tilesets/` (ground, path, soil, paving, water, grass tufts, bushes) need a small switch in the maps, which the programmer does when they arrive. Everything else shows up in the game by itself.
+Map tiles (ground, path, soil, paving, water, tufts, bushes) live in one tileset, `art/tilesets/world_tileset.tres`; a new tile image needs a small change there, which the programmer does. Everything else shows up in the game by itself.
 
-### 1. Reference set (do this first)
-- [ ] One character, one tree and one grass tile in the final anime style, so the team can agree on the look before the rest is drawn.
+### 1. Reference set
+- [x] Character, tree and grass tile approved: anime style, sharp at 8×.
 
 ### 2. Portraits: 512×512, head and shoulders (`art/portraits/`)
 Shown on the avatar selection screen and next to the speaker in conversations.
-- [ ] Avatars: `avatar_1.png` (Farmer), `avatar_2.png` (Builder), `avatar_3.png` (Nova), `avatar_4.png` (Pilot)
+- [x] Players: `player1.png`–`player4.png` (same names as the player sheets)
 - [ ] NPCs: `government_official.png`, `village_chief.png`, `merchant.png`, `technological_inventor.png` (the speaker's name from the dialogue sheet, lowercase with underscores)
 - [ ] Later: a few expressions per NPC, e.g. `village_chief_happy.png`
 
-### 3. Player characters: 640×1024 sheets (`art/characters/player1.png`–`player4.png`)
-5 columns (idle, walk 1–4) × 4 rows of 128×256 frames.
-- [ ] Rows in this order: facing down, up, left, right. Each direction drawn separately (currently `player1` has two left-facing rows and `player3` two right-facing ones).
-- [ ] A real 4-frame walk: right foot forward, passing, left foot forward, passing. In the current sheets only one foot moves.
-- [ ] Feet on the bottom edge of every frame, character centred.
+### 3. Player characters: 640×1024 sheets (5 columns × 4 rows of 128×256 frames)
+Received in `tilesets/players/`, not in the game yet. The game still uses the old pixel sheets in `art/characters/player1.png`–`player4.png`; the new ones will replace them there.
+- [ ] **Feet on the same line in every frame** (e.g. 8 px above the bottom). Now they vary by up to 28 px between rows, so the character would jump when turning.
+- [ ] **Nothing touching the frame edges:** player3 and player4 touch them in almost every frame.
+- [ ] **Same height for all four players:** player1 is shorter than player3 and player4.
+- [ ] **Row order: down, up, left, right.** player4 has left and right swapped.
+- [x] Real 4-frame walk cycles.
+- Tip: only down, up and one side view are needed (the game can mirror the side view), and loose frames are fine: the programmer can line them up with a tool.
 
-### 4. Grass ground tile: 128×128, seamless (`art/tilesets/grass_ground.png`)
-- [ ] 3–4 variants side by side (e.g. 512×128), fully opaque, tiling on all four sides. The ground is still a flat colour.
+### 4. Grass ground tile: 128×128, seamless (`art/tilesets/environment/grass_ground.png`)
+- [ ] `grass_variations.png` is solid and seamless (good), but the 4 variants differ too much in colour, so the ground looks like a checkerboard. Keep one base colour and vary only details (a few flowers, a stone). Two tiles have a thin 1 px line along their edges.
+- [ ] Optional: one set per season (`grass_ground_spring.png`, `_summer`, `_fall`, `_winter`).
 
-### 5. NPCs: 128×256 per idle frame, frames side by side (`art/characters/`)
-- [ ] `government_official1.png`, `village_chief.png`, `shopkeeper1.png` (merchant), `inventor.png`
-- Not used yet: `banker.png`, `futuristic_chief.png`, `guide1.png`, `nova.png`, `woman_player4.png`
+### 5. NPCs: 128×256 per idle frame (`art/characters/`)
+- [x] `government_official.png`, `village_chief.png`, `merchant.png`, `technological_inventor.png`
+- [x] `banker.png`, `guide1.png` (not placed in a map yet)
+- [ ] Optional: a 2–4 frame idle animation (frames side by side)
 
 ### 6. Buildings: 640×512 (`art/environment/`)
-- [ ] `house_chief.png`: larger traditional cottage, porch, flag or community emblem (design doc Map 03). Currently a recoloured farmhouse (`house_chief_placeholder.png`).
-- [ ] `house_workshop.png`: workshop with metal roof, gears, pipes, solar panel prototype. Currently only solar panels.
-- [ ] `house_farm.png`: the player's farmhouse, in the new style
-- [ ] `house_shop.png`: the merchant's shop, 512×512, in the new style
+- [x] `house_farm.png` (the player's farmhouse), `house_chief.png`, `house_shop.png` (512×512), `house_workshop.png`
+- [x] `house_farm_2.png` (variant, not used yet)
 
-### 7. Tiles: 128×128 (`art/tilesets/`)
-- [ ] `dirt_path.png`, plus a version without grass in the corners for the inside of wide paths
-- [ ] `soil_dry.png`, `soil_wet.png`: tilled soil filling the whole tile (currently a small blob)
-- [ ] `town_paving.png`: filling the whole tile
-- [ ] `water.png`: same layout as now (8 × 6 tiles = 1024×768)
+### 7. Tiles: 128×128 (`art/tilesets/environment/`)
+- [x] `dirt_path.png` (3×3 set)
+- [ ] 4 inside-corner tiles for the dirt path (grass in just one corner), so paths can turn corners cleanly
+- [x] `water.png` (8 × 6 tiles); later: pond edge tiles (water to grass)
+- [ ] `soil_dry.png`, `soil_wet.png`: `soil_wet` shows a seam when repeated
+- [ ] `town_paving.png`: `town_paving1` shows lines where tiles meet; `town_paving2` is JPG (please PNG)
 
 ### 8. Trees and props (`art/environment/`)
-- [ ] Trees, 256×384: `tree_oak.png`, `tree_pine.png`, `tree_maple_spring.png` / `_summer` / `_fall` / `_winter`
-- [ ] 128×128: `fence.png`, `rock_small.png` (filling most of the tile), `sign.png` (signpost)
-- [ ] `solar_panel.png` 128×256, `robot_scarecrow.png` 128×192
-- [ ] Grass tufts and bushes for decoration, 128×128 each: `tilesets/environment/grass.png`, `bush.png` (4 × 4 = 512×512)
+- [x] Trees: `tree_oak.png`, `tree_oak_2.png`, `tree_pine.png`, `tree_maple_spring.png` / `_summer` / `_fall` / `_winter`. (Small fix for later: the bases end 15–25 px above the bottom edge, so trees float slightly.)
+- [x] `fence.png`, `rock_small.png`, `sign.png`, `solar_panel.png`, `robot_scarecrow.png`
+- [x] Decoration: `tilesets/environment/grass_tufts.png`, `bushes.png`
 
 ### 9. Crops: strip of 4 stages, 512×128 (`art/tilesets/crops/`)
-- [ ] `carrot.png` (3 growing stages + ripe)
-- [ ] Later: `onion.png`, `cabbage.png`, `broccoli.png`
+- [x] `carrot.png` (in the game)
+- [x] `broccoli.png`, `cabbage.png`, `garlic.png`, `onion.png`, `potato.png` (ready for when these crops are added)
 
 ### 10. Item icons: 128×128 (`art/items/`)
-- [ ] `hoe.png`, `watering_can.png`, `carrot_seeds.png` (seed packet), `carrot.png`
-- [ ] `axe.png`, `chainsaw.png`, `rock_hammer.png` (as PNG; `axe2.jpeg` and `rock_hammer.jpeg` can't be used)
+- [x] `hoe.png`, `watering_can.png` (in the hotbar)
+- [x] `axe.png`, `chainsaw.png`, `pick_axe.png`, `pitchfork.png`, `rake.png`, `rock_hammer.png`, `scythe.png`, `sickle.png` (for upcoming tools)
+- [ ] `carrot_seeds.png` (seed packet) and `carrot.png` (the harvested carrot); the hotbar shows their names as text until then
 
 ### 11. Interface (`art/ui/`)
-- [ ] Energy bar: frame and fill (the current ones can't be used)
-- [ ] Panel and hotbar slot frames in the new style (the current ones work for now)
+- [x] Energy bar: `energy_bar.png` (frame) and `energy_bar_fill.png`; the game draws the level inside the frame
+- [x] Hotbar: `hotbar_frame.png`, `hotbar_frame_selected.png`
+- [ ] Dialogue box and panel frame in the same blue sci-fi style (the current ones are brown wood)
 - [ ] Simpler game icon `branding/icon.png` (the poster is hard to read at browser-tab size)
 
 ### 12. Later

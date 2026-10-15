@@ -5,7 +5,7 @@ extends Control
 signal avatar_chosen(avatar_id: StringName)
 
 ## Without a portrait the sprite is shown at exactly 5x so its pixels stay
-## square. Portraits (assets/art/portraits/avatar_<n>.png) are shown at
+## square. Portraits (assets/art/portraits/, named like the sheet) are shown at
 ## PORTRAIT_SIZE and the walking sprite is shown under them.
 const SPRITE_SIZE := Vector2(16, 32) * 5
 const PORTRAIT_SIZE := Vector2(112, 112)
@@ -60,7 +60,7 @@ func _make_card(index: int) -> PanelContainer:
 	var column := VBoxContainer.new()
 	column.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	card.add_child(column)
-	var portrait := Registry.get_portrait(String(_avatars[index].id))
+	var portrait := _avatars[index].get_portrait()
 	if portrait:
 		var portrait_rect := _texture_rect("Portrait", portrait, PORTRAIT_SIZE, TextureRect.STRETCH_KEEP_ASPECT_CENTERED)
 		portrait_rect.texture_filter = Art.filter_for(portrait, 64)
