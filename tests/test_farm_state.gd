@@ -14,7 +14,7 @@ func test_must_till_before_planting() -> void:
 
 func test_watered_crop_grows_until_harvestable() -> void:
 	var farm := _planted_farm()
-	for day in 3:
+	for day in Registry.get_crop(&"carrot").get_total_days():
 		assert_false(farm.can_harvest(CELL), "not ready on day %d" % day)
 		farm.water(CELL)
 		farm.advance_day(SPRING)

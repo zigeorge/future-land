@@ -6,6 +6,7 @@ extends Node
 const FADE_SECONDS := 0.3
 const AVATAR_SELECT_SCENE := preload("res://src/ui/avatar_select/avatar_select.tscn")
 const MENU_SCENE := preload("res://src/ui/menus/game_menu.tscn")
+const BACKPACK_SCENE := preload("res://src/ui/inventory/backpack.tscn")
 
 @export_file("*.tscn") var start_level := "res://src/world/farm/farm.tscn"
 
@@ -28,6 +29,9 @@ func _ready() -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("pause") and _can_pause():
 		_show_pause_menu()
+		get_viewport().set_input_as_handled()
+	elif event.is_action_pressed("toggle_inventory") and _can_pause():
+		open_backpack()
 		get_viewport().set_input_as_handled()
 	elif event.is_action_pressed("quick_save"):
 		_save()
@@ -73,6 +77,16 @@ func _show_pause_menu() -> void:
 			_load()
 		&"title":
 			_show_title()
+
+
+## Opens the backpack and pauses the game until it is closed.
+func open_backpack(shop_open := false) -> Backpack:
+	var backpack: Backpack = BACKPACK_SCENE.instantiate()
+	backpack.shop_open = shop_open
+	$UI.add_child(backpack)
+	get_tree().paused = true
+	backpack.closed.connect(func() -> void: get_tree().paused = false)
+	return backpack
 
 
 func _open_menu(title: String, backdrop: bool) -> GameMenu:

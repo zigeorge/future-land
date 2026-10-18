@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="ItemData" format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/item_data.gd" id="1_item"]
+
+[resource]
+script = ExtResource("1_item")
+id = &"sand_perch"
+display_name = "Sand Perch"
+description = "A hardy perch that hides among rocks and sandy shallows. Requires a Level 1+ fishing tool."
+category = 6
+level = 1
+sell_price = 65
+seasons = 4
+catch_chance = 0.45

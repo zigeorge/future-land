@@ -3,19 +3,9 @@ extends Control
 ## goal (once the story has revealed them), energy, hotbar, messages.
 ## Restyle freely in hud.tscn; the script only needs the %UniqueName nodes.
 
-const SLOT_SIZE := Vector2(40, 40)
-## Item icons are 16x16, shown at exactly 2x.
-const ICON_SIZE := Vector2(32, 32)
 const MESSAGE_SECONDS := 2.0
 
-## Hotbar slot frames (assets/art/ui/hotbar_frame.png and
-## hotbar_frame_selected.png). Small pixel-art frames are 9-sliced; large HD
-## frames are scaled whole into the slot. Without them, slots use the theme's
-## panel style and the selected slot is tinted.
-@export var slot_texture: Texture2D
-@export var selected_slot_texture: Texture2D
-
-var _slots: Array[PanelContainer] = []
+var _slots: Array[ItemSlot] = []
 var _message_tween: Tween
 
 @onready var date_label: Label = %DateLabel
@@ -50,10 +40,8 @@ func _unhandled_input(event: InputEvent) -> void:
 		GameState.selected_hotbar_slot -= 1
 	elif event is InputEventKey and event.pressed and not event.echo:
 		var key: Key = event.physical_keycode
-		if key >= KEY_1 and key <= KEY_9:
+		if key >= KEY_1 and key < KEY_1 + GameState.HOTBAR_SIZE:
 			GameState.selected_hotbar_slot = key - KEY_1
-		elif key == KEY_0:
-			GameState.selected_hotbar_slot = 9
 
 
 func show_message(text: String) -> void:
@@ -97,61 +85,12 @@ func _update_energy(current: int, maximum: int) -> void:
 
 func _build_hotbar() -> void:
 	for i in GameState.HOTBAR_SIZE:
-		var slot := PanelContainer.new()
-		slot.custom_minimum_size = SLOT_SIZE
-		slot.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		var icon := TextureRect.new()
-		icon.name = "Icon"
-		icon.custom_minimum_size = ICON_SIZE
-		icon.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
-		icon.size_flags_vertical = Control.SIZE_SHRINK_CENTER
-		icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-		icon.stretch_mode = TextureRect.STRETCH_SCALE
-		var label := Label.new()
-		label.name = "Label"
-		label.add_theme_font_size_override("font_size", 8)
-		label.add_theme_constant_override("outline_size", 3)
-		label.add_theme_color_override("font_outline_color", Color(0.1, 0.06, 0.04))
-		slot.add_child(icon)
-		slot.add_child(label)
+		var slot := ItemSlot.new()
 		hotbar.add_child(slot)
 		_slots.append(slot)
 
 
 func _update_hotbar() -> void:
 	for i in _slots.size():
-		var slot := _slots[i]
-		var icon: TextureRect = slot.get_node("Icon")
-		var label: Label = slot.get_node("Label")
-		var item := GameState.inventory.get_item_at(i)
-		var count := GameState.inventory.slots[i].count
-		icon.texture = item.icon if item else null
-		icon.texture_filter = Art.filter_for(icon.texture, 16)
-		if item == null:
-			label.text = ""
-		elif item.icon == null:
-			# No art yet: show a short name instead of an icon.
-			label.text = item.display_name.left(6) + ("\n%d" % count if count > 1 else "")
-			label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-			label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-		else:
-			# Stack size in the bottom-right corner.
-			label.text = str(count) if count > 1 else ""
-			label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-			label.vertical_alignment = VERTICAL_ALIGNMENT_BOTTOM
-		_style_slot(slot, i == GameState.selected_hotbar_slot)
-
-
-func _style_slot(slot: PanelContainer, selected: bool) -> void:
-	var texture := selected_slot_texture if selected else slot_texture
-	if texture:
-		var style := StyleBoxTexture.new()
-		style.texture = texture
-		style.set_texture_margin_all(5 if texture.get_width() <= 32 else 0)
-		style.set_content_margin_all(4)
-		slot.texture_filter = Art.filter_for(texture, SLOT_SIZE.x)
-		slot.add_theme_stylebox_override("panel", style)
-		slot.self_modulate = Color.WHITE
-	else:
-		slot.remove_theme_stylebox_override("panel")
-		slot.self_modulate = Color(2.0, 1.7, 0.6) if selected else Color.WHITE
+		_slots[i].show_item(GameState.inventory.get_item_at(i), GameState.inventory.slots[i].count)
+		_slots[i].set_selected(i == GameState.selected_hotbar_slot)

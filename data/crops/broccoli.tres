@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="CropData" format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/crop_data.gd" id="1_crop"]
+[ext_resource type="Resource" path="res://data/items/broccoli.tres" id="2_harvest"]
+[ext_resource type="Texture2D" path="res://assets/art/tilesets/crops/broccoli.png" id="3_stages"]
+
+[resource]
+script = ExtResource("1_crop")
+id = &"broccoli"
+display_name = "Broccoli"
+days_per_stage = Array[int]([3, 3, 2])
+harvest_item = ExtResource("2_harvest")
+harvest_amount = 1
+seasons = 4
+stage_strip = ExtResource("3_stages")

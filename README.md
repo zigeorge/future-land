@@ -37,7 +37,8 @@ The web build is single-threaded (`export_presets.cfg`), because GitHub Pages ca
 | Use selected tool or seed | C / left mouse |
 | Interact (talk, read, sleep at the farmhouse door, harvest) | E / right mouse |
 | Advance dialogue | E / Space / left mouse |
-| Select hotbar slot | 1–0 / mouse wheel |
+| Select hotbar slot | 1–8 / mouse wheel |
+| Backpack (8×5; see items and sell prices, move items) | I / Tab |
 | Pause menu (save, load, quit to title) | Esc |
 | Quick save / load | F5 / F9 |
 | Skip to next day (debug builds only) | F6 |

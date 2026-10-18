@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ItemData" format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/item_data.gd" id="1_item"]
+
+[resource]
+script = ExtResource("1_item")
+id = &"strawberry_seeds"
+display_name = "Strawberry Seeds"
+description = "Plant these to grow sweet red strawberries during spring."
+category = 2
+level = 2
+buy_price = 85
+shop = &"merchant"
+sell_price = 42
+crop_id = &"strawberry"

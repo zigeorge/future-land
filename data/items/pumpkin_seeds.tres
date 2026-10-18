@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ItemData" format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/item_data.gd" id="1_item"]
+
+[resource]
+script = ExtResource("1_item")
+id = &"pumpkin_seeds"
+display_name = "Pumpkin Seeds"
+description = "Grow large orange pumpkins that are harvested in autumn."
+category = 2
+level = 1
+buy_price = 120
+shop = &"merchant"
+sell_price = 60
+crop_id = &"pumpkin"

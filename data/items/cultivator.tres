@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ItemData" format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/item_data.gd" id="1_item"]
+
+[resource]
+script = ExtResource("1_item")
+id = &"cultivator"
+display_name = "Cultivator"
+description = "A powered farming machine used to quickly till larger areas of soil and prepare farmland for planting."
+category = 1
+level = 2
+buy_price = 800
+shop = &"merchant"
+max_stack = 1
+sell_price = 800

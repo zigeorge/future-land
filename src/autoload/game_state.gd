@@ -6,8 +6,9 @@ extends Node
 
 const STARTING_MONEY := 500
 const MAX_ENERGY := 270
-const INVENTORY_SIZE := 30
-const HOTBAR_SIZE := 10
+## Backpack: 8 columns x 5 rows; the first row is the hotbar.
+const INVENTORY_SIZE := 40
+const HOTBAR_SIZE := 8
 
 ## Story: the land must be bought back within one in-game year
 ## (docs/Future_Land_NPC_Dialogue.xlsx, sheet "Game Variables").

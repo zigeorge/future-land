@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="CropData" format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/crop_data.gd" id="1_crop"]
+[ext_resource type="Resource" path="res://data/items/leek.tres" id="2_harvest"]
+
+[resource]
+script = ExtResource("1_crop")
+id = &"leek"
+display_name = "Leek"
+days_per_stage = Array[int]([3, 2, 2])
+harvest_item = ExtResource("2_harvest")
+harvest_amount = 1
+seasons = 8

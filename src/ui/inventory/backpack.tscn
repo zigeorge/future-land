@@ -1,0 +1,105 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://src/ui/inventory/backpack.gd" id="1_backpack"]
+[ext_resource type="Script" path="res://src/ui/inventory/inventory_grid.gd" id="2_grid"]
+
+[node name="Backpack" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_backpack")
+
+[node name="Dim" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.03, 0.05, 0.08, 0.6)
+
+[node name="Panel" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -180.0
+offset_top = -150.0
+offset_right = 180.0
+offset_bottom = 150.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBox" type="VBoxContainer" parent="Panel"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="Title" type="Label" parent="Panel/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "Backpack"
+horizontal_alignment = 1
+
+[node name="Grid" type="GridContainer" parent="Panel/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+script = ExtResource("2_grid")
+
+[node name="HotbarNote" type="Label" parent="Panel/VBox"]
+modulate = Color(1, 1, 1, 0.6)
+layout_mode = 2
+theme_override_font_sizes/font_size = 7
+text = "Top row = hotbar (keys 1-8)"
+horizontal_alignment = 1
+
+[node name="Details" type="HBoxContainer" parent="Panel/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Text" type="VBoxContainer" parent="Panel/VBox/Details"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 0
+
+[node name="ItemName" type="Label" parent="Panel/VBox/Details/Text"]
+unique_name_in_owner = true
+modulate = Color(1, 0.85, 0.4, 1)
+layout_mode = 2
+
+[node name="ItemDescription" type="Label" parent="Panel/VBox/Details/Text"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 22)
+layout_mode = 2
+theme_override_font_sizes/font_size = 8
+autowrap_mode = 3
+
+[node name="ItemPrice" type="Label" parent="Panel/VBox/Details/Text"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="SellButtons" type="VBoxContainer" parent="Panel/VBox/Details"]
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="SellOne" type="Button" parent="Panel/VBox/Details/SellButtons"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Sell 1"
+
+[node name="SellAll" type="Button" parent="Panel/VBox/Details/SellButtons"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Sell all"
+
+[node name="Hint" type="Label" parent="Panel/VBox"]
+unique_name_in_owner = true
+modulate = Color(1, 1, 1, 0.7)
+layout_mode = 2
+theme_override_font_sizes/font_size = 7
+horizontal_alignment = 1

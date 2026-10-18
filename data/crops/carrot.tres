@@ -1,15 +1,15 @@
 [gd_resource type="Resource" script_class="CropData" format=3]
 
 [ext_resource type="Script" path="res://src/core/resources/crop_data.gd" id="1_crop"]
-[ext_resource type="Resource" path="res://data/items/carrot.tres" id="2_carrot"]
+[ext_resource type="Resource" path="res://data/items/carrot.tres" id="2_harvest"]
 [ext_resource type="Texture2D" path="res://assets/art/tilesets/crops/carrot.png" id="3_stages"]
 
 [resource]
 script = ExtResource("1_crop")
 id = &"carrot"
 display_name = "Carrot"
-days_per_stage = Array[int]([1, 1, 1])
-stage_strip = ExtResource("3_stages")
-harvest_item = ExtResource("2_carrot")
+days_per_stage = Array[int]([2, 2, 1])
+harvest_item = ExtResource("2_harvest")
 harvest_amount = 1
 seasons = 1
+stage_strip = ExtResource("3_stages")

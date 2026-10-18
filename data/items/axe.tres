@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="ItemData" format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/item_data.gd" id="1_item"]
+[ext_resource type="Texture2D" path="res://assets/art/items/axe.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_item")
+icon = ExtResource("2_icon")
+id = &"axe"
+display_name = "Axe"
+description = "A sturdy tool used to chop trees, cut wood, and clear wooden obstacles."
+category = 1
+level = 1
+max_stack = 1
+sell_price = 0
+tool_type = 3

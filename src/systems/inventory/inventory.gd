@@ -72,6 +72,18 @@ func remove_item(item_id: StringName, amount := 1) -> bool:
 	return true
 
 
+## Removes up to `amount` from one slot. Returns false if the slot is empty.
+func remove_from_slot(index: int, amount := 1) -> bool:
+	if index < 0 or index >= slots.size() or slots[index].is_empty():
+		return false
+	var slot := slots[index]
+	slot.count -= mini(amount, slot.count)
+	if slot.count == 0:
+		slot.item = null
+	emit_changed()
+	return true
+
+
 func count_item(item_id: StringName) -> int:
 	var total := 0
 	for slot in slots:

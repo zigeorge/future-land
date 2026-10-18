@@ -102,8 +102,14 @@ The four looks offered on the start screen, in the order of `Registry.AVATAR_IDS
 
 Put a PNG in `assets/art/portraits/` named like the player's sprite sheet (`player1.png` for `characters/player1.png`) or like a speaker in the dialogue sheet (`Village Chief` → `village_chief.png`). The selection screen and dialogue box use it automatically; player lines ("You") use the chosen avatar's portrait.
 
-## Items (`items/*.tres`) and crops (`crops/*.tres`)
+## Items (`items/*.tres`), crops (`crops/*.tres`) and shops (`shops.json`)
 
-Create these in the Godot editor: right-click the folder → **New Resource** → `ItemData` / `CropData`. The file name **must** match the `id` field. Step-by-step instructions are in [docs/ARCHITECTURE.md](../docs/ARCHITECTURE.md#how-to).
+These are generated from **`docs/Future_Land_Item_List.xlsx`** (repo root):
+
+```bash
+python3 tools/items_from_xlsx.py     # run from the repo root
+```
+
+Every tool, seed and fish row becomes an item. Each seed also creates its crop (`data/crops/<crop>.tres`, growth days split over 3 stages, seasons) and the harvested crop item (sold for the row's Sell Price; the seed itself sells for half its Buy Price). `shops.json` lists what the Merchant, Inventor and Fisherman sell (the Location column). Ids come from names: "Carrot Seeds" → `carrot_seeds`, its crop → `carrot`. Art is picked up by the same names: `assets/art/items/<id>.png` for icons and `assets/art/tilesets/crops/<crop>.png` for crop stages, so a new icon only needs the right file name (then run the script again). **Don't edit the generated files by hand**; change the spreadsheet and rerun.
 
 A crop's art is either `stage_strip` (one image with every stage as a square, side by side, at any resolution, as `carrot.tres` does with `assets/art/tilesets/crops/carrot.png`) or a list of `stage_textures`.

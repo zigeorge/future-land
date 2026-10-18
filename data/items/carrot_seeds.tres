@@ -6,8 +6,10 @@
 script = ExtResource("1_item")
 id = &"carrot_seeds"
 display_name = "Carrot Seeds"
-description = "Plant in tilled soil in Spring. Ready in 3 days."
+description = "Grow crisp orange carrots in the mild spring weather."
 category = 2
-max_stack = 99
-sell_price = 10
+level = 1
+buy_price = 25
+shop = &"merchant"
+sell_price = 12
 crop_id = &"carrot"

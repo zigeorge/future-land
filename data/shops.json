@@ -1,0 +1,51 @@
+{
+  "generated_from": "docs/Future_Land_Item_List.xlsx; run tools/items_from_xlsx.py",
+  "shops": {
+    "fisherman": [
+      "fishing_rod"
+    ],
+    "inventor": [
+      "echo_sonar_caster",
+      "nano_net_launcher",
+      "quantum_tide_harvester"
+    ],
+    "merchant": [
+      "cultivator",
+      "lawn_mower",
+      "sprinkler",
+      "chainsaw",
+      "turnip_seeds",
+      "potato_seeds",
+      "carrot_seeds",
+      "radish_seeds",
+      "lettuce_seeds",
+      "cabbage_seeds",
+      "strawberry_seeds",
+      "green_pea_seeds",
+      "tomato_seeds",
+      "corn_seeds",
+      "cucumber_seeds",
+      "sunflower_seeds",
+      "bell_pepper_seeds",
+      "eggplant_seeds",
+      "blueberry_seeds",
+      "watermelon_seeds",
+      "pumpkin_seeds",
+      "sweet_potato_seeds",
+      "beet_seeds",
+      "wheat_seeds",
+      "broccoli_seeds",
+      "cauliflower_seeds",
+      "cranberry_seeds",
+      "grape_seeds",
+      "kale_seeds",
+      "spinach_seeds",
+      "garlic_seeds",
+      "leek_seeds",
+      "parsnip_seeds",
+      "brussels_sprout_seeds",
+      "onion_seeds",
+      "snow_pea_seeds"
+    ]
+  }
+}

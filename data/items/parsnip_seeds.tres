@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ItemData" format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/item_data.gd" id="1_item"]
+
+[resource]
+script = ExtResource("1_item")
+id = &"parsnip_seeds"
+display_name = "Parsnip Seeds"
+description = "Grow pale, sweet root vegetables that tolerate winter cold."
+category = 2
+level = 2
+buy_price = 45
+shop = &"merchant"
+sell_price = 22
+crop_id = &"parsnip"
