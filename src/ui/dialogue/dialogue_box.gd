@@ -56,14 +56,14 @@ func _on_line_shown(speaker: String, text: String) -> void:
 	_typing_tween.finished.connect(_show_pending_choices)
 
 
-## assets/art/portraits/<speaker>.png; the player ("You") uses the avatar's.
-func _show_portrait(speaker: String) -> void:
+## assets/art/portraits/<role>.png; the player's lines use the avatar's portrait.
+func _show_portrait(_speaker: String) -> void:
 	var texture: Texture2D = null
-	if speaker == "You":
+	if DialogueManager.current_speaker_is_player:
 		var avatar := Registry.get_avatar(GameState.avatar_id) if GameState.avatar_id != &"" else null
 		texture = avatar.get_portrait() if avatar else null
-	elif speaker != "":
-		texture = Registry.get_portrait(speaker)
+	elif DialogueManager.current_speaker_role != "":
+		texture = Registry.get_portrait(DialogueManager.current_speaker_role)
 	portrait.texture = texture
 	portrait.texture_filter = Art.filter_for(texture, 64)
 	portrait.visible = texture != null

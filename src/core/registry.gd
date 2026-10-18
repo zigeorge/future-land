@@ -8,6 +8,9 @@ const ITEMS_DIR := "res://data/items/"
 const CROPS_DIR := "res://data/crops/"
 const AVATARS_DIR := "res://data/avatars/"
 const PORTRAITS_DIR := "res://assets/art/portraits/"
+const NPC_NAMES_PATH := "res://data/npcs.json"
+
+static var _npc_names: Dictionary = {}
 
 ## Order shown on the avatar selection screen.
 const AVATAR_IDS: Array[StringName] = [&"avatar_1", &"avatar_2", &"avatar_3", &"avatar_4"]
@@ -23,6 +26,16 @@ static func get_crop(id: StringName) -> CropData:
 
 static func get_avatar(id: StringName) -> AvatarData:
 	return _load(AVATARS_DIR, id) as AvatarData
+
+
+## Name players see for an NPC role ("Village Chief" -> "Arthur"), from
+## data/npcs.json. Unknown roles are shown as they are.
+static func get_npc_name(role: String) -> String:
+	if _npc_names.is_empty() and FileAccess.file_exists(NPC_NAMES_PATH):
+		var data: Variant = JSON.parse_string(FileAccess.get_file_as_string(NPC_NAMES_PATH))
+		if data is Dictionary:
+			_npc_names = data.get("names", {})
+	return str(_npc_names.get(role, role))
 
 
 ## Portrait for a file name or a speaker name, e.g. "Village Chief" ->

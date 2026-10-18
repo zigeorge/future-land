@@ -1,6 +1,7 @@
 extends Control
-## Avatar selection shown at the start of a new game. The game is paused
-## underneath; choosing sets GameState.avatar_id and frees this screen.
+## Avatar selection shown at the start of a new game, in two steps: pick a
+## look, then type a name. The game is paused underneath; finishing sets
+## GameState.avatar_id and player_name and frees this screen.
 
 signal avatar_chosen(avatar_id: StringName)
 
@@ -11,6 +12,8 @@ const SPRITE_SIZE := Vector2(16, 32) * 5
 const PORTRAIT_SIZE := Vector2(112, 112)
 const SMALL_SPRITE_SIZE := Vector2(16, 32) * 2
 const WALK_FRAME_SECONDS := 0.15
+const LOOK_HINT := "A / D or arrows to choose  -  E, Enter or click to continue"
+const NAME_HINT := "Enter to start  -  Esc to choose another look"
 
 var _avatars: Array[AvatarData] = []
 var _frames: Array[SpriteFrames] = []
@@ -21,6 +24,10 @@ var _walk_timer := 0.0
 
 @onready var cards_box: HBoxContainer = %Cards
 @onready var name_label: Label = %NameLabel
+@onready var name_row: HBoxContainer = %NameRow
+@onready var name_edit: LineEdit = %NameEdit
+@onready var start_button: Button = %StartButton
+@onready var hint: Label = %Hint
 
 
 func _ready() -> void:
@@ -32,6 +39,10 @@ func _ready() -> void:
 			_frames.append(avatar.build_sprite_frames())
 			_cards.append(_make_card(_avatars.size() - 1))
 	_select(0)
+	name_edit.text_submitted.connect(func(_text: String) -> void: _start())
+	name_edit.text_changed.connect(func(_text: String) -> void: _update_start_button())
+	start_button.pressed.connect(_start)
+	_update_start_button()
 
 
 func _process(delta: float) -> void:
@@ -44,6 +55,11 @@ func _process(delta: float) -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
+	if name_row.visible:
+		if event.is_action_pressed("ui_cancel"):
+			_ask_for_look()
+			get_viewport().set_input_as_handled()
+		return
 	if event.is_action_pressed("move_right"):
 		_select(_selected + 1)
 	elif event.is_action_pressed("move_left"):
@@ -107,7 +123,29 @@ func _show_frame(index: int, animation: StringName, frame: int) -> void:
 		(_cards[index].find_child("Picture", true, false) as TextureRect).texture = _frames[index].get_frame_texture(animation, frame)
 
 
+## Look chosen: ask for the name.
 func _confirm() -> void:
+	name_row.show()
+	hint.text = NAME_HINT
+	name_edit.grab_focus()
+
+
+func _ask_for_look() -> void:
+	name_row.hide()
+	hint.text = LOOK_HINT
+	name_edit.release_focus()
+
+
+func _update_start_button() -> void:
+	start_button.disabled = name_edit.text.strip_edges() == ""
+
+
+func _start() -> void:
+	var player_name := name_edit.text.strip_edges()
+	if player_name == "":
+		name_edit.grab_focus()
+		return
+	GameState.player_name = player_name
 	GameState.avatar_id = _avatars[_selected].id
 	avatar_chosen.emit(_avatars[_selected].id)
 	queue_free()

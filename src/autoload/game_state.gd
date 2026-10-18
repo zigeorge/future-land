@@ -11,7 +11,7 @@ const HOTBAR_SIZE := 10
 
 ## Story: the land must be bought back within one in-game year
 ## (docs/Future_Land_NPC_Dialogue.xlsx, sheet "Game Variables").
-const DEADLINE_DAYS := 4 * 28
+const DEADLINE_DAYS := 365  # one year, TimeManager.DAYS_PER_YEAR
 const BUYBACK_PRICE := 100000
 
 const STARTING_ITEMS := {
@@ -35,6 +35,8 @@ var selected_hotbar_slot := 0:
 		selected_hotbar_slot = posmod(value, HOTBAR_SIZE)
 		EventBus.hotbar_selection_changed.emit(selected_hotbar_slot)
 
+## Typed on the avatar selection screen; shown in dialogue for the player's lines.
+var player_name := ""
 ## Chosen on the avatar selection screen (data/avatars/<id>.tres). Empty = not chosen yet.
 var avatar_id: StringName = &"":
 	set(value):
@@ -61,6 +63,7 @@ func new_game() -> void:
 	energy = MAX_ENERGY
 	story_flags.clear()
 	relationships.clear()
+	player_name = ""
 	avatar_id = &""
 	farm.clear()
 	inventory.clear()
@@ -94,6 +97,17 @@ func change_relationship(npc_name: String, amount: int) -> void:
 	relationships[npc_name] = int(relationships.get(npc_name, 0)) + amount
 
 
+## 100000 -> "100,000".
+static func format_money(amount: int) -> String:
+	var digits := str(absi(amount))
+	var result := ""
+	for i in digits.length():
+		if i > 0 and (digits.length() - i) % 3 == 0:
+			result += ","
+		result += digits[i]
+	return ("-" if amount < 0 else "") + result
+
+
 func get_days_remaining() -> int:
 	return maxi(DEADLINE_DAYS - TimeManager.get_day_number() + 1, 0)
 
@@ -113,6 +127,7 @@ func get_save_data() -> Dictionary:
 		"story_flags": story_flags,
 		"relationships": relationships,
 		"avatar_id": String(avatar_id),
+		"player_name": player_name,
 	}
 
 
@@ -124,4 +139,5 @@ func load_save_data(data: Dictionary) -> void:
 	farm.from_data(data.get("farm", {}))
 	story_flags = data.get("story_flags", {})
 	relationships = data.get("relationships", {})
+	player_name = str(data.get("player_name", ""))
 	avatar_id = StringName(data.get("avatar_id", ""))

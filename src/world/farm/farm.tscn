@@ -531,7 +531,7 @@ sprite_texture = ExtResource("15_ow8c4")
 
 [node name="NPC2" parent="Entities" unique_id=276363524 instance=ExtResource("14_tn3wy")]
 position = Vector2(1150, 300)
-npc_name = "Inventor"
+npc_name = "Technological Inventor"
 dialogue_id = &"inventor_visit"
 done_flag = &"inventor_deal_accepted"
 auto_talk = true

@@ -84,21 +84,11 @@ func _update_story() -> void:
 	deadline_label.visible = GameState.has_story_flag(&"main_quest_started")
 	deadline_label.text = "%d days left" % GameState.get_days_remaining()
 	goal_label.visible = GameState.has_story_flag(&"buyback_goal_unlocked")
-	goal_label.text = "Buy back: %s g" % _with_commas(GameState.BUYBACK_PRICE)
-
-
-static func _with_commas(amount: int) -> String:
-	var digits := str(amount)
-	var result := ""
-	for i in digits.length():
-		if i > 0 and (digits.length() - i) % 3 == 0:
-			result += ","
-		result += digits[i]
-	return result
+	goal_label.text = "Buy back: %s g" % GameState.format_money(GameState.BUYBACK_PRICE)
 
 
 func _update_money(amount: int) -> void:
-	money_label.text = "%d g" % amount
+	money_label.text = "%s g" % GameState.format_money(amount)
 
 
 func _update_energy(current: int, maximum: int) -> void:

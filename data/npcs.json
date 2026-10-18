@@ -1,0 +1,10 @@
+{
+  "about": "Display names of the NPCs. Keys are the roles used in the dialogue sheet's Speaker / NPC_Name columns (and in the maps); values are what players see.",
+  "names": {
+    "Government Official": "Alexander",
+    "Village Chief": "Arthur",
+    "Merchant": "Marcus",
+    "Technological Inventor": "Ethan",
+    "Fisherman": "Jack"
+  }
+}

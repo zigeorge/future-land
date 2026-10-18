@@ -2,14 +2,26 @@ extends Node
 ## Saves and loads the game as JSON in user://.
 ##
 ## Each saved system exposes get_save_data() -> Dictionary and
-## load_save_data(data). Register new ones in _saved_systems().
+## load_save_data(data). Autoloads are listed in _saved_systems(); scene
+## nodes (like Main, which saves the current map) call register().
 
 const SAVE_PATH := "user://savegame.json"
 const SAVE_VERSION := 1
 
 
+var _registered: Dictionary = {}
+
+
+func register(key: String, system: Object) -> void:
+	_registered[key] = system
+
+
 func _saved_systems() -> Dictionary:
-	return {"time": TimeManager, "state": GameState}
+	var systems := {"time": TimeManager, "state": GameState}
+	for key: String in _registered:
+		if is_instance_valid(_registered[key]):
+			systems[key] = _registered[key]
+	return systems
 
 
 func has_save() -> bool:

@@ -100,7 +100,7 @@ position = Vector2(912, 672)
 
 [node name="NPC3" parent="Entities" unique_id=125106611 instance=ExtResource("6_8w0ef")]
 position = Vector2(880, 696)
-npc_name = "Inventor"
+npc_name = "Technological Inventor"
 dialogue_id = &"inventor_repeat"
 requires_flag = &"inventor_deal_accepted"
 sprite_texture = ExtResource("12_a0ed5")

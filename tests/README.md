@@ -37,9 +37,10 @@ Debug builds have shortcuts that make playtesting faster:
 
 ### Smoke test checklist (run before merging into `main`)
 
+- [ ] The title screen shows *New Game*, and *Continue* only when a save exists
 - [ ] The avatar screen appears, all four looks can be picked (keys and mouse), and the game waits until one is chosen
 - [ ] The chosen avatar walks correctly in all 4 directions (faces the way it moves, feet alternate), and can't leave the map or walk through houses, trees, fences or the pond
-- [ ] The Government Official starts talking right away; the choice ("I need time to think.") works with E, Space and a mouse click, even after clicking elsewhere first; afterwards he is gone, "Start main quest" appears, and the HUD shows "112 days left" and "Buy back: 100,000 g"
+- [ ] The Government Official starts talking right away; the choice ("I need time to think.") works with E, Space and a mouse click, even after clicking elsewhere first; afterwards he is gone, "Start main quest" appears, and the HUD shows "365 days left" and "Buy back: 100,000 g"
 - [ ] Game starts with a hoe, a watering can and 15 carrot seeds; hotbar selection works with 1–0 and the mouse wheel
 - [ ] Hoe (C) tills any open grass on the farm, not paths, water or under objects; the white square shows where. Watering can waters (soil darkens), seeds plant (seed count goes down), energy goes down
 - [ ] Reading the signpost by the farm shows the farming tips
@@ -48,7 +49,8 @@ Debug builds have shortcuts that make playtesting faster:
 - [ ] The path off the right edge of the farm leads to the village, and the left edge of the village returns to the farm
 - [ ] Village Chief: full introduction the first time, a short line after that. Same for the Merchant
 - [ ] On day 4 (F6 three times) the Inventor is on the farm and starts talking; after the deal he is at the workshop in the village
-- [ ] F5 then F9 restores money, inventory, farm, date, story progress and the avatar
+- [ ] Esc opens the pause menu; Save, then Quit to Title, then Continue restores money, inventory, farm, date, story progress, the avatar, the name, the map and the position
+- [ ] NPCs show their names (Alexander, Arthur, Marcus, Ethan) and the player's lines show the typed name
 
 ## Reporting bugs
 

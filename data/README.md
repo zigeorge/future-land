@@ -88,6 +88,10 @@ The current story setup:
 | Inventor | Farm, on the path | `inventor_visit` (auto) | From day 4, until `inventor_deal_accepted` |
 | Inventor | Village workshop | `inventor_repeat` | After `inventor_deal_accepted` |
 
+## NPC names (`npcs.json`)
+
+The names players see for each NPC role: `"Village Chief": "Arthur"`. The dialogue sheet keeps using roles in its Speaker and NPC_Name columns; the game shows the names above the NPCs and in the dialogue box. Portraits stay named by role (`village_chief.png`). Dialogue text can use `{player}` (the name the player typed), `{buyback_price}` and `{days_remaining}`.
+
 ## Avatars (`avatars/*.tres`)
 
 The four looks offered on the start screen, in the order of `Registry.AVATAR_IDS`. Each points at an 80×128 sheet in `assets/art/characters/` and says which sheet row holds each direction. If a sheet has only one side-facing row, `mirror_left` or `mirror_right` reuses it flipped. Rename them by changing `display_name`.

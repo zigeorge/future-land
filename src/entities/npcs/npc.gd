@@ -13,6 +13,8 @@ extends StaticBody2D
 const WORLD_FRAME_SIZE := Vector2(16, 32)
 const AUTO_TALK_DELAY := 0.6
 
+## Role, as in the dialogue sheet ("Village Chief"); the name shown above the
+## NPC comes from data/npcs.json ("Arthur").
 @export var npc_name := "Villager"
 
 @export_group("Dialogue")
@@ -48,7 +50,7 @@ var _present := true
 
 
 func _ready() -> void:
-	name_label.text = npc_name
+	name_label.text = Registry.get_npc_name(npc_name)
 	_setup_sprite()
 	interactable.interacted.connect(_on_interacted)
 	EventBus.day_started.connect(func(_d: int, _s: int, _y: int) -> void: _refresh_presence())

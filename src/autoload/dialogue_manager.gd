@@ -8,6 +8,11 @@ const DIALOGUE_DIR := "res://data/dialogue/"
 ## Written in dialogue files where the player's name should appear.
 const PLAYER_TOKEN := "{player}"
 
+## Who says the current line: the role from the dialogue sheet (used for
+## portraits), and whether it is the player.
+var current_speaker_role := ""
+var current_speaker_is_player := false
+
 var _graph: DialogueGraph
 var _node_id := ""
 var _current_id: StringName = &""
@@ -59,7 +64,11 @@ func _show(node_id: String) -> void:
 	_node_id = node_id
 	var node := _graph.get_node_data(node_id)
 	_apply_effects(node)
-	EventBus.dialogue_line_shown.emit(_fill(str(node.get("speaker", ""))), _fill(str(node.get("text", ""))))
+	var speaker := str(node.get("speaker", ""))
+	current_speaker_is_player = speaker == PLAYER_TOKEN
+	current_speaker_role = "" if current_speaker_is_player else speaker
+	var shown_name := _player_name() if current_speaker_is_player else Registry.get_npc_name(speaker)
+	EventBus.dialogue_line_shown.emit(shown_name, _fill(str(node.get("text", ""))))
 	var choices := _graph.get_choices(node_id)
 	if not choices.is_empty():
 		var texts: Array[String] = []
@@ -78,8 +87,15 @@ func _apply_effects(node: Dictionary) -> void:
 		EventBus.notification_requested.emit(str(node["notify"]))
 
 
+## Replaces {player}, {buyback_price} and {days_remaining} in a line.
 func _fill(text: String) -> String:
-	return text.replace(PLAYER_TOKEN, "You")
+	return text.replace(PLAYER_TOKEN, _player_name()) \
+		.replace("{buyback_price}", GameState.format_money(GameState.BUYBACK_PRICE)) \
+		.replace("{days_remaining}", str(GameState.get_days_remaining()))
+
+
+func _player_name() -> String:
+	return GameState.player_name if GameState.player_name != "" else "You"
 
 
 func _finish() -> void:

@@ -83,6 +83,8 @@ Order matters: `EventBus` must stay first because the others use it in `_ready()
 
 ## Day cycle
 
+The calendar has 365 days a year: 4 seasons of 3 months (`TimeManager.MONTH_DAYS`), shown as "Spring, Month 2, Day 5". A day (06:00–02:00) lasts 9 real minutes (`seconds_per_tick`). The story deadline is one year (`GameState.DEADLINE_DAYS`).
+
 ```
 06:00 day starts ── time ticks every 7 real seconds (+10 min) ── 02:00 pass out
                                                                      │
@@ -99,7 +101,7 @@ Order matters: `EventBus` must stay first because the others use it in `_ready()
 
 The story follows `docs/Game story.docx` and the dialogue spreadsheet (repo-level `docs/`):
 
-1. **New game:** the avatar selection screen (`src/ui/avatar_select/`) pauses the game until the player picks one of the four looks in `data/avatars/`.
+1. **Start:** the title screen offers *Continue* (when `user://savegame.json` exists) and *New Game*. A new game opens the avatar selection screen (`src/ui/avatar_select/`): pick one of the four looks in `data/avatars/`, then type a name (`GameState.player_name`). Esc opens the pause menu (save, load, quit to title). Saves include the current map and position (`main.gd` registers with `SaveManager`).
 2. **Day 1, farm:** the Government Official waits at the farmhouse door and starts `land_requisition_notice` by himself. It sets `main_quest_started` and `buyback_goal_unlocked`, so the HUD shows the days left and the buy-back price (`GameState.DEADLINE_DAYS`, `GameState.BUYBACK_PRICE`). Then he leaves.
 3. **Village:** the Village Chief and the Merchant have one-time introductions, then repeat lines.
 4. **Day 4, farm:** the Inventor visits and proposes the deal (`inventor_deal_accepted`). Afterwards he is found at his workshop in the village.
