@@ -4,6 +4,9 @@
 [ext_resource type="Texture2D" path="res://assets/art/tilesets/environment/water.png" id="2_m3w6v"]
 [ext_resource type="Texture2D" path="res://assets/art/tilesets/environment/grass_tufts.png" id="3_wfd03"]
 [ext_resource type="Texture2D" path="res://assets/art/tilesets/environment/bushes.png" id="4_d21od"]
+[ext_resource type="Texture2D" path="res://assets/art/tilesets/environment/grass_ground.png" id="5_d21od"]
+[ext_resource type="Texture2D" path="res://assets/art/tilesets/environment/water_grass.png" id="6_kpylr"]
+[ext_resource type="Texture2D" path="res://assets/art/tilesets/environment/water_grass_corner.png" id="7_vpvoh"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_o7luu"]
 texture = ExtResource("1_ty8pu")
@@ -110,9 +113,46 @@ texture_region_size = Vector2i(128, 128)
 2:3/0 = 0
 3:3/0 = 0
 
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_1gpqb"]
+texture = ExtResource("5_d21od")
+texture_region_size = Vector2i(128, 128)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_p2xmd"]
+texture = ExtResource("6_kpylr")
+texture_region_size = Vector2i(128, 128)
+0:0/next_alternative_id = 4
+0:0/0 = 0
+0:0/1 = 1
+0:0/1/flip_v = true
+0:0/2 = 2
+0:0/2/transpose = true
+0:0/3 = 3
+0:0/3/flip_h = true
+0:0/3/transpose = true
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_4tswy"]
+texture = ExtResource("7_vpvoh")
+texture_region_size = Vector2i(128, 128)
+0:0/next_alternative_id = 4
+0:0/0 = 0
+0:0/1 = 1
+0:0/1/flip_h = true
+0:0/2 = 2
+0:0/2/flip_v = true
+0:0/3 = 3
+0:0/3/flip_h = true
+0:0/3/flip_v = true
+
 [resource]
 tile_size = Vector2i(128, 128)
 sources/0 = SubResource("TileSetAtlasSource_o7luu")
 sources/2 = SubResource("TileSetAtlasSource_ssd5w")
 sources/3 = SubResource("TileSetAtlasSource_xvabs")
 sources/1 = SubResource("TileSetAtlasSource_kpylr")
+sources/4 = SubResource("TileSetAtlasSource_1gpqb")
+sources/5 = SubResource("TileSetAtlasSource_p2xmd")
+sources/6 = SubResource("TileSetAtlasSource_4tswy")

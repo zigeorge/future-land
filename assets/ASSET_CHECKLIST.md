@@ -57,21 +57,17 @@ Map tiles (ground, path, soil, paving, water, tufts, bushes) live in one tileset
 ### 2. Portraits: 512×512, head and shoulders (`art/portraits/`)
 Shown on the avatar selection screen and next to the speaker in conversations.
 - [x] Players: `player1.png`–`player4.png` (same names as the player sheets)
-- [ ] NPCs: `government_official.png`, `village_chief.png`, `merchant.png`, `technological_inventor.png` (the speaker's name from the dialogue sheet, lowercase with underscores)
-- [ ] Later: a few expressions per NPC, e.g. `village_chief_happy.png`
+- [x] NPCs: `government_official.png`, `village_chief.png`, `merchant.png`, `technological_inventor.png`, `banker.png`, `guide1.png`
+- [x] Expressions, 6 per character (neutral, happy, sad, angry, tired, surprised), 3072×512 strips in `art/portraits/expressions/` (ready; the dialogue will use them once the sheet says which face each line has)
+- [ ] Fisherman (Jack): sprite and portrait
 
-### 3. Player characters: 640×1024 sheets (5 columns × 4 rows of 128×256 frames)
-Received in `tilesets/players/`, not in the game yet. The game still uses the old pixel sheets in `art/characters/player1.png`–`player4.png`; the new ones will replace them there.
-- [ ] **Feet on the same line in every frame** (e.g. 8 px above the bottom). Now they vary by up to 28 px between rows, so the character would jump when turning.
-- [ ] **Nothing touching the frame edges:** player3 and player4 touch them in almost every frame.
-- [ ] **Same height for all four players:** player1 is shorter than player3 and player4.
-- [ ] **Row order: down, up, left, right.** player4 has left and right swapped.
-- [x] Real 4-frame walk cycles.
-- Tip: only down, up and one side view are needed (the game can mirror the side view), and loose frames are fine: the programmer can line them up with a tool.
+### 3. Player characters: `art/characters/player1.png`–`player4.png`
+- [x] In the game. Nir's sheets (3 rows: down, up, side, with grid lines) are converted with `tools/pack_character_sheet.py` (repo root) into the game format: 640×1024, 5 columns × 4 rows of 128×256 frames, same scale, feet on one line, side view mirrored for the other direction. To update a character, run e.g. `python3 tools/pack_character_sheet.py new_player1.png future-land/assets/art/characters/player1.png`.
 
-### 4. Grass ground tile: 128×128, seamless (`art/tilesets/environment/grass_ground.png`)
-- [ ] `grass_variations.png` is solid and seamless (good), but the 4 variants differ too much in colour, so the ground looks like a checkerboard. Keep one base colour and vary only details (a few flowers, a stone). Two tiles have a thin 1 px line along their edges.
-- [ ] Optional: one set per season (`grass_ground_spring.png`, `_summer`, `_fall`, `_winter`).
+### 4. Grass ground tile (`art/tilesets/environment/grass_ground.png`)
+- [x] In the game: covers both maps (4 variants mixed).
+- [ ] Small fix: each tile is darker along its left and right edges, so faint vertical stripes show across the ground. The edges should be as bright as the middle.
+- [ ] Optional: one set per season.
 
 ### 5. NPCs: 128×256 per idle frame (`art/characters/`)
 - [x] `government_official.png`, `village_chief.png`, `merchant.png`, `technological_inventor.png`
@@ -84,10 +80,11 @@ Received in `tilesets/players/`, not in the game yet. The game still uses the ol
 
 ### 7. Tiles: 128×128 (`art/tilesets/environment/`)
 - [x] `dirt_path.png` (3×3 set)
-- [ ] 4 inside-corner tiles for the dirt path (grass in just one corner), so paths can turn corners cleanly
-- [x] `water.png` (8 × 6 tiles); later: pond edge tiles (water to grass)
+- [x] `water.png`; `water_grass.png` and `water_grass_corner.png` give the pond a grass shore (rotated for every side)
+- [ ] A plain water tile in the same deep blue as the shore tiles (the pond's middle uses the closest tiles from `water.png`, which are a little lighter and wavier)
+- [ ] 4 inside-corner tiles for paths and the shore (grass in just one corner)
 - [ ] `soil_dry.png`, `soil_wet.png`: `soil_wet` shows a seam when repeated
-- [ ] `town_paving.png`: `town_paving1` shows lines where tiles meet; `town_paving2` is JPG (please PNG)
+- [x] Stored for later: `dirt_path_grass(_corner).png`, `paved_path_grass(_corner).png`; a plain paving centre tile is still needed for paved areas
 
 ### 8. Trees and props (`art/environment/`)
 - [x] Trees: `tree_oak.png`, `tree_oak_2.png`, `tree_pine.png`, `tree_maple_spring.png` / `_summer` / `_fall` / `_winter`. (Small fix for later: the bases end 15–25 px above the bottom edge, so trees float slightly.)
