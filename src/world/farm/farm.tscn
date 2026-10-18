@@ -523,6 +523,7 @@ position = Vector2(1265, 997)
 [node name="NPC" parent="Entities" unique_id=965672133 instance=ExtResource("14_tn3wy")]
 position = Vector2(1044, 262)
 npc_name = "Government Official"
+appear_from_day = 2
 dialogue_id = &"land_requisition_notice"
 done_flag = &"main_quest_started"
 auto_talk = true

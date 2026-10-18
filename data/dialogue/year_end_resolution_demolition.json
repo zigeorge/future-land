@@ -1,0 +1,29 @@
+{
+  "generated_from": "docs/Future_Land_NPC_Dialogue.xlsx (scene \"Year-End Resolution – Demolition\"); edit the spreadsheet, then run tools/dialogue_from_xlsx.py",
+  "start": "END_DEMOLISH_001",
+  "nodes": {
+    "END_DEMOLISH_001": {
+      "speaker": "Government Official",
+      "text": "The one-year deadline has passed, and you have not raised enough to buy back the land.",
+      "next": "PLAYER_END_DEMOLISH_001"
+    },
+    "PLAYER_END_DEMOLISH_001": {
+      "speaker": "{player}",
+      "text": "Please give me more time; this farm has become my home.",
+      "next": "END_DEMOLISH_002"
+    },
+    "END_DEMOLISH_002": {
+      "speaker": "Government Official",
+      "text": "I am sorry, but the order is final; demolition robots, clear the entire property.",
+      "next": "END",
+      "set_flags": [
+        "demolition_started",
+        "farm_demolished",
+        "ending_complete"
+      ],
+      "todo": [
+        "show failure ending demolition cutscene"
+      ]
+    }
+  }
+}

@@ -46,7 +46,9 @@
       "speaker": "{player}",
       "text": "All right. If your inventions can help me save this farm, I am willing to work with you.",
       "next": "INV_007",
-      "set_flag": "inventor_deal_accepted"
+      "set_flags": [
+        "inventor_deal_accepted"
+      ]
     },
     "INV_007": {
       "speaker": "Technological Inventor",

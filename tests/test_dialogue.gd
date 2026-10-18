@@ -14,8 +14,9 @@ func test_every_dialogue_file_is_valid() -> void:
 
 func test_npc_dialogue_ids_exist() -> void:
 	# Ids used by the NPCs in the farm and village scenes.
-	for id in ["land_requisition_notice", "inventor_visit", "inventor_repeat", "village_introduction",
-			"chief_repeat", "merchant_introduction", "merchant_repeat", "farming_tips"]:
+	for id in ["land_requisition_notice", "inventor_visit", "village_introduction", "chief_repeat",
+			"merchant_introduction", "repeatable_shop_greeting_merchant",
+			"repeatable_shop_greeting_technological_inventor", "farming_tips"]:
 		assert_true(FileAccess.file_exists(DIALOGUE_DIR + id + ".json"), "missing %s.json" % id)
 
 
@@ -40,5 +41,17 @@ func test_story_intro_sets_main_quest_flags() -> void:
 	for node: Dictionary in graph.nodes.values():
 		if node.has("set_flag"):
 			flags.append(node["set_flag"])
+		flags.append_array(node.get("set_flags", []))
 	for flag in ["land_notice_received", "buyback_goal_unlocked", "main_quest_started"]:
 		assert_true(flag in flags, "intro should set %s" % flag)
+
+
+func test_official_offers_six_questions() -> void:
+	var graph := DialogueGraph.load_file(DIALOGUE_DIR + "land_requisition_notice.json")
+	assert_eq(graph.get_choices("GOV_006").size(), 6)
+
+
+func test_merchant_greeting_opens_the_shop() -> void:
+	var graph := DialogueGraph.load_file(DIALOGUE_DIR + "repeatable_shop_greeting_merchant.json")
+	var opens := graph.nodes.values().any(func(node: Dictionary) -> bool: return node.get("open_shop", "") == "merchant")
+	assert_true(opens)

@@ -39,6 +39,7 @@ The web build is single-threaded (`export_presets.cfg`), because GitHub Pages ca
 | Advance dialogue | E / Space / left mouse |
 | Select hotbar slot | 1–8 / mouse wheel |
 | Backpack (8×5; see items and sell prices, move items) | I / Tab |
+| Shops: talk to Marcus (merchant) or Ethan (inventor) after meeting them | E |
 | Pause menu (save, load, quit to title) | Esc |
 | Quick save / load | F5 / F9 |
 | Skip to next day (debug builds only) | F6 |

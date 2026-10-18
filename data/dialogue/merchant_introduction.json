@@ -51,7 +51,9 @@
       "speaker": "Merchant",
       "text": "I look forward to it! Good luck, and welcome to the village.",
       "next": "END",
-      "set_flag": "merchant_introduction_complete"
+      "set_flags": [
+        "merchant_introduction_complete"
+      ]
     }
   }
 }

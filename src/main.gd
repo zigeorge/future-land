@@ -7,6 +7,7 @@ const FADE_SECONDS := 0.3
 const AVATAR_SELECT_SCENE := preload("res://src/ui/avatar_select/avatar_select.tscn")
 const MENU_SCENE := preload("res://src/ui/menus/game_menu.tscn")
 const BACKPACK_SCENE := preload("res://src/ui/inventory/backpack.tscn")
+const SHOP_SCENE := preload("res://src/ui/shop/shop.tscn")
 
 @export_file("*.tscn") var start_level := "res://src/world/farm/farm.tscn"
 
@@ -21,6 +22,7 @@ var _menu: GameMenu
 
 func _ready() -> void:
 	EventBus.level_change_requested.connect(change_level)
+	EventBus.shop_requested.connect(open_shop)
 	SaveManager.register("world", self)
 	_load_level(start_level, &"")
 	_show_title()
@@ -77,6 +79,15 @@ func _show_pause_menu() -> void:
 			_load()
 		&"title":
 			_show_title()
+
+
+## Opens a shop (after its owner's greeting) and pauses the game until it is closed.
+func open_shop(shop_id: StringName) -> void:
+	var shop: Shop = SHOP_SCENE.instantiate()
+	shop.shop_id = shop_id
+	$UI.add_child(shop)
+	get_tree().paused = true
+	shop.closed.connect(func() -> void: get_tree().paused = false)
 
 
 ## Opens the backpack and pauses the game until it is closed.

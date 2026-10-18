@@ -92,7 +92,7 @@ position = Vector2(784, 456)
 npc_name = "Merchant"
 dialogue_id = &"merchant_introduction"
 done_flag = &"merchant_introduction_complete"
-repeat_dialogue_id = &"merchant_repeat"
+repeat_dialogue_id = &"repeatable_shop_greeting_merchant"
 sprite_texture = ExtResource("9_rbsni")
 
 [node name="Scarecrow" parent="Entities" unique_id=1009290082 instance=ExtResource("11_3736o")]
@@ -101,7 +101,7 @@ position = Vector2(912, 672)
 [node name="NPC3" parent="Entities" unique_id=125106611 instance=ExtResource("6_8w0ef")]
 position = Vector2(880, 696)
 npc_name = "Technological Inventor"
-dialogue_id = &"inventor_repeat"
+dialogue_id = &"repeatable_shop_greeting_technological_inventor"
 requires_flag = &"inventor_deal_accepted"
 sprite_texture = ExtResource("12_a0ed5")
 

@@ -28,10 +28,10 @@ How the spreadsheet columns are used:
 | Dialogue_ID | Line id. Must be unique. |
 | Speaker | Name shown above the line. `Player` is shown as "You". |
 | Dialogue_Text | The line. |
-| Player_Choice | Makes the line a question. For several answers, separate them with ` / ` and list the same number of ids in Next_ID, also separated by ` / `. |
+| Player_Choice | The text on an answer button. A **choice menu** is a row whose Next_ID lists several ids separated by ` / `; each button shows the Player_Choice of the row it leads to (Animal Crossing style: answers that lead back to the menu let the player ask more questions). |
 | Next_ID | The line that follows. `END` ends the conversation. |
 | Quest_Flag | A story flag set when the line is shown, e.g. `main_quest_started`. |
-| Effect | `some_flag = true` sets a flag. Any other text is shown to the player as a notification, e.g. "Start main quest: Save the Land". |
+| Effect | Parts separated by `;`: `set some_flag = true` sets a flag; `Open Merchant shop` (or Inventor / Fisherman) opens that shop when the conversation ends; text starting with "Start" or "Unlock" is shown to the player (e.g. "Start main quest: Save the Land"). Anything else is kept as a `todo` for the programmer and listed when the script runs. |
 | Relationship_Change | Friendship points with the NPC_Name. |
 | Scene, NPC_Name, Condition, Notes | For people. *When* a conversation plays is set on the NPC in Godot (see below). |
 

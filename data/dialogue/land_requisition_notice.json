@@ -6,7 +6,9 @@
       "speaker": "Government Official",
       "text": "Good morning. I am here on behalf of the city government. I have an official notice regarding this village and your property.",
       "next": "GOV_002",
-      "set_flag": "land_notice_received"
+      "set_flags": [
+        "land_notice_received"
+      ]
     },
     "GOV_002": {
       "speaker": "Government Official",
@@ -35,6 +37,26 @@
         {
           "text": "I need time to think.",
           "next": "PLAYER_001"
+        },
+        {
+          "text": "How much does the land cost?",
+          "next": "PLAYER_GOV_D2_PRICE"
+        },
+        {
+          "text": "What if I choose to leave?",
+          "next": "PLAYER_GOV_D2_LEAVE"
+        },
+        {
+          "text": "Why is the city taking our land?",
+          "next": "PLAYER_GOV_D2_REASON"
+        },
+        {
+          "text": "What if I miss the deadline?",
+          "next": "PLAYER_GOV_D2_DEADLINE"
+        },
+        {
+          "text": "I refuse to give up my farm.",
+          "next": "PLAYER_GOV_D2_REFUSE"
         }
       ]
     },
@@ -43,15 +65,99 @@
       "text": "I need some time to understand all of this. A year sounds long, but this place is my home.",
       "next": "GOV_007"
     },
+    "PLAYER_GOV_D2_PRICE": {
+      "speaker": "{player}",
+      "text": "How much will I have to pay to buy back the farm?",
+      "next": "GOV_D2_PRICE_001"
+    },
+    "PLAYER_GOV_D2_LEAVE": {
+      "speaker": "{player}",
+      "text": "What happens if I decide to move away?",
+      "next": "GOV_D2_LEAVE_001"
+    },
+    "PLAYER_GOV_D2_REASON": {
+      "speaker": "{player}",
+      "text": "Why does the city need our village in the first place?",
+      "next": "GOV_D2_REASON_001"
+    },
+    "PLAYER_GOV_D2_DEADLINE": {
+      "speaker": "{player}",
+      "text": "What happens if I cannot get the money before the year is over?",
+      "next": "GOV_D2_DEADLINE_001"
+    },
+    "PLAYER_GOV_D2_REFUSE": {
+      "speaker": "{player}",
+      "text": "I won't just give up my home. Is there anything we can do?",
+      "next": "GOV_D2_REFUSE_001"
+    },
     "GOV_007": {
       "speaker": "Government Official",
       "text": "Of course. You do not have to make the final decision today. The deadline is one year from the date of this notice.",
-      "next": "GOV_008"
+      "next": "GOV_008",
+      "set_flags": [
+        "decision_pending"
+      ]
+    },
+    "GOV_D2_PRICE_001": {
+      "speaker": "Government Official",
+      "text": "The city has set the repurchase price at {buyback_price} coins. You must pay that full amount before the year ends.",
+      "next": "GOV_D2_PRICE_002"
+    },
+    "GOV_D2_LEAVE_001": {
+      "speaker": "Government Official",
+      "text": "You have one year to pack your belongings and leave the property. You may use that time to settle your affairs.",
+      "next": "GOV_D2_LEAVE_002"
+    },
+    "GOV_D2_REASON_001": {
+      "speaker": "Government Official",
+      "text": "The city's expansion plan includes this village. I know people have built their lives here, but I have no authority to change the project.",
+      "next": "GOV_006"
+    },
+    "GOV_D2_DEADLINE_001": {
+      "speaker": "Government Official",
+      "text": "If the full repurchase payment is not completed within a year, the city will proceed with the requisition order.",
+      "next": "GOV_D2_DEADLINE_002"
+    },
+    "GOV_D2_REFUSE_001": {
+      "speaker": "Government Official",
+      "text": "I understand why you want to protect this place, but refusing the notice alone will not stop the process.",
+      "next": "GOV_D2_REFUSE_002"
     },
     "GOV_008": {
       "speaker": "Government Official",
       "text": "The repurchase price has been set by the city. You must pay the full amount before the one-year deadline.",
       "next": "GOV_009"
+    },
+    "GOV_D2_PRICE_002": {
+      "speaker": "Government Official",
+      "text": "You may earn the money through crops, fishing, or trade. How you raise it is up to you; the deadline will not change.",
+      "next": "GOV_006",
+      "set_flags": [
+        "asked_buyback_option",
+        "buyback_goal_unlocked"
+      ]
+    },
+    "GOV_D2_LEAVE_002": {
+      "speaker": "Government Official",
+      "text": "The city will provide financial compensation after the deadline, according to the notice. Remaining on the property could lead to forced clearance.",
+      "next": "GOV_006",
+      "set_flags": [
+        "asked_leave_option"
+      ]
+    },
+    "GOV_D2_DEADLINE_002": {
+      "speaker": "Government Official",
+      "text": "If the property has not been vacated, the city may send demolition robots to clear it. That is why the deadline matters.",
+      "next": "GOV_006"
+    },
+    "GOV_D2_REFUSE_002": {
+      "speaker": "Government Official",
+      "text": "You may speak with the village chief and your neighbors. But to legally keep the farm, the city still requires the full repurchase payment.",
+      "next": "GOV_006",
+      "set_flags": [
+        "player_resists",
+        "community_route_hint"
+      ]
     },
     "GOV_009": {
       "speaker": "Government Official",
@@ -61,12 +167,14 @@
     "PLAYER_002": {
       "speaker": "{player}",
       "text": "Then I still have a chance. If I can earn enough money before the deadline, I can protect this place.",
-      "next": "GOV_009_2",
-      "set_flag": "buyback_goal_unlocked"
+      "next": "GOV_010",
+      "set_flags": [
+        "buyback_goal_unlocked"
+      ]
     },
-    "GOV_009_2": {
+    "GOV_010": {
       "speaker": "Government Official",
-      "text": "I understand your anger, but ignoring the notice will not stop the process. I strongly recommend that you use this year to prepare.",
+      "text": "You have a difficult year ahead. Whatever you decide, please remember that the deadline will not change.",
       "next": "GOV_END_001"
     },
     "GOV_END_001": {
@@ -78,8 +186,10 @@
       "speaker": "{player}",
       "text": "One year... I need to decide whether to leave, earn enough to buy the land back, or find another way to save our home.",
       "next": "END",
-      "notify": "Start main quest: Save the Land",
-      "set_flag": "main_quest_started"
+      "set_flags": [
+        "main_quest_started"
+      ],
+      "notify": "Start main quest: Save the Land"
     }
   }
 }

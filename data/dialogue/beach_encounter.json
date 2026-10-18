@@ -1,0 +1,33 @@
+{
+  "generated_from": "docs/Future_Land_NPC_Dialogue.xlsx (scene \"Beach Encounter\"); edit the spreadsheet, then run tools/dialogue_from_xlsx.py",
+  "start": "FISH_D7_001",
+  "nodes": {
+    "FISH_D7_001": {
+      "speaker": "Fisherman",
+      "text": "Ahoy, you must be the new farmer.",
+      "next": "FISH_D7_002"
+    },
+    "FISH_D7_002": {
+      "speaker": "Fisherman",
+      "text": "Do you want to try fishing?",
+      "next": "PLAYER_FISH_D7_001"
+    },
+    "PLAYER_FISH_D7_001": {
+      "speaker": "{player}",
+      "text": "Sure, could you teach me how to do that?",
+      "next": "FISH_D7_003"
+    },
+    "FISH_D7_003": {
+      "speaker": "Fisherman",
+      "text": "Take this fishing rod and try to catch your first fish! If you want, you can also sell the fish to me.",
+      "next": "END",
+      "set_flags": [
+        "fisherman_introduction_complete"
+      ],
+      "notify": "Unlock fishing activity",
+      "relationship": {
+        "Fisherman": 1
+      }
+    }
+  }
+}

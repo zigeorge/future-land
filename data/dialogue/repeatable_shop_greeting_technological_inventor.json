@@ -1,0 +1,12 @@
+{
+  "generated_from": "docs/Future_Land_NPC_Dialogue.xlsx (scene \"Repeatable Shop Greeting\"); edit the spreadsheet, then run tools/dialogue_from_xlsx.py",
+  "start": "INV_SHOP_REPEAT_001",
+  "nodes": {
+    "INV_SHOP_REPEAT_001": {
+      "speaker": "Technological Inventor",
+      "text": "Step inside—my workshop is open for powerful new upgrades to your farming equipment!",
+      "next": "END",
+      "open_shop": "inventor"
+    }
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "generated_from": "docs/Future_Land_NPC_Dialogue.xlsx (scene \"Repeatable Shop Greeting\"); edit the spreadsheet, then run tools/dialogue_from_xlsx.py",
+  "start": "MERCH_SHOP_REPEAT_001",
+  "nodes": {
+    "MERCH_SHOP_REPEAT_001": {
+      "speaker": "Merchant",
+      "text": "Welcome back—my shop is open for seeds, tools, and selling your harvest!",
+      "next": "END",
+      "open_shop": "merchant"
+    }
+  }
+}

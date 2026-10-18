@@ -102,8 +102,8 @@ The calendar has 365 days a year: 4 seasons of 3 months (`TimeManager.MONTH_DAYS
 The story follows `docs/Game story.docx` and the dialogue spreadsheet (repo-level `docs/`):
 
 1. **Start:** the title screen offers *Continue* (when `user://savegame.json` exists) and *New Game*. A new game opens the avatar selection screen (`src/ui/avatar_select/`): pick one of the four looks in `data/avatars/`, then type a name (`GameState.player_name`). Esc opens the pause menu (save, load, quit to title). Saves include the current map and position (`main.gd` registers with `SaveManager`).
-2. **Day 1, farm:** the Government Official waits at the farmhouse door and starts `land_requisition_notice` by himself. It sets `main_quest_started` and `buyback_goal_unlocked`, so the HUD shows the days left and the buy-back price (`GameState.DEADLINE_DAYS`, `GameState.BUYBACK_PRICE`). Then he leaves.
-3. **Village:** the Village Chief and the Merchant have one-time introductions, then repeat lines.
+2. **Day 2, farm:** the Government Official waits at the farmhouse door and starts `land_requisition_notice` by himself. It sets `main_quest_started` and `buyback_goal_unlocked`, so the HUD shows the days left and the buy-back price (`GameState.DEADLINE_DAYS`, `GameState.BUYBACK_PRICE`). Then he leaves.
+3. **Village:** the Village Chief and the Merchant have one-time introductions. Afterwards the Merchant's (and later the Inventor's) repeat greeting ends with `open_shop`, and `EventBus.shop_requested` opens the shop screen (`src/ui/shop/`): buy the items `data/shops.json` lists for that shop (seeds only in their season), or open the backpack to sell.
 4. **Day 4, farm:** the Inventor visits and proposes the deal (`inventor_deal_accepted`). Afterwards he is found at his workshop in the village.
 
 Story progress is stored as **story flags** (`GameState.story_flags`), set by dialogue lines and saved with the game. NPCs use flags and the day number (`TimeManager.get_day_number()`) to decide whether they're present and what they say; see [data/README.md](../data/README.md#when-npcs-say-what).

@@ -35,6 +35,10 @@ signal dialogue_choices_shown(choices: Array[String])
 signal dialogue_finished(dialogue_id: StringName)
 signal story_flag_changed(flag: StringName, value: Variant)
 
+# --- Shops --------------------------------------------------------------
+## Open a shop screen (shop id from data/shops.json: merchant, inventor, fisherman).
+signal shop_requested(shop_id: StringName)
+
 # --- Game flow ----------------------------------------------------------
 signal level_change_requested(level_path: String, spawn_point: StringName)
 signal game_saved

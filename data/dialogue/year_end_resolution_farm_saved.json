@@ -1,0 +1,47 @@
+{
+  "generated_from": "docs/Future_Land_NPC_Dialogue.xlsx (scene \"Year-End Resolution – Farm Saved\"); edit the spreadsheet, then run tools/dialogue_from_xlsx.py",
+  "start": "END_SAVE_001",
+  "nodes": {
+    "END_SAVE_001": {
+      "speaker": "Government Official",
+      "text": "The one-year deadline is here. It seem you have earned enough money to repurchase your land. Congratulations!",
+      "next": "PLAYER_END_SAVE_001"
+    },
+    "PLAYER_END_SAVE_001": {
+      "speaker": "{player}",
+      "text": "Yes, I would like to pay the full amount and keep my farm.",
+      "next": "END_SAVE_002"
+    },
+    "END_SAVE_002": {
+      "speaker": "Government Official",
+      "text": "Payment confirmed; the requisition order is canceled, and the farm is yours.",
+      "next": "CHIEF_END_SAVE_001",
+      "set_flags": [
+        "land_repurchase_paid"
+      ],
+      "todo": [
+        "If not already paid: deduct buyback_price from current_money"
+      ]
+    },
+    "CHIEF_END_SAVE_001": {
+      "speaker": "Village Chief",
+      "text": "You did it, and this place will remain a home for years to come!",
+      "next": "PLAYER_END_SAVE_002",
+      "relationship": {
+        "Village Chief": 1
+      }
+    },
+    "PLAYER_END_SAVE_002": {
+      "speaker": "{player}",
+      "text": "A year ago this was just a place to live, but now I love life on this farm and never want to leave.",
+      "next": "END",
+      "set_flags": [
+        "farm_saved",
+        "ending_complete"
+      ],
+      "todo": [
+        "show success ending"
+      ]
+    }
+  }
+}
