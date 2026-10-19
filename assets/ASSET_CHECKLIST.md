@@ -84,7 +84,7 @@ Shown on the avatar selection screen and next to the speaker in conversations.
 - [ ] A plain water tile in the same deep blue as the shore tiles (the pond's middle uses the closest tiles from `water.png`, which are a little lighter and wavier)
 - [x] `pond.png`: generated from `water_grass(_corner).png` (plain water, every edge and corner) so the whole pond uses one water texture
 - [ ] 4 inside-corner tiles for paths and the shore (grass in just one corner, with a curved bank); until then the pond has to stay rectangular
-- [x] `soil_dry.png`, `soil_wet.png` (in `tilesets/environment/`): currently made from the dirt path's centre tile with furrows, so tilled fields join seamlessly. Nir may replace them with drawn versions (128×128, seamless on all sides, wet = darker).
+- [x] `soil_dry.png`, `soil_wet.png` (in `tilesets/environment/`): Nir's tiles; a 4 px white strip on the left edge of `soil_wet` was trimmed
 - [x] Stored for later: `dirt_path_grass(_corner).png`, `paved_path_grass(_corner).png`; a plain paving centre tile is still needed for paved areas
 
 ### 8. Trees and props (`art/environment/`)
