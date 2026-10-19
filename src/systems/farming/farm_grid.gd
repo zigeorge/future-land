@@ -23,7 +23,7 @@ const CURSOR_COLOR := Color(1, 1, 1, 0.6)
 
 ## Cells where farming is allowed, relative to this node's position.
 @export var area := Rect2i(0, 0, 16, 10)
-## 16x16 tilled-soil tiles (assets/art/tilesets/soil_dry.png, soil_wet.png).
+## Tilled-soil tiles, any resolution (assets/art/tilesets/environment/soil_dry.png, soil_wet.png).
 @export var dry_soil_texture: Texture2D
 @export var wet_soil_texture: Texture2D
 
