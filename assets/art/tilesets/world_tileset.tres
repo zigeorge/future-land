@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" path="res://assets/art/tilesets/environment/grass_ground.png" id="5_d21od"]
 [ext_resource type="Texture2D" path="res://assets/art/tilesets/environment/water_grass.png" id="6_kpylr"]
 [ext_resource type="Texture2D" path="res://assets/art/tilesets/environment/water_grass_corner.png" id="7_vpvoh"]
+[ext_resource type="Texture2D" path="res://assets/art/tilesets/environment/pond.png" id="8_kpylr"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_o7luu"]
 texture = ExtResource("1_ty8pu")
@@ -147,6 +148,26 @@ texture_region_size = Vector2i(128, 128)
 0:0/3/flip_h = true
 0:0/3/flip_v = true
 
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_vpvoh"]
+texture = ExtResource("8_kpylr")
+texture_region_size = Vector2i(128, 128)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+3:2/0 = 0
+0:3/0 = 0
+1:3/0 = 0
+2:3/0 = 0
+3:3/0 = 0
+
 [resource]
 tile_size = Vector2i(128, 128)
 sources/0 = SubResource("TileSetAtlasSource_o7luu")
@@ -156,3 +177,4 @@ sources/1 = SubResource("TileSetAtlasSource_kpylr")
 sources/4 = SubResource("TileSetAtlasSource_1gpqb")
 sources/5 = SubResource("TileSetAtlasSource_p2xmd")
 sources/6 = SubResource("TileSetAtlasSource_4tswy")
+sources/7 = SubResource("TileSetAtlasSource_vpvoh")

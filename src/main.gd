@@ -131,6 +131,8 @@ func _new_game() -> void:
 	get_tree().paused = true
 	await screen.avatar_chosen
 	get_tree().paused = false
+	await get_tree().create_timer(0.4).timeout
+	DialogueManager.start(&"opening")
 
 
 func _save() -> void:

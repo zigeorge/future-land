@@ -29,6 +29,7 @@ func _draw() -> void:
 	var slot_rect := Rect2(slot.position * scale, slot.size * scale)
 	var shown := Rect2(slot_rect.position, Vector2(slot_rect.size.x * ratio, slot_rect.size.y))
 	var source := Rect2(Vector2.ZERO, Vector2(fill.get_width() * ratio, fill.get_height()))
+	draw_rect(slot_rect, Color(0.07, 0.1, 0.16, 0.94))  # backing, so the map doesn't show through
 	if ratio > 0.0:
 		draw_texture_rect_region(fill, shown, source, LOW_TINT if ratio < LOW_LEVEL else Color.WHITE)
 	draw_texture_rect(frame, Rect2(Vector2.ZERO, size), false)

@@ -13,6 +13,8 @@ var _message_tween: Tween
 @onready var money_label: Label = %MoneyLabel
 @onready var deadline_label: Label = %DeadlineLabel
 @onready var goal_label: Label = %GoalLabel
+@onready var objective_panel: PanelContainer = %GoalPanel
+@onready var objective_label: Label = %GoalLabel2
 @onready var energy_bar: EnergyBar = %EnergyBar
 @onready var hotbar: HBoxContainer = %Hotbar
 @onready var message_label: Label = %MessageLabel
@@ -29,6 +31,7 @@ func _ready() -> void:
 	EventBus.hotbar_selection_changed.connect(func(_i: int) -> void: _update_hotbar())
 	EventBus.notification_requested.connect(show_message)
 	EventBus.story_flag_changed.connect(func(_f: StringName, _v: Variant) -> void: _update_story())
+	EventBus.avatar_changed.connect(func(_id: StringName) -> void: _update_story())
 	EventBus.game_loaded.connect(_refresh_all)
 	_refresh_all()
 
@@ -73,6 +76,9 @@ func _update_story() -> void:
 	deadline_label.text = "%d days left" % GameState.get_days_remaining()
 	goal_label.visible = GameState.has_story_flag(&"buyback_goal_unlocked")
 	goal_label.text = "Buy back: %s g" % GameState.format_money(GameState.BUYBACK_PRICE)
+	var objective := Objectives.current_text()
+	objective_panel.visible = objective != ""
+	objective_label.text = "Goal: " + objective
 
 
 func _update_money(amount: int) -> void:

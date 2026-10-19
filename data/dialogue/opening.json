@@ -1,0 +1,9 @@
+{
+  "about": "Opening story shown when a new game starts. Hand-written from docs/Game story.docx as a placeholder; the story lead may rewrite it (or move it into the dialogue sheet as scene \"Opening\").",
+  "lines": [
+    { "speaker": "", "text": "The year is 2070. Artificial intelligence now does most of the work in the city, and your engineering job is gone." },
+    { "speaker": "", "text": "With nothing keeping you there, you remember the farmhouse your family left behind in the countryside." },
+    { "speaker": "", "text": "You arrive to find the house still standing, but the land around it overgrown and forgotten." },
+    { "speaker": "{player}", "text": "This place needs a lot of work... The village is just east of here. Maybe someone there can help me get started.", "set_flag": "opening_seen" }
+  ]
+}

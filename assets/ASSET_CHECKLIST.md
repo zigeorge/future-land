@@ -82,7 +82,8 @@ Shown on the avatar selection screen and next to the speaker in conversations.
 - [x] `dirt_path.png` (3×3 set)
 - [x] `water.png`; `water_grass.png` and `water_grass_corner.png` give the pond a grass shore (rotated for every side)
 - [ ] A plain water tile in the same deep blue as the shore tiles (the pond's middle uses the closest tiles from `water.png`, which are a little lighter and wavier)
-- [ ] 4 inside-corner tiles for paths and the shore (grass in just one corner)
+- [x] `pond.png`: generated from `water_grass(_corner).png` (plain water, every edge and corner) so the whole pond uses one water texture
+- [ ] 4 inside-corner tiles for paths and the shore (grass in just one corner, with a curved bank); until then the pond has to stay rectangular
 - [ ] `soil_dry.png`, `soil_wet.png`: `soil_wet` shows a seam when repeated
 - [x] Stored for later: `dirt_path_grass(_corner).png`, `paved_path_grass(_corner).png`; a plain paving centre tile is still needed for paved areas
 

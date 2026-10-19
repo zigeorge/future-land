@@ -123,6 +123,8 @@ func _plant_seed(item: ItemData, cell: Vector2i) -> bool:
 	if not GameState.farm.plant(cell, crop.id):
 		return false
 	GameState.inventory.remove_item(item.id, 1)
+	if not GameState.has_story_flag(&"first_crop_planted"):
+		GameState.set_story_flag(&"first_crop_planted")
 	return true
 
 

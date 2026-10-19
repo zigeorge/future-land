@@ -1,6 +1,7 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://src/entities/player/player.gd" id="1_player"]
+[ext_resource type="Script" path="res://src/entities/player/objective_arrow.gd" id="2_arrow"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_body"]
 size = Vector2(10, 6)
@@ -39,3 +40,8 @@ shape = SubResource("CircleShape2D_reach")
 [node name="Camera2D" type="Camera2D" parent="."]
 zoom = Vector2(2, 2)
 position_smoothing_enabled = true
+
+[node name="ObjectiveArrow" type="Node2D" parent="."]
+z_index = 5
+position = Vector2(0, -14)
+script = ExtResource("2_arrow")

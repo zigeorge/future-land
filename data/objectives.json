@@ -1,0 +1,11 @@
+{
+  "about": "The goal shown on screen, top left. The first goal whose done_flag is not set (and whose requires_flag is set, if any) is shown. map + target make an arrow point the way: target is an NPC role, or a node name in that map (e.g. FarmhouseDoor). Flags come from dialogue (Quest_Flag / Effect) or from the game: first_crop_planted, first_sleep.",
+  "objectives": [
+    { "text": "Visit the village east of your farm and meet the village chief", "done_flag": "village_introduction_complete", "map": "village", "target": "Village Chief" },
+    { "text": "Meet Marcus at the village shop", "done_flag": "merchant_introduction_complete", "map": "village", "target": "Merchant" },
+    { "text": "Plant your first crop: hoe (1), seeds (3), then water (2)", "done_flag": "first_crop_planted", "map": "farm", "target": "FarmGrid" },
+    { "text": "Go to sleep at your farmhouse door to end the day", "done_flag": "first_sleep", "map": "farm", "target": "FarmhouseDoor" },
+    { "text": "Talk to the visitor at your farmhouse", "done_flag": "main_quest_started", "map": "farm", "target": "Government Official" },
+    { "text": "Earn {buyback_price} g to buy back your land before the deadline", "done_flag": "land_repurchase_paid" }
+  ]
+}

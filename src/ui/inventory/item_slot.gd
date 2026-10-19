@@ -10,6 +10,8 @@ const SIZE := Vector2(40, 40)
 const ICON_SIZE := Vector2(32, 32)
 const FRAME := preload("res://assets/art/ui/hotbar_frame.png")
 const SELECTED_FRAME := preload("res://assets/art/ui/hotbar_frame_selected.png")
+## Solid backing inside the frame, so the map never shows through the slot.
+const BACKING_COLOR := Color(0.07, 0.1, 0.16, 0.94)
 
 ## Clickable slots emit `pressed`; the hotbar's slots let clicks through.
 var interactive := false:
@@ -17,6 +19,7 @@ var interactive := false:
 		interactive = value
 		mouse_filter = Control.MOUSE_FILTER_STOP if value else Control.MOUSE_FILTER_IGNORE
 
+var _backing := ColorRect.new()
 var _icon := TextureRect.new()
 var _label := Label.new()
 var _selected := false
@@ -25,6 +28,9 @@ var _selected := false
 func _init() -> void:
 	custom_minimum_size = SIZE
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_backing.color = BACKING_COLOR
+	_backing.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(_backing)
 	_icon.custom_minimum_size = ICON_SIZE
 	_icon.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	_icon.size_flags_vertical = Control.SIZE_SHRINK_CENTER

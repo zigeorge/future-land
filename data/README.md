@@ -88,6 +88,12 @@ The current story setup:
 | Inventor | Farm, on the path | `inventor_visit` (auto) | From day 4, until `inventor_deal_accepted` |
 | Inventor | Village workshop | `inventor_repeat` | After `inventor_deal_accepted` |
 
+## Goals (`objectives.json`) and the opening (`dialogue/opening.json`)
+
+`objectives.json` is the list of goals shown at the top left, in order: the first goal whose `done_flag` isn't set yet is shown, and a yellow arrow next to the player points to its `target` (an NPC role or a node name) in its `map`, or to the exit leading there. Flags come from the dialogue sheet (Quest_Flag / Effect) or from the game (`first_crop_planted`, `first_sleep`, `opening_seen`). Add, remove or reorder goals freely.
+
+`dialogue/opening.json` is the short story shown when a new game starts. It's a placeholder written from `docs/Game story.docx`; the story lead can rewrite it.
+
 ## NPC names (`npcs.json`)
 
 The names players see for each NPC role: `"Village Chief": "Arthur"`. The dialogue sheet keeps using roles in its Speaker and NPC_Name columns; the game shows the names above the NPCs and in the dialogue box. Portraits stay named by role (`village_chief.png`). Dialogue text can use `{player}` (the name the player typed), `{buyback_price}` and `{days_remaining}`.
