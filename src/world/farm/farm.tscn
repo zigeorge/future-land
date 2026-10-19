@@ -17,6 +17,8 @@
 [ext_resource type="Texture2D" path="res://assets/art/characters/government_official.png" id="15_ow8c4"]
 [ext_resource type="Texture2D" path="res://assets/art/characters/technological_inventor.png" id="16_nl26v"]
 [ext_resource type="Script" path="res://src/components/level_warp.gd" id="17_4es2c"]
+[ext_resource type="Texture2D" path="res://assets/art/tilesets/environment/soil_dry.png" id="soil_dry"]
+[ext_resource type="Texture2D" path="res://assets/art/tilesets/environment/soil_wet.png" id="soil_wet"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_x4imo"]
 size = Vector2(24, 12)
@@ -95,6 +97,8 @@ tile_set = ExtResource("2_ld28u")
 [node name="FarmGrid" type="Node2D" parent="." unique_id=1843307094]
 script = ExtResource("3_u0f21")
 area = Rect2i(2, 4, 76, 59)
+dry_soil_texture = ExtResource("soil_dry")
+wet_soil_texture = ExtResource("soil_wet")
 
 [node name="Entities" type="Node2D" parent="." unique_id=2034488462]
 y_sort_enabled = true

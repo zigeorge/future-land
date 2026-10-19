@@ -136,7 +136,7 @@ func _draw() -> void:
 		if soil_texture:
 			draw_texture_rect(soil_texture, rect, false)
 		else:
-			draw_rect(rect.grow(-1), WET_SOIL_COLOR if tile.watered else SOIL_COLOR)
+			draw_rect(rect, WET_SOIL_COLOR if tile.watered else SOIL_COLOR)
 		if tile.has_crop():
 			_draw_crop(tile, rect)
 	if _cursor_cell != Vector2i.MAX:
