@@ -1,9 +1,11 @@
 [gd_resource type="Resource" script_class="ItemData" format=3]
 
 [ext_resource type="Script" path="res://src/core/resources/item_data.gd" id="1_item"]
+[ext_resource type="Texture2D" path="res://assets/art/items/prism_snapper.png" id="2_icon"]
 
 [resource]
 script = ExtResource("1_item")
+icon = ExtResource("2_icon")
 id = &"prism_snapper"
 display_name = "Prism Snapper"
 description = "A bright reef fish whose scales shimmer like a prism. Requires a Level 2+ fishing tool."

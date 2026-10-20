@@ -1,9 +1,11 @@
 [gd_resource type="Resource" script_class="ItemData" format=3]
 
 [ext_resource type="Script" path="res://src/core/resources/item_data.gd" id="1_item"]
+[ext_resource type="Texture2D" path="res://assets/art/items/quantum_marlin.png" id="2_icon"]
 
 [resource]
 script = ExtResource("1_item")
+icon = ExtResource("2_icon")
 id = &"quantum_marlin"
 display_name = "Quantum Marlin"
 description = "A legendary marlin that rapidly shifts its position in the water. Requires a Level 4+ fishing tool."

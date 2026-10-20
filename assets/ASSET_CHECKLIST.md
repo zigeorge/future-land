@@ -93,18 +93,19 @@ Shown on the avatar selection screen and next to the speaker in conversations.
 - [x] Decoration: `tilesets/environment/grass_tufts.png`, `bushes.png`
 
 ### 9. Crops: strip of 4 stages, 512×128 (`art/tilesets/crops/`)
-- [x] `carrot.png` (in the game)
+- [x] All 32 crops (512×128 strips, from Nir's batch 5; `brrocoli`, `grapes`, `onions` renamed to match the crop ids)
 - [x] `broccoli.png`, `cabbage.png`, `garlic.png`, `onion.png`, `potato.png` (ready for when these crops are added)
 
 ### 10. Item icons: 128×128 (`art/items/`)
 - [x] `hoe.png`, `watering_can.png` (in the hotbar)
 - [x] `axe.png`, `chainsaw.png`, `pick_axe.png`, `pitchfork.png`, `rake.png`, `rock_hammer.png`, `scythe.png`, `sickle.png` (for upcoming tools)
-- [ ] `carrot_seeds.png` (seed packet) and `carrot.png` (the harvested carrot); the hotbar shows their names as text until then
+- [x] Seed packets for all 32 crops (`<crop>_seeds.png`), 15 fish (renamed to the item ids, e.g. `sardines` → `silver_sardine`), 7 new tools (`srinkler_robot` → `sprinkler`, `nanonet_launcher` → `nano_net_launcher`)
+- [ ] Harvested crop icons (`<crop>.png`, e.g. `carrot.png`); Nir's `crops/seeds/` images show loose seeds, not the crop, so they're not used yet
 
 ### 11. Interface (`art/ui/`)
 - [x] Energy bar: `energy_bar.png` (frame) and `energy_bar_fill.png`; the game draws the level inside the frame
 - [x] Hotbar: `hotbar_frame.png`, `hotbar_frame_selected.png`
-- [ ] Dialogue box and panel frame in the same blue sci-fi style (the current ones are brown wood)
+- [x] Panel frame `ui/text_frame.png` (512×512): used for every box (dialogue, portrait, menus, shop, backpack, HUD) via `src/ui/hd_frame_style.gd`, which draws its 160 px corners at 10 UI units. Nir's 3×3 tile version is not used: the tiles are 170/171 px and leave thin lines between them.
 - [ ] Simpler game icon `branding/icon.png` (the poster is hard to read at browser-tab size)
 
 ### 12. Later

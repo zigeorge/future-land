@@ -37,12 +37,16 @@ theme_override_constants/margin_bottom = 4
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="Portrait" type="TextureRect" parent="Box/Margin/HBox"]
+[node name="PortraitFrame" type="PanelContainer" parent="Box/Margin/HBox"]
 unique_name_in_owner = true
 visible = false
-custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 size_flags_vertical = 4
+
+[node name="Portrait" type="TextureRect" parent="Box/Margin/HBox/PortraitFrame"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(56, 56)
+layout_mode = 2
 expand_mode = 1
 stretch_mode = 5
 

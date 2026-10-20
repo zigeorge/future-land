@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" path="res://src/core/resources/crop_data.gd" id="1_crop"]
 [ext_resource type="Resource" path="res://data/items/watermelon.tres" id="2_harvest"]
+[ext_resource type="Texture2D" path="res://assets/art/tilesets/crops/watermelon.png" id="3_stages"]
 
 [resource]
 script = ExtResource("1_crop")
@@ -11,3 +12,4 @@ days_per_stage = Array[int]([5, 4, 4])
 harvest_item = ExtResource("2_harvest")
 harvest_amount = 1
 seasons = 2
+stage_strip = ExtResource("3_stages")

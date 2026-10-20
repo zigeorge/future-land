@@ -14,6 +14,7 @@ var _choice_index := 0
 var _choice_texts: Array[String] = []
 
 @onready var portrait: TextureRect = %Portrait
+@onready var portrait_frame: PanelContainer = %PortraitFrame
 @onready var speaker_label: Label = %SpeakerLabel
 @onready var text_label: Label = %TextLabel
 @onready var choices_panel: PanelContainer = %ChoicesPanel
@@ -66,7 +67,7 @@ func _show_portrait(_speaker: String) -> void:
 		texture = Registry.get_portrait(DialogueManager.current_speaker_role)
 	portrait.texture = texture
 	portrait.texture_filter = Art.filter_for(texture, 64)
-	portrait.visible = texture != null
+	portrait_frame.visible = texture != null
 
 
 func _on_choices_shown(choices: Array[String]) -> void:
