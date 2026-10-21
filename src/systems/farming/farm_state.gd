@@ -8,6 +8,8 @@ signal cell_changed(cell: Vector2i)
 
 ## Vector2i -> FarmTile
 var tiles: Dictionary = {}
+## Placed sprinklers: Vector2i -> how many tiles they water (effective range).
+var sprinklers: Dictionary = {}
 
 
 class FarmTile:
@@ -21,6 +23,7 @@ class FarmTile:
 
 func clear() -> void:
 	tiles.clear()
+	sprinklers.clear()
 
 
 func get_tile(cell: Vector2i) -> FarmTile:
@@ -32,9 +35,12 @@ func is_tilled(cell: Vector2i) -> bool:
 
 
 func till(cell: Vector2i) -> bool:
-	if is_tilled(cell):
+	if is_tilled(cell) or has_sprinkler(cell):
 		return false
 	tiles[cell] = FarmTile.new()
+	for sprinkler: Vector2i in sprinklers:
+		if cell in sprinkler_cells(sprinkler, sprinklers[sprinkler]):
+			tiles[cell].watered = true
 	cell_changed.emit(cell)
 	return true
 
@@ -58,6 +64,44 @@ func plant(cell: Vector2i, crop_id: StringName) -> bool:
 	return true
 
 
+func has_sprinkler(cell: Vector2i) -> bool:
+	return sprinklers.has(cell)
+
+
+## Places a sprinkler on open (untilled) ground.
+func place_sprinkler(cell: Vector2i, reach: int) -> bool:
+	if is_tilled(cell) or has_sprinkler(cell):
+		return false
+	sprinklers[cell] = reach
+	_water_around(cell)
+	cell_changed.emit(cell)
+	return true
+
+
+## Removes a sprinkler; returns false if there is none.
+func remove_sprinkler(cell: Vector2i) -> bool:
+	if not sprinklers.erase(cell):
+		return false
+	cell_changed.emit(cell)
+	return true
+
+
+## Cells a sprinkler waters: range 4 = the 4 neighbours, 8 = all 8 around it.
+static func sprinkler_cells(cell: Vector2i, reach: int) -> Array[Vector2i]:
+	var cells: Array[Vector2i] = [cell + Vector2i.UP, cell + Vector2i.DOWN, cell + Vector2i.LEFT, cell + Vector2i.RIGHT]
+	if reach >= 8:
+		cells.append_array([cell + Vector2i(-1, -1), cell + Vector2i(1, -1), cell + Vector2i(-1, 1), cell + Vector2i(1, 1)])
+	return cells
+
+
+func _water_around(sprinkler: Vector2i) -> void:
+	for cell in sprinkler_cells(sprinkler, sprinklers[sprinkler]):
+		var tile := get_tile(cell)
+		if tile and not tile.watered:
+			tile.watered = true
+			cell_changed.emit(cell)
+
+
 func can_harvest(cell: Vector2i) -> bool:
 	var tile := get_tile(cell)
 	if tile == null or not tile.has_crop():
@@ -79,7 +123,7 @@ func harvest(cell: Vector2i) -> CropData:
 
 
 ## Called once each morning: watered crops grow, out-of-season crops die,
-## and all soil dries out.
+## all soil dries out, then sprinklers water the soil around them.
 func advance_day(season: int) -> void:
 	for cell: Vector2i in tiles:
 		var tile: FarmTile = tiles[cell]
@@ -92,6 +136,8 @@ func advance_day(season: int) -> void:
 				tile.days_grown += 1
 		tile.watered = false
 		cell_changed.emit(cell)
+	for sprinkler: Vector2i in sprinklers:
+		_water_around(sprinkler)
 
 
 func to_data() -> Dictionary:
@@ -103,12 +149,24 @@ func to_data() -> Dictionary:
 			"crop_id": String(tile.crop_id),
 			"days_grown": tile.days_grown,
 		}
+	var placed := {}
+	for cell: Vector2i in sprinklers:
+		placed["%d,%d" % [cell.x, cell.y]] = sprinklers[cell]
+	if not placed.is_empty():
+		data["_sprinklers"] = placed
 	return data
 
 
 func from_data(data: Dictionary) -> void:
 	tiles.clear()
+	sprinklers.clear()
+	var placed: Dictionary = data.get("_sprinklers", {})
+	for key: String in placed:
+		var p := key.split(",")
+		sprinklers[Vector2i(int(p[0]), int(p[1]))] = int(placed[key])
 	for key: String in data:
+		if key.begins_with("_"):
+			continue
 		var parts := key.split(",")
 		var cell := Vector2i(int(parts[0]), int(parts[1]))
 		var tile := FarmTile.new()

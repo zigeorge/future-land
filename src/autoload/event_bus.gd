@@ -39,6 +39,10 @@ signal story_flag_changed(flag: StringName, value: Variant)
 ## Open a shop screen (shop id from data/shops.json: merchant, inventor, fisherman).
 signal shop_requested(shop_id: StringName)
 
+# --- Story --------------------------------------------------------------
+## End of the story year: kind is "saved" or "demolished".
+signal ending_requested(kind: String)
+
 # --- Game flow ----------------------------------------------------------
 signal level_change_requested(level_path: String, spawn_point: StringName)
 signal game_saved

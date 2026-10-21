@@ -8,6 +8,8 @@ signal chosen(id: StringName)
 
 @export var title := ""
 @export var show_backdrop_image := false
+## Optional text under the title (ending screens).
+@export_multiline var message := ""
 
 @onready var title_label: Label = %TitleLabel
 @onready var buttons_box: VBoxContainer = %Buttons
@@ -19,6 +21,17 @@ func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	title_label.text = title
 	backdrop.visible = show_backdrop_image
+	if message != "":
+		var label := Label.new()
+		label.text = message
+		label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		label.custom_minimum_size = Vector2(300, 0)
+		label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		title_label.add_sibling(label)
+		panel.offset_left = -170.0
+		panel.offset_right = 170.0
+		panel.offset_top = -62.0
+		panel.offset_bottom = 62.0
 	if show_backdrop_image:
 		# The backdrop already shows the logo; put the buttons over its
 		# "Loading..." bar at the bottom.

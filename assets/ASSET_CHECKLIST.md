@@ -64,6 +64,8 @@ Shown on the avatar selection screen and next to the speaker in conversations.
 ### 3. Player characters: `art/characters/player1.png`–`player4.png`
 - [x] In the game. Nir's sheets (3 rows: down, up, side, with grid lines) are converted with `tools/pack_character_sheet.py` (repo root) into the game format: 640×1024, 5 columns × 4 rows of 128×256 frames, same scale, feet on one line, side view mirrored for the other direction. To update a character, run e.g. `python3 tools/pack_character_sheet.py new_player1.png future-land/assets/art/characters/player1.png`.
 
+- [ ] **Side-view walk (all four players):** the 4 side frames all show the same leg forward, so walking left/right looks like sliding. Needed: right leg forward, passing (legs together), left leg forward, passing. Until then the game alternates the stride with the standing pose (`side_walk_with_passing` in `data/avatars/`).
+
 ### 4. Grass ground tile (`art/tilesets/environment/grass_ground.png`)
 - [x] In the game: covers both maps (4 variants mixed).
 - [ ] Small fix: each tile is darker along its left and right edges, so faint vertical stripes show across the ground. The edges should be as bright as the middle.

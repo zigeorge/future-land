@@ -27,6 +27,8 @@ const CURSOR_COLOR := Color(1, 1, 1, 0.6)
 @export var dry_soil_texture: Texture2D
 @export var wet_soil_texture: Texture2D
 
+const SPRINKLER_ICON := preload("res://assets/art/items/sprinkler.png")
+
 var _cursor_cell := Vector2i.MAX
 var _target_cell := Vector2i.MAX
 ## crop id -> CropData, loaded outside _draw(): a texture loaded for the first
@@ -40,6 +42,7 @@ var _crops: Dictionary = {}
 
 func _ready() -> void:
 	add_to_group(GROUP)
+	texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS  # HD crop, soil and sprinkler art
 	EventBus.farm_changed.connect(func(_cell: Vector2i) -> void: _refresh())
 	EventBus.game_loaded.connect(_refresh)
 	_refresh()
@@ -52,7 +55,8 @@ func _process(_delta: float) -> void:
 		return
 	_target_cell = target
 	# Only highlight cells where the hoe (or seeds, water) would do something.
-	var cell := target if GameState.farm.is_tilled(target) or can_till(target) else Vector2i.MAX
+	var farm := GameState.farm
+	var cell := target if farm.is_tilled(target) or farm.has_sprinkler(target) or can_till(target) else Vector2i.MAX
 	if cell != _cursor_cell:
 		_cursor_cell = cell
 		queue_redraw()
@@ -63,7 +67,7 @@ func world_to_cell(world_position: Vector2) -> Vector2i:
 
 
 func can_till(cell: Vector2i) -> bool:
-	if not area.has_point(cell) or GameState.farm.is_tilled(cell):
+	if not area.has_point(cell) or GameState.farm.is_tilled(cell) or GameState.farm.has_sprinkler(cell):
 		return false
 	for layer in _blocking_layers:
 		if layer.get_cell_source_id(cell) != -1:
@@ -87,6 +91,8 @@ func use_item(item: ItemData, cell: Vector2i) -> bool:
 
 
 func try_harvest(cell: Vector2i) -> bool:
+	if area.has_point(cell) and GameState.farm.has_sprinkler(cell):
+		return _pick_up_sprinkler(cell)
 	if not area.has_point(cell) or not GameState.farm.can_harvest(cell):
 		return false
 	var crop := GameState.farm.harvest(cell)
@@ -108,9 +114,45 @@ func _use_tool(item: ItemData, cell: Vector2i) -> bool:
 			success = can_till(cell) and GameState.farm.till(cell)
 		ItemData.ToolType.WATERING_CAN:
 			success = GameState.farm.water(cell)
+		ItemData.ToolType.CULTIVATOR:
+			success = _cultivate(cell, item.effective_range)
+		ItemData.ToolType.SPRINKLER:
+			return _place_sprinkler(item, cell)
 	if success:
 		GameState.spend_energy(item.energy_cost)
 	return success
+
+
+## Tills up to `reach` tiles in a line, starting at `cell`, away from the player.
+func _cultivate(cell: Vector2i, reach: int) -> bool:
+	var player := get_tree().get_first_node_in_group("player") as Player
+	var step := Vector2i(player.facing) if player else Vector2i.DOWN
+	var tilled := 0
+	for i in reach:
+		var target := cell + step * i
+		if can_till(target) and GameState.farm.till(target):
+			tilled += 1
+	return tilled > 0
+
+
+func _place_sprinkler(item: ItemData, cell: Vector2i) -> bool:
+	if not can_till(cell):
+		EventBus.notification_requested.emit("Place sprinklers on open grass next to your crops")
+		return false
+	if not GameState.farm.place_sprinkler(cell, item.effective_range):
+		return false
+	GameState.inventory.remove_item(item.id, 1)
+	EventBus.notification_requested.emit("Sprinkler placed: waters 4 tiles around it every morning (E: pick up)")
+	return true
+
+
+func _pick_up_sprinkler(cell: Vector2i) -> bool:
+	var sprinkler := Registry.get_item(&"sprinkler")
+	if GameState.inventory.add_item(sprinkler, 1) > 0:
+		EventBus.notification_requested.emit("Backpack is full")
+		return false
+	GameState.farm.remove_sprinkler(cell)
+	return true
 
 
 func _plant_seed(item: ItemData, cell: Vector2i) -> bool:
@@ -139,6 +181,8 @@ func _draw() -> void:
 			draw_rect(rect, WET_SOIL_COLOR if tile.watered else SOIL_COLOR)
 		if tile.has_crop():
 			_draw_crop(tile, rect)
+	for cell: Vector2i in GameState.farm.sprinklers:
+		draw_texture_rect(SPRINKLER_ICON, Rect2(cell * CELL_SIZE, Vector2.ONE * CELL_SIZE), false)
 	if _cursor_cell != Vector2i.MAX:
 		draw_rect(Rect2(_cursor_cell * CELL_SIZE, Vector2.ONE * CELL_SIZE), CURSOR_COLOR, false, 1.0)
 

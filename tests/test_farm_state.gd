@@ -59,3 +59,28 @@ func _planted_farm() -> FarmState:
 	farm.till(CELL)
 	farm.plant(CELL, &"carrot")
 	return farm
+
+
+func test_sprinkler_waters_neighbours_every_morning() -> void:
+	var farm := FarmState.new()
+	var sprinkler := Vector2i(5, 5)
+	farm.till(CELL)
+	for side in [Vector2i.UP, Vector2i.DOWN, Vector2i.LEFT, Vector2i.RIGHT]:
+		farm.till(sprinkler + side)
+		farm.plant(sprinkler + side, &"carrot")
+	assert_true(farm.place_sprinkler(sprinkler, 4))
+	assert_false(farm.till(sprinkler), "can't till under a sprinkler")
+	for day in Registry.get_crop(&"carrot").get_total_days():
+		farm.advance_day(SPRING)
+	for side in [Vector2i.UP, Vector2i.DOWN, Vector2i.LEFT, Vector2i.RIGHT]:
+		assert_true(farm.can_harvest(sprinkler + side), "crop next to the sprinkler grew without watering")
+	assert_false(farm.get_tile(CELL).watered, "tiles out of range stay dry")
+
+
+func test_sprinklers_are_saved() -> void:
+	var farm := FarmState.new()
+	farm.place_sprinkler(Vector2i(3, 4), 4)
+	var loaded := FarmState.new()
+	loaded.from_data(JSON.parse_string(JSON.stringify(farm.to_data())))
+	assert_true(loaded.has_sprinkler(Vector2i(3, 4)))
+	assert_true(loaded.tiles.is_empty(), "sprinklers aren't tiles")

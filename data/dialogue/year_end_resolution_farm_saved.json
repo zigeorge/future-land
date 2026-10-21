@@ -16,11 +16,9 @@
       "speaker": "Government Official",
       "text": "Payment confirmed; the requisition order is canceled, and the farm is yours.",
       "next": "CHIEF_END_SAVE_001",
+      "pay_buyback": true,
       "set_flags": [
         "land_repurchase_paid"
-      ],
-      "todo": [
-        "If not already paid: deduct buyback_price from current_money"
       ]
     },
     "CHIEF_END_SAVE_001": {
@@ -35,12 +33,10 @@
       "speaker": "{player}",
       "text": "A year ago this was just a place to live, but now I love life on this farm and never want to leave.",
       "next": "END",
+      "ending": "saved",
       "set_flags": [
         "farm_saved",
         "ending_complete"
-      ],
-      "todo": [
-        "show success ending"
       ]
     }
   }

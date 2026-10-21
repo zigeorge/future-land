@@ -36,3 +36,12 @@ func test_rebuilt_front_walk_alternates_feet() -> void:
 	var other := frames.get_frame_texture("walk_down", 2).get_image()
 	step.flip_x()
 	assert_eq(step.get_data(), other.get_data(), "frame 3 is frame 1 mirrored")
+
+
+func test_side_walk_alternates_stride_and_standing() -> void:
+	var avatar := Registry.get_avatar(&"avatar_1")
+	var frames := avatar.build_sprite_frames()
+	var idle := frames.get_frame_texture("idle_left", 0) as AtlasTexture
+	assert_eq(frames.get_frame_count("walk_left"), 4)
+	assert_eq((frames.get_frame_texture("walk_left", 1) as AtlasTexture).region, idle.region, "2nd frame is the standing pose")
+	assert_true((frames.get_frame_texture("walk_left", 0) as AtlasTexture).region != idle.region, "1st frame is a stride")

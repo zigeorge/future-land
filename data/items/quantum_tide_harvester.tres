@@ -15,3 +15,5 @@ buy_price = 4500
 shop = &"inventor"
 max_stack = 1
 sell_price = 4500
+tool_type = 8
+effective_range = 4

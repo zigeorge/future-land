@@ -88,6 +88,13 @@ func get_date_text() -> String:
 	return text if year == 1 else "%s, Year %d" % [text, year]
 
 
+## Back to 06:00 on the current day.
+func reset_clock() -> void:
+	minutes = DAY_START_MINUTES
+	_accumulator = 0.0
+	EventBus.time_ticked.emit(day, get_hour(), get_minute())
+
+
 ## Back to 06:00 on the first day of year 1 (new game).
 func reset() -> void:
 	day_of_year = 1

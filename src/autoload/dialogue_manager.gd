@@ -15,6 +15,8 @@ var current_speaker_is_player := false
 
 ## Shop to open when the current conversation ends ("open_shop" in a line).
 var _shop_after: StringName = &""
+## Ending to show when the current conversation ends ("ending" in a line).
+var _ending_after := ""
 var _graph: DialogueGraph
 var _node_id := ""
 var _current_id: StringName = &""
@@ -80,12 +82,17 @@ func _show(node_id: String) -> void:
 
 
 func _apply_effects(node: Dictionary) -> void:
+	# Pay before setting flags: the same line usually sets land_repurchase_paid.
+	if node.get("pay_buyback", false):
+		GameState.pay_buyback()
 	if node.has("set_flag"):
 		GameState.set_story_flag(StringName(node["set_flag"]))
 	for flag: String in node.get("set_flags", []):
 		GameState.set_story_flag(StringName(flag))
 	if node.has("open_shop"):
 		_shop_after = StringName(node["open_shop"])
+	if node.has("ending"):
+		_ending_after = str(node["ending"])
 	var relationship: Dictionary = node.get("relationship", {})
 	for npc_name: String in relationship:
 		GameState.change_relationship(npc_name, int(relationship[npc_name]))
@@ -114,3 +121,7 @@ func _finish() -> void:
 		var shop := _shop_after
 		_shop_after = &""
 		EventBus.shop_requested.emit(shop)
+	if _ending_after != "":
+		var ending := _ending_after
+		_ending_after = ""
+		EventBus.ending_requested.emit(ending)

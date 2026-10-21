@@ -72,16 +72,21 @@ func _update_time() -> void:
 
 
 func _update_story() -> void:
-	deadline_label.visible = GameState.has_story_flag(&"main_quest_started")
+	var ended := GameState.has_story_flag(&"ending_complete")
+	deadline_label.visible = GameState.has_story_flag(&"main_quest_started") and not ended
 	deadline_label.text = "%d days left" % GameState.get_days_remaining()
-	goal_label.visible = GameState.has_story_flag(&"buyback_goal_unlocked")
+	goal_label.visible = GameState.has_story_flag(&"buyback_goal_unlocked") and not ended
 	goal_label.text = "Buy back: %s g" % GameState.format_money(GameState.BUYBACK_PRICE)
 	var objective := Objectives.current_text()
 	objective_panel.visible = objective != ""
 	objective_label.text = "Goal: " + objective
+	if Objectives.current().get("done_flag", "") == "land_repurchase_paid":
+		objective_label.text += " (you have %s g)" % GameState.format_money(GameState.money)
 
 
 func _update_money(amount: int) -> void:
+	if Objectives.current().get("done_flag", "") == "land_repurchase_paid":
+		_update_story()
 	money_label.text = "%s g" % GameState.format_money(amount)
 
 

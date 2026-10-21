@@ -23,6 +23,8 @@ var _menu: GameMenu
 func _ready() -> void:
 	EventBus.level_change_requested.connect(change_level)
 	EventBus.shop_requested.connect(open_shop)
+	EventBus.ending_requested.connect(_show_ending)
+	EventBus.day_started.connect(func(_d: int, _s: int, _y: int) -> void: _check_deadline())
 	SaveManager.register("world", self)
 	_load_level(start_level, &"")
 	_show_title()
@@ -42,6 +44,12 @@ func _unhandled_input(event: InputEvent) -> void:
 	elif event.is_action_pressed("debug_next_day") and OS.is_debug_build():
 		TimeManager.start_next_day()
 		EventBus.notification_requested.emit("[debug] %s" % TimeManager.get_date_text())
+	elif event.is_action_pressed("debug_end_year") and OS.is_debug_build():
+		# Jump to the last day of the story year (sleep once more to reach the deadline).
+		GameState.set_story_flag(&"main_quest_started")
+		TimeManager.day_of_year = GameState.DEADLINE_DAYS
+		TimeManager.reset_clock()
+		EventBus.notification_requested.emit("[debug] Last day of the year. Sleep to reach the deadline.")
 
 
 # --- Title screen and pause menu ---------------------------------------------
@@ -100,9 +108,10 @@ func open_backpack(shop_open := false) -> Backpack:
 	return backpack
 
 
-func _open_menu(title: String, backdrop: bool) -> GameMenu:
+func _open_menu(title: String, backdrop: bool, message := "") -> GameMenu:
 	var menu: GameMenu = MENU_SCENE.instantiate()
 	menu.title = title
+	menu.message = message
 	menu.show_backdrop_image = backdrop
 	$UI.add_child(menu)
 	get_tree().paused = true
@@ -118,6 +127,49 @@ func _close_menu() -> void:
 
 func _can_pause() -> bool:
 	return _menu == null and not get_tree().paused and not DialogueManager.is_active() and not _transitioning
+
+
+# --- Year end -----------------------------------------------------------------
+
+## The morning after the last day: the official comes for the decision.
+func _check_deadline() -> void:
+	if not GameState.is_deadline_reached():
+		return
+	await get_tree().create_timer(1.0).timeout
+	# Wait for any conversation already running (e.g. an NPC greeting).
+	while DialogueManager.is_active():
+		await EventBus.dialogue_finished
+		await get_tree().process_frame
+	var can_pay := GameState.money >= GameState.BUYBACK_PRICE or GameState.has_story_flag(&"land_repurchase_paid")
+	DialogueManager.start(&"year_end_resolution_farm_saved" if can_pay else &"year_end_resolution_demolition")
+
+
+func _show_ending(kind: String) -> void:
+	var saved := kind == "saved"
+	if not saved:
+		# Demolition: the screen fades to red as the robots move in.
+		fade.color = Color(0.35, 0.02, 0.02)
+		EventBus.notification_requested.emit("The demolition robots move in...")
+		await _fade_to(1.0)
+		await get_tree().create_timer(1.5).timeout
+	_close_menu()
+	fade.modulate.a = 0.0
+	fade.color = Color.BLACK
+	_menu = _open_menu("The Farm Endures" if saved else "The Farm Is Demolished", false,
+		"You raised the money and bought back your land. A year ago this was just a place to live; now it's home." if saved
+		else "You couldn't raise enough money in time. The city cleared the land, and your family's farm is gone.")
+	if saved:
+		_menu.add_option(&"continue", "Keep farming")
+	_menu.add_option(&"title", "Title screen")
+	_menu.focus_first()
+	if not saved:
+		(_menu.get_node("Dim") as ColorRect).color = Color(0.3, 0.02, 0.02, 0.92)
+	var choice: StringName = await _menu.chosen
+	if choice == &"continue":
+		_close_menu()
+		SaveManager.save_game()
+	else:
+		_show_title()
 
 
 # --- New game, save, load ----------------------------------------------------

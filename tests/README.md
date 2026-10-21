@@ -49,6 +49,9 @@ Debug builds have shortcuts that make playtesting faster:
 - [ ] The path off the right edge of the farm leads to the village, and the left edge of the village returns to the farm
 - [ ] Village Chief: full introduction the first time, a short line after that. Same for the Merchant
 - [ ] On day 4 (F6 three times) the Inventor is on the farm and starts talking; after the deal he is at the workshop in the village
+- [ ] Cultivator tills 4 tiles in a line; a sprinkler waters the 4 tiles around it each morning (crops grow without watering) and E picks it up
+- [ ] Fishing at the pond with the Echo Sonar Caster (from Ethan): "Waiting for a bite...", then a fish or "Nothing is biting"; better tools catch rarer fish
+- [ ] F7 then sleeping: with 100,000 g the official buys the land back (money goes down by 100,000) and "The Farm Endures" offers Keep farming; without it the screen turns red and "The Farm Is Demolished" appears
 - [ ] Esc opens the pause menu; Save, then Quit to Title, then Continue restores money, inventory, farm, date, story progress, the avatar, the name, the map and the position
 - [ ] NPCs show their names (Alexander, Arthur, Marcus, Ethan) and the player's lines show the typed name
 

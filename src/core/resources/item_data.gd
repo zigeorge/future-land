@@ -4,7 +4,7 @@ extends Resource
 ## generated from docs/Future_Land_Item_List.xlsx by tools/items_from_xlsx.py.
 
 enum Category { MISC, TOOL, SEED, CROP, FOOD, RESOURCE, FISH }
-enum ToolType { NONE, HOE, WATERING_CAN, AXE, PICKAXE, SCYTHE }
+enum ToolType { NONE, HOE, WATERING_CAN, AXE, PICKAXE, SCYTHE, CULTIVATOR, SPRINKLER, FISHING }
 
 ## Must match the file name (data/items/<id>.tres).
 @export var id: StringName
@@ -26,6 +26,9 @@ enum ToolType { NONE, HOE, WATERING_CAN, AXE, PICKAXE, SCYTHE }
 @export_group("Tool")
 @export var tool_type := ToolType.NONE
 @export var energy_cost := 2
+## "effective range" in the item list: tiles a cultivator tills in a line,
+## tiles a sprinkler waters around itself.
+@export_range(1, 8) var effective_range := 1
 
 @export_group("Seed")
 ## Id of the crop this seed plants (data/crops/<crop_id>.tres).

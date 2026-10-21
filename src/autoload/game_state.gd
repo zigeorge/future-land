@@ -98,6 +98,23 @@ func change_relationship(npc_name: String, amount: int) -> void:
 	relationships[npc_name] = int(relationships.get(npc_name, 0)) + amount
 
 
+## Pays for the land (once). Returns false if there isn't enough money.
+func pay_buyback() -> bool:
+	if has_story_flag(&"land_repurchase_paid"):
+		return true
+	if money < BUYBACK_PRICE:
+		return false
+	money -= BUYBACK_PRICE
+	set_story_flag(&"land_repurchase_paid")
+	return true
+
+
+## True on the morning after the last day of the story year.
+func is_deadline_reached() -> bool:
+	return get_days_remaining() <= 0 and has_story_flag(&"main_quest_started") \
+		and not has_story_flag(&"ending_complete")
+
+
 ## 100000 -> "100,000".
 static func format_money(amount: int) -> String:
 	var digits := str(absi(amount))

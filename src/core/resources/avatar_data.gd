@@ -31,6 +31,10 @@ const DIRECTIONS: Array[String] = ["down", "up", "left", "right"]
 ## mirror image (the other foot), side views alternate the widest stride with
 ## the idle pose. Turn off for sheets with a real 4-frame walk cycle.
 @export var auto_walk_cycle := true
+## For sheets whose side-view walk frames all show the same stride (one foot
+## always forward): walk sideways as stride, standing, stride, standing, so
+## the legs visibly open and close instead of sliding.
+@export var side_walk_with_passing := false
 
 
 func get_row(direction: String) -> int:
@@ -78,7 +82,10 @@ func build_sprite_frames() -> SpriteFrames:
 	for direction in DIRECTIONS:
 		_add_animation(frames, "idle_" + direction, [get_frame(direction, 0)], 1.0)
 		var walk: Array[Texture2D] = []
-		if image:
+		if side_walk_with_passing and (direction == "left" or direction == "right"):
+			var idle := get_frame(direction, 0)
+			walk = [get_frame(direction, 1), idle, get_frame(direction, 3), idle]
+		elif image:
 			walk = _rebuilt_walk(image, direction)
 		else:
 			for column in range(1, 5):

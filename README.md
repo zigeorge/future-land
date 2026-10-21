@@ -40,8 +40,10 @@ The web build is single-threaded (`export_presets.cfg`), because GitHub Pages ca
 | Select hotbar slot | 1–8 / mouse wheel |
 | Backpack (8×5; see items and sell prices, move items) | I / Tab |
 | Shops: talk to Marcus (merchant) or Ethan (inventor) after meeting them | E |
+| Tools: cultivator tills 4 tiles in a row; sprinkler (placed on grass) waters the 4 tiles around it every morning, E picks it up; fishing tools catch fish in water (the farm pond until the beach exists) | C |
 | Pause menu (save, load, quit to title) | Esc |
 | Quick save / load | F5 / F9 |
+| Jump to the last day of the year (debug builds; then sleep to see an ending) | F7 |
 | Skip to next day (debug builds only) | F6 |
 
 **How a new game starts:** on the title screen choose *New Game* (or *Continue* a saved game), pick one of four looks and type your name, then a government official at your door explains that the city will take the land unless you buy it back within a year (365 in-game days, 100,000 g). Walk east to the village to meet the chief and the merchant. On day 4 the inventor visits your farm.

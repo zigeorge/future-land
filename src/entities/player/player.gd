@@ -6,6 +6,7 @@ extends CharacterBody2D
 ## data/avatars/). $Placeholder shows until an avatar is applied.
 
 const INTERACT_REACH := 12.0
+const CAST_SECONDS := 1.5
 
 @export var speed := 90.0
 ## World zoom: 2 shows about 20 x 11 tiles, like Stardew Valley. Keep it a
@@ -19,6 +20,8 @@ const INTERACT_REACH := 12.0
 var facing := Vector2.DOWN
 
 var _avatar: AvatarData
+## True while waiting for a bite; the player can't move.
+var _fishing := false
 
 @onready var sprite: AnimatedSprite2D = $Sprite
 @onready var interact_area: Area2D = $InteractArea
@@ -36,7 +39,7 @@ func _ready() -> void:
 
 func _physics_process(_delta: float) -> void:
 	var direction := Vector2.ZERO
-	if not DialogueManager.is_active():
+	if not DialogueManager.is_active() and not _fishing:
 		direction = Input.get_vector("move_left", "move_right", "move_up", "move_down")
 	velocity = direction * speed
 	move_and_slide()
@@ -47,7 +50,7 @@ func _physics_process(_delta: float) -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
-	if DialogueManager.is_active():
+	if DialogueManager.is_active() or _fishing:
 		return
 	if event.is_action_pressed("interact"):
 		if _interact_with_nearest() or _try_harvest():
@@ -110,10 +113,35 @@ func _try_harvest() -> bool:
 
 func _use_selected_item() -> void:
 	var item := GameState.get_selected_item()
+	if item and item.tool_type == ItemData.ToolType.FISHING:
+		_cast(item)
+		return
 	var farm := _get_farm_grid()
 	if item == null or farm == null:
 		return
 	farm.use_item(item, farm.world_to_cell(get_target_position()))
+
+
+func _cast(rod: ItemData) -> void:
+	var level := get_tree().current_scene.get("_level") as Node
+	if not Fishing.is_water(level, get_target_position()):
+		EventBus.notification_requested.emit("Face the water to fish")
+		return
+	if not GameState.spend_energy(rod.energy_cost):
+		EventBus.notification_requested.emit("Too tired...")
+		return
+	_fishing = true
+	_update_animation(false)
+	EventBus.notification_requested.emit("Waiting for a bite...")
+	await get_tree().create_timer(CAST_SECONDS).timeout
+	_fishing = false
+	var fish := Fishing.catch(rod.level, TimeManager.season, randf(), randf())
+	if fish == null:
+		EventBus.notification_requested.emit("Nothing is biting. Try again!")
+	elif GameState.inventory.add_item(fish, 1) > 0:
+		EventBus.notification_requested.emit("Your backpack is full, the %s got away" % fish.display_name)
+	else:
+		EventBus.notification_requested.emit("You caught a %s! (sells for %d g)" % [fish.display_name, fish.sell_price])
 
 
 func _get_farm_grid() -> FarmGrid:
