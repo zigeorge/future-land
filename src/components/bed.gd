@@ -1,12 +1,9 @@
 class_name Bed
 extends Interactable
-## Sleeping ends the day and autosaves.
+## The farmhouse door: asks whether to end the day (data/dialogue/sleep_prompt.json);
+## Main ends the day when the player says yes.
 
 
 func interact(player: Node) -> void:
 	super(player)
-	if not GameState.has_story_flag(&"first_sleep"):
-		GameState.set_story_flag(&"first_sleep")
-	TimeManager.start_next_day()
-	SaveManager.save_game()
-	EventBus.notification_requested.emit("Good morning! %s" % TimeManager.get_date_text())
+	DialogueManager.start(&"sleep_prompt")

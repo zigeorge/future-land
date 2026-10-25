@@ -40,6 +40,8 @@ signal story_flag_changed(flag: StringName, value: Variant)
 signal shop_requested(shop_id: StringName)
 
 # --- Story --------------------------------------------------------------
+## The player chose to end the day (sleep confirmation).
+signal end_day_requested
 ## End of the story year: kind is "saved" or "demolished".
 signal ending_requested(kind: String)
 

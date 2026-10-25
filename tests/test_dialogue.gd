@@ -55,3 +55,11 @@ func test_merchant_greeting_opens_the_shop() -> void:
 	var graph := DialogueGraph.load_file(DIALOGUE_DIR + "repeatable_shop_greeting_merchant.json")
 	var opens := graph.nodes.values().any(func(node: Dictionary) -> bool: return node.get("open_shop", "") == "merchant")
 	assert_true(opens)
+
+
+func test_sleep_prompt_asks_yes_or_no() -> void:
+	var graph := DialogueGraph.load_file(DIALOGUE_DIR + "sleep_prompt.json")
+	var choices := graph.get_choices(graph.start)
+	assert_eq(choices.size(), 2)
+	assert_true(graph.get_node_data(choices[0]["next"]).get("end_day", false), "Yes ends the day")
+	assert_eq(choices[1]["next"], DialogueGraph.END, "No just closes")

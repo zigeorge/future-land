@@ -10,7 +10,8 @@ extends RefCounted
 ##
 ## Node fields: speaker, text, next (missing or "END" ends the conversation),
 ## choices [{text, next}], set_flag / set_flags, relationship {npc name: amount},
-## notify, open_shop (shop id, opened when the conversation ends).
+## notify, open_shop (shop id, opened when the conversation ends), end_day,
+## pay_buyback, ending ("saved" / "demolished").
 
 const END := "END"
 

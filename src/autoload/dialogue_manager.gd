@@ -15,6 +15,7 @@ var current_speaker_is_player := false
 
 ## Shop to open when the current conversation ends ("open_shop" in a line).
 var _shop_after: StringName = &""
+var _end_day_after := false
 ## Ending to show when the current conversation ends ("ending" in a line).
 var _ending_after := ""
 var _graph: DialogueGraph
@@ -93,6 +94,8 @@ func _apply_effects(node: Dictionary) -> void:
 		_shop_after = StringName(node["open_shop"])
 	if node.has("ending"):
 		_ending_after = str(node["ending"])
+	if node.get("end_day", false):
+		_end_day_after = true
 	var relationship: Dictionary = node.get("relationship", {})
 	for npc_name: String in relationship:
 		GameState.change_relationship(npc_name, int(relationship[npc_name]))
@@ -121,6 +124,9 @@ func _finish() -> void:
 		var shop := _shop_after
 		_shop_after = &""
 		EventBus.shop_requested.emit(shop)
+	if _end_day_after:
+		_end_day_after = false
+		EventBus.end_day_requested.emit()
 	if _ending_after != "":
 		var ending := _ending_after
 		_ending_after = ""

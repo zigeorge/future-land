@@ -1,0 +1,10 @@
+{
+  "about": "Shown when the player presses E at the farmhouse door (Zheng's request). The Yes answer ends the day.",
+  "start": "ASK",
+  "nodes": {
+    "ASK": { "speaker": "", "text": "Do you want to end the day and go to sleep?", "choices": [
+      { "text": "Yes, end the day", "next": "SLEEP" },
+      { "text": "No, not yet", "next": "END" } ] },
+    "SLEEP": { "speaker": "", "text": "You head inside and fall asleep...", "next": "END", "end_day": true }
+  }
+}

@@ -24,6 +24,7 @@ func _ready() -> void:
 	EventBus.level_change_requested.connect(change_level)
 	EventBus.shop_requested.connect(open_shop)
 	EventBus.ending_requested.connect(_show_ending)
+	EventBus.end_day_requested.connect(_end_day)
 	EventBus.day_started.connect(func(_d: int, _s: int, _y: int) -> void: _check_deadline())
 	SaveManager.register("world", self)
 	_load_level(start_level, &"")
@@ -127,6 +128,26 @@ func _close_menu() -> void:
 
 func _can_pause() -> bool:
 	return _menu == null and not get_tree().paused and not DialogueManager.is_active() and not _transitioning
+
+
+# --- Ending a day -------------------------------------------------------------
+
+## Sleep: fade out, next morning, autosave, fade in.
+func _end_day() -> void:
+	if _transitioning:
+		return
+	_transitioning = true
+	TimeManager.paused = true
+	await _fade_to(1.0)
+	if not GameState.has_story_flag(&"first_sleep"):
+		GameState.set_story_flag(&"first_sleep")
+	TimeManager.start_next_day()
+	SaveManager.save_game()
+	await get_tree().create_timer(0.4).timeout
+	await _fade_to(0.0)
+	TimeManager.paused = false
+	_transitioning = false
+	EventBus.notification_requested.emit("Good morning! %s" % TimeManager.get_date_text())
 
 
 # --- Year end -----------------------------------------------------------------
