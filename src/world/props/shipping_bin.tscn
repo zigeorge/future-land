@@ -1,0 +1,56 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://src/components/shipping_bin.gd" id="1_bin"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_base"]
+size = Vector2(16, 8)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_use"]
+size = Vector2(24, 22)
+
+[node name="ShippingBin" type="StaticBody2D"]
+collision_mask = 0
+
+[node name="Box" type="ColorRect" parent="."]
+offset_left = -8.0
+offset_top = -12.0
+offset_right = 8.0
+mouse_filter = 2
+color = Color(0.55, 0.35, 0.18, 1)
+
+[node name="Lid" type="ColorRect" parent="."]
+offset_left = -9.0
+offset_top = -15.0
+offset_right = 9.0
+offset_bottom = -11.0
+mouse_filter = 2
+color = Color(0.4, 0.24, 0.12, 1)
+
+[node name="Plank" type="ColorRect" parent="."]
+offset_left = -8.0
+offset_top = -7.0
+offset_right = 8.0
+offset_bottom = -6.0
+mouse_filter = 2
+color = Color(0.35, 0.2, 0.1, 1)
+
+[node name="Label" type="Label" parent="."]
+offset_left = -20.0
+offset_top = -26.0
+offset_right = 20.0
+offset_bottom = -15.0
+theme_override_font_sizes/font_size = 7
+text = "Ship"
+horizontal_alignment = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -4)
+shape = SubResource("RectangleShape2D_base")
+
+[node name="Interactable" type="Area2D" parent="."]
+script = ExtResource("1_bin")
+prompt = "Ship"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Interactable"]
+position = Vector2(0, -6)
+shape = SubResource("RectangleShape2D_use")

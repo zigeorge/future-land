@@ -13,6 +13,12 @@ var shop_open := false:
 		shop_open = value
 		if is_node_ready():
 			_show_details()
+## Set by the shipping bin: items can be put in the bin (sold overnight).
+var bin_open := false:
+	set(value):
+		bin_open = value
+		if is_node_ready():
+			_show_details()
 
 @onready var grid: InventoryGrid = %Grid
 @onready var name_label: Label = %ItemName
@@ -30,6 +36,10 @@ func _ready() -> void:
 	sell_one_button.pressed.connect(_sell.bind(false))
 	sell_all_button.pressed.connect(_sell.bind(true))
 	EventBus.inventory_changed.connect(_show_details)
+	if bin_open:
+		(get_node("Panel/VBox/Title") as Label).text = "Shipping bin"
+		sell_one_button.text = "Ship 1"
+		sell_all_button.text = "Ship all"
 	_show_details()
 
 
@@ -77,12 +87,15 @@ func _show_details() -> void:
 		price_label.text = "Sells for %s g" % GameState.format_money(item.sell_price)
 	else:
 		price_label.text = "Can't be sold"
-	var can_sell := shop_open and item != null and item.sell_price > 0
-	sell_one_button.visible = shop_open
-	sell_all_button.visible = shop_open
+	var trading := shop_open or bin_open
+	var can_sell := trading and item != null and item.sell_price > 0
+	sell_one_button.visible = trading
+	sell_all_button.visible = trading
 	sell_one_button.disabled = not can_sell
 	sell_all_button.disabled = not can_sell or count < 2
-	if grid.selected != -1:
+	if bin_open:
+		hint_label.text = "In the bin: %s g, sold overnight  -  choose an item, then Ship  -  Esc to close" % GameState.format_money(GameState.shipping_value())
+	elif grid.selected != -1:
 		hint_label.text = "Choose where to move it  -  same slot to cancel"
 	else:
 		hint_label.text = "Click an item (or arrows + E) to see it and move it  -  I / Esc to close"
@@ -94,7 +107,10 @@ func _sell(all: bool) -> void:
 	if item == null or item.sell_price <= 0:
 		return
 	var amount: int = GameState.inventory.slots[index].count if all else 1
-	if GameState.inventory.remove_from_slot(index, amount):
+	if bin_open:
+		if GameState.ship_from_slot(index, amount):
+			EventBus.notification_requested.emit("Put %s x%d in the bin (%s g tomorrow morning)" % [item.display_name, amount, GameState.format_money(item.sell_price * amount)])
+	elif GameState.inventory.remove_from_slot(index, amount):
 		GameState.money += item.sell_price * amount
 		EventBus.notification_requested.emit("Sold %s x%d for %s g" % [item.display_name, amount, GameState.format_money(item.sell_price * amount)])
 	if GameState.inventory.get_item_at(index) == null:

@@ -100,9 +100,10 @@ func open_shop(shop_id: StringName) -> void:
 
 
 ## Opens the backpack and pauses the game until it is closed.
-func open_backpack(shop_open := false) -> Backpack:
+func open_backpack(shop_open := false, bin_open := false) -> Backpack:
 	var backpack: Backpack = BACKPACK_SCENE.instantiate()
 	backpack.shop_open = shop_open
+	backpack.bin_open = bin_open
 	$UI.add_child(backpack)
 	get_tree().paused = true
 	backpack.closed.connect(func() -> void: get_tree().paused = false)
@@ -147,7 +148,10 @@ func _end_day() -> void:
 	await _fade_to(0.0)
 	TimeManager.paused = false
 	_transitioning = false
-	EventBus.notification_requested.emit("Good morning! %s" % TimeManager.get_date_text())
+	var morning := "Good morning! %s" % TimeManager.get_date_text()
+	if GameState.last_shipping_income > 0:
+		morning += "  The shipping bin earned %s g." % GameState.format_money(GameState.last_shipping_income)
+	EventBus.notification_requested.emit(morning)
 
 
 # --- Year end -----------------------------------------------------------------

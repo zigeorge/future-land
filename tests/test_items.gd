@@ -58,3 +58,17 @@ func test_remove_from_slot() -> void:
 	assert_true(inventory.remove_from_slot(0, 99))
 	assert_true(inventory.slots[0].is_empty())
 	assert_false(inventory.remove_from_slot(0, 1), "empty slot")
+
+
+func test_shipping_bin_sells_overnight_at_full_price() -> void:
+	var state = load("res://src/autoload/game_state.gd").new()
+	state.inventory = Inventory.new(4)
+	state.inventory.add_item(Registry.get_item(&"carrot"), 3)
+	state.money = 0
+	assert_true(state.ship_from_slot(0, 2))
+	assert_eq(state.inventory.count_item(&"carrot"), 1)
+	assert_eq(state.shipping_value(), 2 * Registry.get_item(&"carrot").sell_price)
+	state._sell_shipping()
+	assert_eq(state.money, 2 * Registry.get_item(&"carrot").sell_price)
+	assert_true(state.shipping.is_empty())
+	state.free()

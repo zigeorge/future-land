@@ -17,6 +17,7 @@
 [ext_resource type="Texture2D" path="res://assets/art/characters/government_official.png" id="15_ow8c4"]
 [ext_resource type="Texture2D" path="res://assets/art/characters/technological_inventor.png" id="16_nl26v"]
 [ext_resource type="Script" path="res://src/components/level_warp.gd" id="17_4es2c"]
+[ext_resource type="PackedScene" path="res://src/world/props/shipping_bin.tscn" id="19_fxiao"]
 [ext_resource type="Texture2D" path="res://assets/art/tilesets/environment/soil_dry.png" id="soil_dry"]
 [ext_resource type="Texture2D" path="res://assets/art/tilesets/environment/soil_wet.png" id="soil_wet"]
 
@@ -567,6 +568,9 @@ auto_talk = true
 appear_from_day = 4
 hidden_by_flag = &"inventor_deal_accepted"
 sprite_texture = ExtResource("16_nl26v")
+
+[node name="ShippingBin" parent="Entities" unique_id=1927199786 instance=ExtResource("19_fxiao")]
+position = Vector2(952, 268)
 
 [node name="Warps" type="Node2D" parent="." unique_id=885226508]
 

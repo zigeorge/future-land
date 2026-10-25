@@ -48,6 +48,11 @@ var inventory := Inventory.new(INVENTORY_SIZE)
 var farm := FarmState.new()
 ## Story progress, set from dialogue files or gameplay (e.g. &"met_mayor": true).
 var story_flags: Dictionary = {}
+## Shipping bin: items put in today, sold overnight at full price.
+## Array of {"id": String, "count": int}.
+var shipping: Array = []
+## Money the bin earned last night (shown in the morning).
+var last_shipping_income := 0
 ## NPC name -> friendship points, changed by dialogue.
 var relationships: Dictionary = {}
 
@@ -64,6 +69,8 @@ func new_game() -> void:
 	energy = MAX_ENERGY
 	story_flags.clear()
 	relationships.clear()
+	shipping.clear()
+	last_shipping_income = 0
 	player_name = ""
 	avatar_id = &""
 	farm.clear()
@@ -126,11 +133,50 @@ static func format_money(amount: int) -> String:
 	return ("-" if amount < 0 else "") + result
 
 
+## Moves `amount` from an inventory slot into the shipping bin.
+func ship_from_slot(index: int, amount: int) -> bool:
+	var item := inventory.get_item_at(index)
+	if item == null or item.sell_price <= 0:
+		return false
+	amount = mini(amount, inventory.slots[index].count)
+	if not inventory.remove_from_slot(index, amount):
+		return false
+	for entry: Dictionary in shipping:
+		if entry["id"] == String(item.id):
+			entry["count"] = int(entry["count"]) + amount
+			EventBus.shipping_changed.emit()
+			return true
+	shipping.append({"id": String(item.id), "count": amount})
+	if not has_story_flag(&"first_shipment"):
+		set_story_flag(&"first_shipment")
+	EventBus.shipping_changed.emit()
+	return true
+
+
+func shipping_value() -> int:
+	var total := 0
+	for entry: Dictionary in shipping:
+		var item := Registry.get_item(StringName(entry["id"]))
+		if item:
+			total += item.sell_price * int(entry["count"])
+	return total
+
+
+## Overnight: everything in the bin is sold at full price.
+func _sell_shipping() -> void:
+	last_shipping_income = shipping_value()
+	shipping.clear()
+	if last_shipping_income > 0:
+		money += last_shipping_income
+	EventBus.shipping_changed.emit()
+
+
 func get_days_remaining() -> int:
 	return maxi(DEADLINE_DAYS - TimeManager.get_day_number() + 1, 0)
 
 
 func _on_day_started(_day: int, season: int, _year: int) -> void:
+	_sell_shipping()
 	energy = MAX_ENERGY
 	farm.advance_day(season)
 
@@ -144,6 +190,7 @@ func get_save_data() -> Dictionary:
 		"farm": farm.to_data(),
 		"story_flags": story_flags,
 		"relationships": relationships,
+		"shipping": shipping,
 		"avatar_id": String(avatar_id),
 		"player_name": player_name,
 	}
@@ -157,5 +204,6 @@ func load_save_data(data: Dictionary) -> void:
 	farm.from_data(data.get("farm", {}))
 	story_flags = data.get("story_flags", {})
 	relationships = data.get("relationships", {})
+	shipping = data.get("shipping", [])
 	player_name = str(data.get("player_name", ""))
 	avatar_id = StringName(data.get("avatar_id", ""))

@@ -21,6 +21,8 @@ signal energy_changed(current: int, maximum: int)
 
 # --- Inventory ----------------------------------------------------------
 signal inventory_changed
+## The shipping bin's contents changed (or were sold overnight).
+signal shipping_changed
 signal hotbar_selection_changed(index: int)
 
 # --- Farming ------------------------------------------------------------
