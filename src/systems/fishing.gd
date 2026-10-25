@@ -3,8 +3,10 @@ class_name Fishing
 ## season, the tool's level (a level-2 tool catches level 1-2 fish) and each
 ## fish's catch chance (data from the item list).
 
-## Tile sources in a level's GroundTiles layer that are water.
+## Tile sources in a level's GroundTiles layer that are water (all tiles).
 const WATER_SOURCES: Array[int] = [1, 7]
+## Beach atlas: tile x = 0 is sand, x >= 1 shore and sea.
+const BEACH_SOURCE := 8
 ## Chance that something bites at all on a cast.
 const BITE_CHANCE := 0.8
 const ITEMS_DIR := "res://data/items/"
@@ -17,7 +19,10 @@ static func is_water(level: Node, world_position: Vector2) -> bool:
 	if ground == null:
 		return false
 	var cell := ground.local_to_map(ground.to_local(world_position))
-	return ground.get_cell_source_id(cell) in WATER_SOURCES
+	var source := ground.get_cell_source_id(cell)
+	if source == BEACH_SOURCE:
+		return ground.get_cell_atlas_coords(cell).x >= 1
+	return source in WATER_SOURCES
 
 
 ## Fish that can bite now with a tool of `tool_level`.

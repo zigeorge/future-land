@@ -7,6 +7,7 @@
     { "text": "Put a harvest in the shipping bin by your house; it sells overnight", "done_flag": "first_shipment", "map": "farm", "target": "ShippingBin" },
     { "text": "Go to sleep at your farmhouse door to end the day", "done_flag": "first_sleep", "map": "farm", "target": "FarmhouseDoor" },
     { "text": "Talk to the visitor at your farmhouse", "done_flag": "main_quest_started", "map": "farm", "target": "Government Official" },
+    { "text": "Meet Jack the fisherman at the beach west of your farm", "done_flag": "fisherman_introduction_complete", "from_day": 7, "map": "beach", "target": "Fisherman" },
     { "text": "Earn {buyback_price} g to buy back your land before the deadline", "done_flag": "land_repurchase_paid" }
   ]
 }

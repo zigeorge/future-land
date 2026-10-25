@@ -117,7 +117,7 @@ Conversations are `DialogueGraph`s (`src/systems/dialogue/`): lines linked by id
 | `src/world/farm/farm.tscn` | Map 01 Starting Farm | 80×65 tiles | Farmhouse (upper right; its door is where you sleep), `FarmGrid` (any open grass can be tilled: not path/water tiles or cells with a collider), pond (lower left), forest along the north and west, path to the eastern exit, farming-tips signpost |
 | `src/world/village/village.tscn` | Map 03 Villager Residential Area | 70×55 tiles | Western entrance, central square, chief's house (north), shop (east), inventor's workshop (south-east), blocked road east |
 
-Map 02 (Western Beach) isn't built yet: it needs sand, cliff and pier art.
+| `src/world/beach/beach.tscn` | Map 02 Western Beach | 64×40 tiles | Sand, a straight shoreline along the south and the sea (fishable), pines along the north, Jack from day 7 (gives the fishing rod, then runs his shop), driftwood and shells that respawn daily (`ForageSpawner`). Entered from the farm's west edge. No pier or cliffs yet (no art). |
 
 Each level has: `Ground` (plain grass colour), `GroundTiles` (paths, water) and `Decor` (grass tufts, bushes) TileMapLayers sharing `assets/art/tilesets/world_tileset.tres`, then `FarmGrid` (farm only), `Entities` (y-sorted: player, NPCs, props), `Warps`, `SpawnPoints`, and `Bounds`.
 

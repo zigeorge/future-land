@@ -93,8 +93,29 @@ func spend_energy(amount: int) -> bool:
 
 
 func set_story_flag(flag: StringName, value: Variant = true) -> void:
+	var first_time := not story_flags.has(flag)
 	story_flags[flag] = value
+	if first_time:
+		_give_rewards(flag)
 	EventBus.story_flag_changed.emit(flag, value)
+
+
+## data/rewards.json: items given once when a flag is first set.
+func _give_rewards(flag: StringName) -> void:
+	if not FileAccess.file_exists("res://data/rewards.json"):
+		return
+	var data: Variant = JSON.parse_string(FileAccess.get_file_as_string("res://data/rewards.json"))
+	if not data is Dictionary:
+		return
+	for reward: Dictionary in data.get("rewards", {}).get(String(flag), []):
+		var item := Registry.get_item(StringName(reward.get("item", "")))
+		if item:
+			inventory.add_item(item, int(reward.get("count", 1)))
+			EventBus.notification_requested.emit("You received: %s" % item.display_name)
+
+
+## Beach finds already picked up today: "map:index" strings.
+var forage_taken: Array = []
 
 
 func has_story_flag(flag: StringName) -> bool:
@@ -177,6 +198,7 @@ func get_days_remaining() -> int:
 
 func _on_day_started(_day: int, season: int, _year: int) -> void:
 	_sell_shipping()
+	forage_taken.clear()
 	energy = MAX_ENERGY
 	farm.advance_day(season)
 
@@ -191,6 +213,7 @@ func get_save_data() -> Dictionary:
 		"story_flags": story_flags,
 		"relationships": relationships,
 		"shipping": shipping,
+		"forage_taken": forage_taken,
 		"avatar_id": String(avatar_id),
 		"player_name": player_name,
 	}
@@ -205,5 +228,6 @@ func load_save_data(data: Dictionary) -> void:
 	story_flags = data.get("story_flags", {})
 	relationships = data.get("relationships", {})
 	shipping = data.get("shipping", [])
+	forage_taken = data.get("forage_taken", [])
 	player_name = str(data.get("player_name", ""))
 	avatar_id = StringName(data.get("avatar_id", ""))

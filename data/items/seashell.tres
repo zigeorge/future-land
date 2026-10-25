@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="ItemData" format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/item_data.gd" id="1_item"]
+[ext_resource type="Texture2D" path="res://assets/art/environment/beach/seashells.png" id="2_sheet"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_icon"]
+atlas = ExtResource("2_sheet")
+region = Rect2(0, 0, 128, 128)
+
+[resource]
+script = ExtResource("1_item")
+icon = SubResource("AtlasTexture_icon")
+id = &"seashell"
+display_name = "Seashell"
+description = "A pretty shell found on the beach. (Price coming with the beach finds table.)"
+category = 5
+level = 1

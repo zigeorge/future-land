@@ -1,0 +1,6 @@
+{
+  "about": "Items the player receives once, when a story flag is first set. Keys are flags from the dialogue sheet.",
+  "rewards": {
+    "fisherman_introduction_complete": [ { "item": "fishing_rod", "count": 1 } ]
+  }
+}

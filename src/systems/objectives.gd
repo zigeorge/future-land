@@ -15,6 +15,8 @@ static func current() -> Dictionary:
 		var required := str(objective.get("requires_flag", ""))
 		if required != "" and not GameState.has_story_flag(StringName(required)):
 			continue
+		if TimeManager.get_day_number() < int(objective.get("from_day", 0)):
+			continue
 		if not GameState.has_story_flag(StringName(str(objective.get("done_flag", "")))):
 			return objective
 	return {}
