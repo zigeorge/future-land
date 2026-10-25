@@ -6,7 +6,6 @@ extends CharacterBody2D
 ## data/avatars/). $Placeholder shows until an avatar is applied.
 
 const INTERACT_REACH := 12.0
-const CAST_SECONDS := 1.5
 
 @export var speed := 90.0
 ## World zoom: 2 shows about 20 x 11 tiles, like Stardew Valley. Keep it a
@@ -124,7 +123,11 @@ func _use_selected_item() -> void:
 
 func _cast(rod: ItemData) -> void:
 	var level := get_tree().current_scene.get("_level") as Node
-	if not Fishing.is_water(level, get_target_position()):
+	# Cast two tiles out if that's water, else one.
+	var target := global_position + facing * FarmGrid.CELL_SIZE * 2.0
+	if not Fishing.is_water(level, target):
+		target = get_target_position()
+	if not Fishing.is_water(level, target):
 		EventBus.notification_requested.emit("Face the water to fish")
 		return
 	if not GameState.spend_energy(rod.energy_cost):
@@ -132,13 +135,14 @@ func _cast(rod: ItemData) -> void:
 		return
 	_fishing = true
 	_update_animation(false)
-	EventBus.notification_requested.emit("Waiting for a bite...")
-	await get_tree().create_timer(CAST_SECONDS).timeout
+	var cast := FishingCast.new()
+	add_child(cast)
+	cast.setup(rod, facing, target + Vector2(0, -2), Fishing.catch(rod.level, TimeManager.season, randf(), randf()))
+	var fish: ItemData = await cast.finished
 	_fishing = false
-	var fish := Fishing.catch(rod.level, TimeManager.season, randf(), randf())
 	if fish == null:
-		EventBus.notification_requested.emit("Nothing is biting. Try again!")
-	elif GameState.inventory.add_item(fish, 1) > 0:
+		return
+	if GameState.inventory.add_item(fish, 1) > 0:
 		EventBus.notification_requested.emit("Your backpack is full, the %s got away" % fish.display_name)
 	else:
 		EventBus.notification_requested.emit("You caught a %s! (sells for %d g)" % [fish.display_name, fish.sell_price])
