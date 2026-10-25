@@ -84,3 +84,24 @@ func test_sprinklers_are_saved() -> void:
 	loaded.from_data(JSON.parse_string(JSON.stringify(farm.to_data())))
 	assert_true(loaded.has_sprinkler(Vector2i(3, 4)))
 	assert_true(loaded.tiles.is_empty(), "sprinklers aren't tiles")
+
+
+func test_debris_needs_the_right_tool() -> void:
+	var farm := FarmState.new()
+	farm.debris[CELL] = "weed"
+	farm.debris[Vector2i(9, 9)] = "branch"
+	assert_false(farm.till(CELL), "can't till over a weed")
+	assert_eq(farm.clear_debris(CELL, ItemData.ToolType.AXE), "", "the axe doesn't cut weeds")
+	assert_eq(farm.clear_debris(CELL, ItemData.ToolType.SCYTHE), "weed")
+	assert_true(farm.till(CELL), "cleared ground can be tilled")
+	assert_eq(farm.clear_debris(Vector2i(9, 9), ItemData.ToolType.AXE), "branch")
+
+
+func test_debris_is_saved() -> void:
+	var farm := FarmState.new()
+	farm.debris[Vector2i(4, 4)] = "stone"
+	farm.debris_generated = true
+	var loaded := FarmState.new()
+	loaded.from_data(JSON.parse_string(JSON.stringify(farm.to_data())))
+	assert_eq(loaded.debris.get(Vector2i(4, 4)), "stone")
+	assert_true(loaded.debris_generated)

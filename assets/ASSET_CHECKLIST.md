@@ -110,6 +110,13 @@ Shown on the avatar selection screen and next to the speaker in conversations.
 - [x] Panel frame `ui/text_frame.png` (512×512): used for every box (dialogue, portrait, menus, shop, backpack, HUD) via `src/ui/hd_frame_style.gd`, which draws its 160 px corners at 10 UI units. Nir's 3×3 tile version is not used: the tiles are 170/171 px and leave thin lines between them.
 - [ ] Simpler game icon `branding/icon.png` (the poster is hard to read at browser-tab size)
 
+### 11b. From batch 6 (beach)
+- [x] `beach/sand.png`, `sand_water.png` (shoreline), `water_beach.png`: the sea uses the deep half of `water_beach` mirrored, because the tile doesn't repeat vertically and its light bottom doesn't meet the shoreline. A seamless deep-sea tile would be better.
+- [x] Driftwood and shells (beach finds), Jack's sprite, portrait and expressions
+- [ ] Pier / dock tiles, cliff or rock border for the north of the beach, shoreline corner pieces
+- [ ] Shipping bin (128×128): currently a drawn crate
+- [ ] Music: only the CC0 track is used; the Vivaldi / Grieg recordings need a source with a free license (see `assets/audio/music/CREDITS.md`), ideally OGG loops of 1-3 minutes per season
+
 ### 12. Later
 - [ ] Beach (Map 02): sand, wet sand, cliffs, pier, shells, driftwood
 - [ ] Farmhouse interior (`bed.png` is waiting for it), notice board, well

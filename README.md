@@ -35,12 +35,12 @@ The web build is single-threaded (`export_presets.cfg`), because GitHub Pages ca
 |---|---|
 | Move | WASD / arrow keys |
 | Use selected tool or seed | C / left mouse |
-| Interact (talk, read, sleep at the farmhouse door, harvest) | E / right mouse |
+| Interact (talk, read, harvest, pick up beach finds, shipping bin; at the farmhouse door: end the day) | E / right mouse |
 | Advance dialogue | E / Space / left mouse |
 | Select hotbar slot | 1–8 / mouse wheel |
 | Backpack (8×5; see items and sell prices, move items) | I / Tab |
 | Shops: talk to Marcus (merchant) or Ethan (inventor) after meeting them | E |
-| Tools: cultivator tills 4 tiles in a row; sprinkler (placed on grass) waters the 4 tiles around it every morning, E picks it up; fishing tools catch fish in water (the farm pond until the beach exists) | C |
+| Tools: sickle clears weeds, axe clears branches and stones (start with both); lawn mower clears 4 weeds in a row; cultivator tills 4 tiles in a row; sprinkler (placed on grass) waters the 4 tiles around it every morning, E picks it up; fishing tools catch fish in water (pond or beach): cast, wait for "!", press C quickly | C |
 | Pause menu (save, load, quit to title) | Esc |
 | Quick save / load | F5 / F9 |
 | Jump to the last day of the year (debug builds; then sleep to see an ending) | F7 |

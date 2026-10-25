@@ -15,4 +15,5 @@ buy_price = 600
 shop = &"merchant"
 max_stack = 1
 sell_price = 600
+tool_type = 5
 effective_range = 4

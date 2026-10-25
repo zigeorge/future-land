@@ -19,6 +19,8 @@ const STARTING_ITEMS := {
 	&"hoe": 1,
 	&"watering_can": 1,
 	&"carrot_seeds": 15,
+	&"sickle": 1,
+	&"axe": 1,
 }
 
 var money := STARTING_MONEY:

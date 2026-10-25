@@ -15,3 +15,4 @@ buy_price = 900
 shop = &"merchant"
 max_stack = 1
 sell_price = 900
+tool_type = 3

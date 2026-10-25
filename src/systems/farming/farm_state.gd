@@ -10,6 +10,17 @@ signal cell_changed(cell: Vector2i)
 var tiles: Dictionary = {}
 ## Placed sprinklers: Vector2i -> how many tiles they water (effective range).
 var sprinklers: Dictionary = {}
+## Weeds, stones and branches on the farm: Vector2i -> "weed" / "stone" / "branch".
+var debris: Dictionary = {}
+## Set once the farm has been scattered with debris (new game).
+var debris_generated := false
+
+## Which tool clears which debris.
+const CLEARED_BY := {
+	"weed": [ItemData.ToolType.SCYTHE],
+	"branch": [ItemData.ToolType.AXE],
+	"stone": [ItemData.ToolType.AXE, ItemData.ToolType.PICKAXE],  # axe until a pickaxe exists
+}
 
 
 class FarmTile:
@@ -24,6 +35,8 @@ class FarmTile:
 func clear() -> void:
 	tiles.clear()
 	sprinklers.clear()
+	debris.clear()
+	debris_generated = false
 
 
 func get_tile(cell: Vector2i) -> FarmTile:
@@ -35,7 +48,7 @@ func is_tilled(cell: Vector2i) -> bool:
 
 
 func till(cell: Vector2i) -> bool:
-	if is_tilled(cell) or has_sprinkler(cell):
+	if is_tilled(cell) or has_sprinkler(cell) or debris.has(cell):
 		return false
 	tiles[cell] = FarmTile.new()
 	for sprinkler: Vector2i in sprinklers:
@@ -64,13 +77,23 @@ func plant(cell: Vector2i, crop_id: StringName) -> bool:
 	return true
 
 
+## Removes debris if `tool_type` can clear it. Returns the debris kind, or "".
+func clear_debris(cell: Vector2i, tool_type: int) -> String:
+	var kind: String = debris.get(cell, "")
+	if kind == "" or not tool_type in CLEARED_BY[kind]:
+		return ""
+	debris.erase(cell)
+	cell_changed.emit(cell)
+	return kind
+
+
 func has_sprinkler(cell: Vector2i) -> bool:
 	return sprinklers.has(cell)
 
 
 ## Places a sprinkler on open (untilled) ground.
 func place_sprinkler(cell: Vector2i, reach: int) -> bool:
-	if is_tilled(cell) or has_sprinkler(cell):
+	if is_tilled(cell) or has_sprinkler(cell) or debris.has(cell):
 		return false
 	sprinklers[cell] = reach
 	_water_around(cell)
@@ -154,12 +177,23 @@ func to_data() -> Dictionary:
 		placed["%d,%d" % [cell.x, cell.y]] = sprinklers[cell]
 	if not placed.is_empty():
 		data["_sprinklers"] = placed
+	var scattered := {}
+	for cell: Vector2i in debris:
+		scattered["%d,%d" % [cell.x, cell.y]] = debris[cell]
+	data["_debris"] = scattered
+	data["_debris_generated"] = debris_generated
 	return data
 
 
 func from_data(data: Dictionary) -> void:
 	tiles.clear()
 	sprinklers.clear()
+	debris.clear()
+	var scattered: Dictionary = data.get("_debris", {})
+	for key: String in scattered:
+		var d := key.split(",")
+		debris[Vector2i(int(d[0]), int(d[1]))] = str(scattered[key])
+	debris_generated = bool(data.get("_debris_generated", false))
 	var placed: Dictionary = data.get("_sprinklers", {})
 	for key: String in placed:
 		var p := key.split(",")

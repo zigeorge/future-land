@@ -28,6 +28,15 @@ const CURSOR_COLOR := Color(1, 1, 1, 0.6)
 @export var wet_soil_texture: Texture2D
 
 const SPRINKLER_ICON := preload("res://assets/art/items/sprinkler.png")
+const WEED_SHEET := preload("res://assets/art/tilesets/environment/grass_tufts.png")
+const BRANCH_SHEET := preload("res://assets/art/environment/beach/driftwood.png")
+const STONE := preload("res://assets/art/environment/rock_small.png")
+## How much debris a new farm starts with (Zheng: scattered randomly).
+const DEBRIS_COUNTS := {"weed": 70, "stone": 35, "branch": 35}
+## No debris this close (in tiles) to the farmhouse door.
+const CLEAR_AROUND_DOOR := 5
+
+var _debris_art: Dictionary = {}  # "kind:variant" -> Texture2D, built in _ready
 
 var _cursor_cell := Vector2i.MAX
 var _target_cell := Vector2i.MAX
@@ -45,7 +54,15 @@ func _ready() -> void:
 	texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS  # HD crop, soil and sprinkler art
 	EventBus.farm_changed.connect(func(_cell: Vector2i) -> void: _refresh())
 	EventBus.game_loaded.connect(_refresh)
+	for i in 4:
+		_debris_art["weed:%d" % i] = _atlas(WEED_SHEET, Vector2i(i, 0))
+		_debris_art["branch:%d" % i] = _atlas(BRANCH_SHEET, Vector2i(i, 0))
+		_debris_art["stone:%d" % i] = STONE
 	_refresh()
+	if not GameState.farm.debris_generated:
+		# Wait a physics frame so buildings and trees can be detected.
+		await get_tree().physics_frame
+		_scatter_debris()
 
 
 func _process(_delta: float) -> void:
@@ -56,7 +73,7 @@ func _process(_delta: float) -> void:
 	_target_cell = target
 	# Only highlight cells where the hoe (or seeds, water) would do something.
 	var farm := GameState.farm
-	var cell := target if farm.is_tilled(target) or farm.has_sprinkler(target) or can_till(target) else Vector2i.MAX
+	var cell := target if farm.is_tilled(target) or farm.has_sprinkler(target) or farm.debris.has(target) or can_till(target) else Vector2i.MAX
 	if cell != _cursor_cell:
 		_cursor_cell = cell
 		queue_redraw()
@@ -67,7 +84,8 @@ func world_to_cell(world_position: Vector2) -> Vector2i:
 
 
 func can_till(cell: Vector2i) -> bool:
-	if not area.has_point(cell) or GameState.farm.is_tilled(cell) or GameState.farm.has_sprinkler(cell):
+	var farm := GameState.farm
+	if not area.has_point(cell) or farm.is_tilled(cell) or farm.has_sprinkler(cell) or farm.debris.has(cell):
 		return false
 	for layer in _blocking_layers:
 		if layer.get_cell_source_id(cell) != -1:
@@ -116,6 +134,8 @@ func _use_tool(item: ItemData, cell: Vector2i) -> bool:
 			success = GameState.farm.water(cell)
 		ItemData.ToolType.CULTIVATOR:
 			success = _cultivate(cell, item.effective_range)
+		ItemData.ToolType.SCYTHE, ItemData.ToolType.AXE, ItemData.ToolType.PICKAXE:
+			success = _clear(item, cell)
 		ItemData.ToolType.SPRINKLER:
 			return _place_sprinkler(item, cell)
 	if success:
@@ -133,6 +153,51 @@ func _cultivate(cell: Vector2i, reach: int) -> bool:
 		if can_till(target) and GameState.farm.till(target):
 			tilled += 1
 	return tilled > 0
+
+
+## Clears debris with a sickle / axe (and a line of `effective_range` cells
+## for the lawn mower).
+func _clear(item: ItemData, cell: Vector2i) -> bool:
+	var player := get_tree().get_first_node_in_group("player") as Player
+	var step := Vector2i(player.facing) if player else Vector2i.DOWN
+	var cleared := 0
+	for i in item.effective_range:
+		if GameState.farm.clear_debris(cell + step * i, item.tool_type) != "":
+			cleared += 1
+	if cleared == 0 and GameState.farm.debris.has(cell):
+		var kind: String = GameState.farm.debris[cell]
+		var tool_name := "sickle" if kind == "weed" else "axe"
+		EventBus.notification_requested.emit("Use the %s on this %s" % [tool_name, kind])
+	return cleared > 0
+
+
+func _scatter_debris() -> void:
+	var farm := GameState.farm
+	var rng := RandomNumberGenerator.new()
+	rng.randomize()
+	var door := get_node_or_null("../Entities/FarmhouseDoor") as Node2D
+	var door_cell := world_to_cell(door.global_position) if door else Vector2i(-99, -99)
+	var free_cells: Array[Vector2i] = []
+	for x in range(area.position.x, area.end.x):
+		for y in range(area.position.y, area.end.y):
+			var cell := Vector2i(x, y)
+			if (cell - door_cell).length() > CLEAR_AROUND_DOOR and can_till(cell):
+				free_cells.append(cell)
+	for kind: String in DEBRIS_COUNTS:
+		for i in DEBRIS_COUNTS[kind]:
+			if free_cells.is_empty():
+				break
+			var cell: Vector2i = free_cells.pop_at(rng.randi() % free_cells.size())
+			farm.debris[cell] = kind
+	farm.debris_generated = true
+	queue_redraw()
+
+
+static func _atlas(sheet: Texture2D, cell: Vector2i) -> AtlasTexture:
+	var atlas := AtlasTexture.new()
+	atlas.atlas = sheet
+	atlas.region = Rect2(cell * 128, Vector2(128, 128))
+	return atlas
 
 
 func _place_sprinkler(item: ItemData, cell: Vector2i) -> bool:
@@ -181,6 +246,12 @@ func _draw() -> void:
 			draw_rect(rect, WET_SOIL_COLOR if tile.watered else SOIL_COLOR)
 		if tile.has_crop():
 			_draw_crop(tile, rect)
+	for cell: Vector2i in GameState.farm.debris:
+		var kind: String = GameState.farm.debris[cell]
+		var texture: Texture2D = _debris_art.get("%s:%d" % [kind, posmod(cell.x * 7 + cell.y * 3, 4)])
+		if texture:
+			var inset := 1.0 if kind == "stone" else 0.0
+			draw_texture_rect(texture, Rect2(cell * CELL_SIZE, Vector2.ONE * CELL_SIZE).grow(-inset), false)
 	for cell: Vector2i in GameState.farm.sprinklers:
 		draw_texture_rect(SPRINKLER_ICON, Rect2(cell * CELL_SIZE, Vector2.ONE * CELL_SIZE), false)
 	if _cursor_cell != Vector2i.MAX:

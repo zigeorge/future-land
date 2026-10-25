@@ -52,6 +52,12 @@ Debug builds have shortcuts that make playtesting faster:
 - [ ] Cultivator tills 4 tiles in a line; a sprinkler waters the 4 tiles around it each morning (crops grow without watering) and E picks it up
 - [ ] Fishing at the pond with the Echo Sonar Caster (from Ethan): "Waiting for a bite...", then a fish or "Nothing is biting"; better tools catch rarer fish
 - [ ] F7 then sleeping: with 100,000 g the official buys the land back (money goes down by 100,000) and "The Farm Endures" offers Keep farming; without it the screen turns red and "The Farm Is Demolished" appears
+- [ ] A new farm has weeds, stones and branches; the sickle clears weeds, the axe branches and stones, the wrong tool says which one to use; cleared ground can be tilled
+- [ ] E at the farmhouse door asks "end the day?"; No keeps the day, Yes fades to the next morning
+- [ ] Items put in the shipping bin (next to the house) are sold overnight; the morning message shows the earnings
+- [ ] The path off the west edge of the farm leads to the beach; on day 7 Jack is there, gives a fishing rod, and opens his shop on later talks; driftwood and shells can be picked up; fishing works in the sea
+- [ ] Fishing shows the rod, the bobber on a line, "!" on a bite; pressing C in time catches the fish, too early or too late loses it
+- [ ] Spring music plays (other seasons are silent for now)
 - [ ] Esc opens the pause menu; Save, then Quit to Title, then Continue restores money, inventory, farm, date, story progress, the avatar, the name, the map and the position
 - [ ] NPCs show their names (Alexander, Arthur, Marcus, Ethan) and the player's lines show the typed name
 
