@@ -57,6 +57,7 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func _show_title() -> void:
 	_close_menu()
+	AudioManager.play_season(TimeManager.season)
 	_menu = _open_menu("Future Land", true)
 	_menu.add_option(&"continue", "Continue", SaveManager.has_save())
 	_menu.add_option(&"new", "New Game")
@@ -219,6 +220,7 @@ func _save() -> void:
 
 func _load() -> void:
 	var loaded := SaveManager.load_game()
+	AudioManager.play_season(TimeManager.season)
 	EventBus.notification_requested.emit("Game loaded" if loaded else "No save file")
 
 

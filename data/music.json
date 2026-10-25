@@ -1,0 +1,9 @@
+{
+  "about": "Background music per season: tracks play one after another and loop. Only use music we may legally ship (CC0 / public-domain recordings); write the source next to each file in assets/audio/music/CREDITS.md.",
+  "seasons": {
+    "spring": ["res://assets/audio/music/spring/spring_on_the_horizon.mp3"],
+    "summer": [],
+    "autumn": [],
+    "winter": []
+  }
+}

@@ -19,11 +19,50 @@ func _ready() -> void:
 	_music = AudioStreamPlayer.new()
 	_music.bus = MUSIC_BUS
 	add_child(_music)
+	_music.finished.connect(_on_track_finished)
+	EventBus.day_started.connect(func(_d: int, season: int, _y: int) -> void: play_season(season))
 	for i in SFX_VOICES:
 		var player := AudioStreamPlayer.new()
 		player.bus = SFX_BUS
 		add_child(player)
 		_sfx_players.append(player)
+
+
+const MUSIC_LIST_PATH := "res://data/music.json"
+## Music volume (dB) on the Music bus; quiet enough to talk over.
+const MUSIC_DB := -8.0
+
+var _season_tracks: Array[AudioStream] = []
+var _season_index := 0
+var _current_season := -1
+
+
+## Starts the playlist for a season from data/music.json (silence if empty).
+func play_season(season: int) -> void:
+	if season == _current_season and _music.playing:
+		return
+	_current_season = season
+	_season_tracks.clear()
+	_season_index = 0
+	var data: Variant = JSON.parse_string(FileAccess.get_file_as_string(MUSIC_LIST_PATH))
+	var names := ["spring", "summer", "autumn", "winter"]
+	if data is Dictionary:
+		for path: String in data.get("seasons", {}).get(names[season], []):
+			var stream := load(path) as AudioStream
+			if stream:
+				_season_tracks.append(stream)
+	if _season_tracks.is_empty():
+		stop_music()
+	else:
+		play_music(_season_tracks[0])
+
+
+func _on_track_finished() -> void:
+	if _season_tracks.is_empty():
+		return
+	_season_index = (_season_index + 1) % _season_tracks.size()
+	_music.stream = _season_tracks[_season_index]
+	_music.play()
 
 
 func play_music(stream: AudioStream, fade_time := 1.0) -> void:
@@ -34,7 +73,7 @@ func play_music(stream: AudioStream, fade_time := 1.0) -> void:
 	_music.stream = stream
 	_music.volume_db = SILENT_DB
 	_music.play()
-	await _fade_music(0.0, fade_time * 0.5)
+	await _fade_music(MUSIC_DB, fade_time * 0.5)
 
 
 func stop_music(fade_time := 1.0) -> void:
