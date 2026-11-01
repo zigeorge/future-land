@@ -96,15 +96,40 @@ func can_till(cell: Vector2i) -> bool:
 	return get_world_2d().direct_space_state.intersect_point(query, 1).is_empty()
 
 
+## Why `cell` can't be tilled, as a message for the player ("" = it can).
+func till_problem(cell: Vector2i) -> String:
+	var farm := GameState.farm
+	if not area.has_point(cell):
+		return "You can't farm here"
+	if farm.is_tilled(cell):
+		return "This soil is already tilled"
+	if farm.has_sprinkler(cell):
+		return "A sprinkler is here (press E to pick it up)"
+	if farm.debris.has(cell):
+		var kind: String = farm.debris[cell]
+		return "Clear the %s first (use the %s)" % [kind, "sickle" if kind == "weed" else "axe"]
+	for layer in _blocking_layers:
+		var source := layer.get_cell_source_id(cell)
+		if source == 0:
+			return "You can't dig up the path"
+		if source != -1:
+			return "You can't till water"
+	if not can_till(cell):
+		return "Something is in the way"
+	return ""
+
+
 ## Applies the given item to a cell. Returns true if something happened.
 func use_item(item: ItemData, cell: Vector2i) -> bool:
 	if not area.has_point(cell):
+		EventBus.notification_requested.emit("You can't farm here")
 		return false
 	match item.category:
 		ItemData.Category.TOOL:
 			return _use_tool(item, cell)
 		ItemData.Category.SEED:
 			return _plant_seed(item, cell)
+	EventBus.notification_requested.emit("You can't use %s here. Ship it or sell it." % item.display_name)
 	return false
 
 
@@ -129,8 +154,19 @@ func _use_tool(item: ItemData, cell: Vector2i) -> bool:
 	var success := false
 	match item.tool_type:
 		ItemData.ToolType.HOE:
-			success = can_till(cell) and GameState.farm.till(cell)
+			var problem := till_problem(cell)
+			if problem != "":
+				EventBus.notification_requested.emit(problem)
+				return false
+			success = GameState.farm.till(cell)
 		ItemData.ToolType.WATERING_CAN:
+			var tile := GameState.farm.get_tile(cell)
+			if tile == null:
+				EventBus.notification_requested.emit("Water tilled soil: use the hoe first")
+				return false
+			if tile.watered:
+				EventBus.notification_requested.emit("Already watered today")
+				return false
 			success = GameState.farm.water(cell)
 		ItemData.ToolType.CULTIVATOR:
 			success = _cultivate(cell, item.effective_range)
@@ -152,6 +188,8 @@ func _cultivate(cell: Vector2i, reach: int) -> bool:
 		var target := cell + step * i
 		if can_till(target) and GameState.farm.till(target):
 			tilled += 1
+	if tilled == 0:
+		EventBus.notification_requested.emit(till_problem(cell))
 	return tilled > 0
 
 
@@ -168,6 +206,8 @@ func _clear(item: ItemData, cell: Vector2i) -> bool:
 		var kind: String = GameState.farm.debris[cell]
 		var tool_name := "sickle" if kind == "weed" else "axe"
 		EventBus.notification_requested.emit("Use the %s on this %s" % [tool_name, kind])
+	elif cleared == 0:
+		EventBus.notification_requested.emit("Nothing to clear here")
 	return cleared > 0
 
 
@@ -226,6 +266,13 @@ func _plant_seed(item: ItemData, cell: Vector2i) -> bool:
 		return false
 	if not crop.grows_in(TimeManager.season):
 		EventBus.notification_requested.emit("%s can't grow in %s." % [crop.display_name, TimeManager.get_season_name()])
+		return false
+	var tile := GameState.farm.get_tile(cell)
+	if tile == null:
+		EventBus.notification_requested.emit("Plant seeds in tilled soil: use the hoe first")
+		return false
+	if tile.has_crop():
+		EventBus.notification_requested.emit("Something is already planted here")
 		return false
 	if not GameState.farm.plant(cell, crop.id):
 		return false

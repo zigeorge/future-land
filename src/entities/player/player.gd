@@ -116,7 +116,11 @@ func _use_selected_item() -> void:
 		_cast(item)
 		return
 	var farm := _get_farm_grid()
-	if item == null or farm == null:
+	if item == null:
+		return
+	if farm == null:
+		var farm_item := item.category == ItemData.Category.SEED or item.tool_type != ItemData.ToolType.NONE
+		EventBus.notification_requested.emit("Use this on your farm" if farm_item else "You can't use %s here" % item.display_name)
 		return
 	farm.use_item(item, farm.world_to_cell(get_target_position()))
 

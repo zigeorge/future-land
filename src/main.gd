@@ -15,12 +15,16 @@ var _level: Level
 var _level_path := ""
 var _transitioning := false
 var _menu: GameMenu
+## F6 / F7 test shortcuts: on in debug builds, and on the web page when the
+## address ends in ?debug=1 (for testers; normal players never see them).
+var _debug_keys := false
 
 @onready var world: Node2D = $World
 @onready var fade: ColorRect = $Transition/Fade
 
 
 func _ready() -> void:
+	_debug_keys = debug_keys_enabled()
 	EventBus.level_change_requested.connect(change_level)
 	EventBus.shop_requested.connect(open_shop)
 	EventBus.ending_requested.connect(_show_ending)
@@ -42,15 +46,24 @@ func _unhandled_input(event: InputEvent) -> void:
 		_save()
 	elif event.is_action_pressed("quick_load"):
 		_load()
-	elif event.is_action_pressed("debug_next_day") and OS.is_debug_build():
+	elif event.is_action_pressed("debug_next_day") and _debug_keys:
 		TimeManager.start_next_day()
 		EventBus.notification_requested.emit("[debug] %s" % TimeManager.get_date_text())
-	elif event.is_action_pressed("debug_end_year") and OS.is_debug_build():
+	elif event.is_action_pressed("debug_end_year") and _debug_keys:
 		# Jump to the last day of the story year (sleep once more to reach the deadline).
 		GameState.set_story_flag(&"main_quest_started")
 		TimeManager.day_of_year = GameState.DEADLINE_DAYS
 		TimeManager.reset_clock()
 		EventBus.notification_requested.emit("[debug] Last day of the year. Sleep to reach the deadline.")
+
+
+static func debug_keys_enabled() -> bool:
+	if OS.is_debug_build():
+		return true
+	if OS.has_feature("web"):
+		var flag: Variant = JavaScriptBridge.eval("new URLSearchParams(window.location.search).get('debug')", true)
+		return str(flag) == "1"
+	return false
 
 
 # --- Title screen and pause menu ---------------------------------------------
@@ -209,6 +222,8 @@ func _new_game() -> void:
 	get_tree().paused = true
 	await screen.avatar_chosen
 	get_tree().paused = false
+	if _debug_keys and OS.has_feature("web"):
+		EventBus.notification_requested.emit("Test mode: F6 = next day, F7 = last day of the year")
 	await get_tree().create_timer(0.4).timeout
 	DialogueManager.start(&"opening")
 

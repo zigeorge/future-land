@@ -34,6 +34,9 @@ Debug builds have shortcuts that make playtesting faster:
 |---|---|
 | F5 / F9 | Quick save / quick load |
 | F6 | Skip to the next day (crops grow, energy refills) |
+| F7 | Jump to the last day of the year (sleep once to see an ending) |
+
+On the web page these keys work only when the address ends in `?debug=1`, e.g. `https://zigeorge.github.io/future-land/?debug=1`.
 
 ### Smoke test checklist (run before merging into `main`)
 
