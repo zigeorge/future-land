@@ -3,11 +3,22 @@ extends TestCase
 ## Test suite for economy pricing, zero-arbitrage exploit audits, and shipping bin settlement.
 ## Author: Tom (Tester)
 
+const ITEMS_DIR := "res://data/items/"
+const CROPS_DIR := "res://data/crops/"
+
+
+func _ids_in(dir: String) -> Array[StringName]:
+	var ids: Array[StringName] = []
+	for file in DirAccess.get_files_at(dir):
+		if file.ends_with(".tres"):
+			ids.append(StringName(file.get_basename()))
+	return ids
+
 
 func test_no_item_sells_for_more_than_buy_price() -> void:
-	for item_id: StringName in Registry._items:
+	for item_id: StringName in _ids_in(ITEMS_DIR):
 		var item: ItemData = Registry.get_item(item_id)
-		if item.buy_price > 0 and item.sell_price > 0:
+		if item and item.buy_price > 0 and item.sell_price > 0:
 			assert_true(
 				item.sell_price <= item.buy_price,
 				"Arbitrage exploit detected: %s sells for %d but costs %d" % [item.id, item.sell_price, item.buy_price]
@@ -29,16 +40,23 @@ func test_durable_tools_permit_full_refund() -> void:
 	for id in durable_items:
 		var item: ItemData = Registry.get_item(id)
 		assert_true(item != null, "Durable item %s must exist in Registry" % id)
-		assert_eq(item.sell_price, item.buy_price, "%s must resell at full purchase price" % id)
+		if item:
+			assert_eq(item.sell_price, item.buy_price, "%s must resell at full purchase price" % id)
 
 
 func test_all_crops_yield_positive_profit_margin() -> void:
-	for crop_id: StringName in Registry._crops:
+	for crop_id: StringName in _ids_in(CROPS_DIR):
 		var crop: CropData = Registry.get_crop(crop_id)
 		var seed_item: ItemData = Registry.get_item(StringName(String(crop_id) + "_seeds"))
-		var harvest_item: ItemData = crop.harvest_item
+		assert_true(crop != null, "Crop %s must exist" % crop_id)
 		assert_true(seed_item != null, "Seed item must exist for crop %s" % crop_id)
+		if not crop or not seed_item:
+			continue
+
+		var harvest_item: ItemData = crop.harvest_item
 		assert_true(harvest_item != null, "Harvest item must exist for crop %s" % crop_id)
+		if not harvest_item:
+			continue
 
 		var total_revenue: int = harvest_item.sell_price * crop.harvest_amount
 		var seed_cost: int = seed_item.buy_price
