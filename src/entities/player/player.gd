@@ -135,11 +135,13 @@ func _use_selected_item() -> void:
 
 func _cast(rod: ItemData) -> void:
 	var level := get_tree().current_scene.get("_level") as Node
-	# Cast two tiles out if that's water, else one.
+	# Cast two tiles out if that's water, else one. The bobber floats 2 px
+	# above the target, so that's the point that has to be water.
+	var bobber := Vector2(0, -2)
 	var target := global_position + facing * FarmGrid.CELL_SIZE * 2.0
-	if not Fishing.is_water(level, target):
+	if not Fishing.is_water(level, target + bobber):
 		target = get_target_position()
-	if not Fishing.is_water(level, target):
+	if not Fishing.is_water(level, target + bobber):
 		EventBus.notification_requested.emit("Face the water to fish")
 		AudioManager.play_ui(&"error")
 		return
@@ -151,7 +153,7 @@ func _cast(rod: ItemData) -> void:
 	AudioManager.play_tool(rod)
 	var cast := FishingCast.new()
 	add_child(cast)
-	cast.setup(rod, facing, target + Vector2(0, -2), Fishing.catch(rod.level, TimeManager.season, randf(), randf()))
+	cast.setup(rod, facing, target + bobber, Fishing.catch(rod.level, TimeManager.season, randf(), randf()))
 	var fish: ItemData = await cast.finished
 	_fishing = false
 	if fish == null:

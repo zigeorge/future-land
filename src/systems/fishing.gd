@@ -5,8 +5,11 @@ class_name Fishing
 
 ## Tile sources in a level's GroundTiles layer that are water (all tiles).
 const WATER_SOURCES: Array[int] = [1, 7]
-## Beach atlas: tile x = 0 is sand, x >= 1 shore and sea.
+## Beach atlas: tile x = 0 is sand, x = 1 shore, x >= 2 sea.
 const BEACH_SOURCE := 8
+const SHORE_TILE := 1
+## The shore tile is sand above this fraction of its height and surf below.
+const SHORE_WATER_FROM := 0.8
 ## Chance that something bites at all on a cast.
 const BITE_CHANCE := 0.8
 const ITEMS_DIR := "res://data/items/"
@@ -21,7 +24,12 @@ static func is_water(level: Node, world_position: Vector2) -> bool:
 	var cell := ground.local_to_map(ground.to_local(world_position))
 	var source := ground.get_cell_source_id(cell)
 	if source == BEACH_SOURCE:
-		return ground.get_cell_atlas_coords(cell).x >= 1
+		var x := ground.get_cell_atlas_coords(cell).x
+		if x != SHORE_TILE:
+			return x > SHORE_TILE
+		var local := ground.to_local(world_position)
+		var top := ground.map_to_local(cell).y - ground.tile_set.tile_size.y / 2.0
+		return (local.y - top) / ground.tile_set.tile_size.y >= SHORE_WATER_FROM
 	return source in WATER_SOURCES
 
 
