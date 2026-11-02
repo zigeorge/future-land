@@ -230,7 +230,7 @@ func _scatter_debris() -> void:
 	for x in range(area.position.x, area.end.x):
 		for y in range(area.position.y, area.end.y):
 			var cell := Vector2i(x, y)
-			if (cell - door_cell).length() > CLEAR_AROUND_DOOR and can_till(cell):
+			if (cell - door_cell).length() > CLEAR_AROUND_DOOR and can_till(cell) and not _touches_obstacle(cell):
 				free_cells.append(cell)
 	for kind: String in DEBRIS_COUNTS:
 		for i in DEBRIS_COUNTS[kind]:
@@ -259,6 +259,18 @@ func _sync_debris_shapes() -> void:
 			shape.position = (Vector2(cell) + Vector2(0.5, 0.5)) * CELL_SIZE
 			_debris_body.add_child(shape)
 			_debris_shapes[cell] = shape
+
+
+## True if a building, fence or tree overlaps any part of the cell (can_till
+## only checks its centre, and a fence crosses the bottom of a cell).
+func _touches_obstacle(cell: Vector2i) -> bool:
+	var rect := RectangleShape2D.new()
+	rect.size = Vector2.ONE * (CELL_SIZE - 2)
+	var query := PhysicsShapeQueryParameters2D.new()
+	query.shape = rect
+	query.transform = Transform2D(0, to_global((Vector2(cell) + Vector2(0.5, 0.5)) * CELL_SIZE))
+	query.collision_mask = OBSTACLE_MASK
+	return not get_world_2d().direct_space_state.intersect_shape(query, 1).is_empty()
 
 
 static func _atlas(sheet: Texture2D, cell: Vector2i) -> AtlasTexture:
