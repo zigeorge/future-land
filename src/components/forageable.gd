@@ -17,5 +17,6 @@ func interact(player: Node) -> void:
 		EventBus.notification_requested.emit("Backpack is full")
 		return
 	GameState.forage_taken.append(key)
+	AudioManager.play_ui(&"pickup")
 	EventBus.notification_requested.emit("Found: %s" % item.display_name)
 	get_parent().queue_free()

@@ -37,6 +37,13 @@ func _ready() -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
+	var slot := GameState.selected_hotbar_slot
+	_change_hotbar_slot(event)
+	if GameState.selected_hotbar_slot != slot:
+		AudioManager.play_ui(&"select")
+
+
+func _change_hotbar_slot(event: InputEvent) -> void:
 	if event.is_action_pressed("hotbar_next"):
 		GameState.selected_hotbar_slot += 1
 	elif event.is_action_pressed("hotbar_prev"):

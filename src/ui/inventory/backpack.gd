@@ -109,9 +109,11 @@ func _sell(all: bool) -> void:
 	var amount: int = GameState.inventory.slots[index].count if all else 1
 	if bin_open:
 		if GameState.ship_from_slot(index, amount):
+			AudioManager.play_ui(&"confirm")
 			EventBus.notification_requested.emit("Put %s x%d in the bin (%s g tomorrow morning)" % [item.display_name, amount, GameState.format_money(item.sell_price * amount)])
 	elif GameState.inventory.remove_from_slot(index, amount):
 		GameState.money += item.sell_price * amount
+		AudioManager.play_ui(&"confirm")
 		EventBus.notification_requested.emit("Sold %s x%d for %s g" % [item.display_name, amount, GameState.format_money(item.sell_price * amount)])
 	if GameState.inventory.get_item_at(index) == null:
 		grid.selected = -1

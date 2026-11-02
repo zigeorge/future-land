@@ -52,7 +52,11 @@ func _unhandled_input(event: InputEvent) -> void:
 	if DialogueManager.is_active() or _fishing:
 		return
 	if event.is_action_pressed("interact"):
-		if _interact_with_nearest() or _try_harvest():
+		# A ripe crop straight ahead comes first: the shipping bin stands next to the field.
+		if _try_harvest():
+			AudioManager.play_ui(&"pickup")
+			get_viewport().set_input_as_handled()
+		elif _interact_with_nearest():
 			get_viewport().set_input_as_handled()
 	elif event.is_action_pressed("use_tool"):
 		_use_selected_item()
@@ -121,8 +125,12 @@ func _use_selected_item() -> void:
 	if farm == null:
 		var farm_item := item.category == ItemData.Category.SEED or item.tool_type != ItemData.ToolType.NONE
 		EventBus.notification_requested.emit("Use this on your farm" if farm_item else "You can't use %s here" % item.display_name)
+		AudioManager.play_ui(&"error")
 		return
-	farm.use_item(item, farm.world_to_cell(get_target_position()))
+	if farm.use_item(item, farm.world_to_cell(get_target_position())):
+		AudioManager.play_tool(item)
+	else:
+		AudioManager.play_ui(&"error")
 
 
 func _cast(rod: ItemData) -> void:
@@ -133,12 +141,14 @@ func _cast(rod: ItemData) -> void:
 		target = get_target_position()
 	if not Fishing.is_water(level, target):
 		EventBus.notification_requested.emit("Face the water to fish")
+		AudioManager.play_ui(&"error")
 		return
 	if not GameState.spend_energy(rod.energy_cost):
 		EventBus.notification_requested.emit("Too tired...")
 		return
 	_fishing = true
 	_update_animation(false)
+	AudioManager.play_tool(rod)
 	var cast := FishingCast.new()
 	add_child(cast)
 	cast.setup(rod, facing, target + Vector2(0, -2), Fishing.catch(rod.level, TimeManager.season, randf(), randf()))
@@ -149,6 +159,7 @@ func _cast(rod: ItemData) -> void:
 	if GameState.inventory.add_item(fish, 1) > 0:
 		EventBus.notification_requested.emit("Your backpack is full, the %s got away" % fish.display_name)
 	else:
+		AudioManager.play_ui(&"pickup")
 		EventBus.notification_requested.emit("You caught a %s! (sells for %d g)" % [fish.display_name, fish.sell_price])
 
 

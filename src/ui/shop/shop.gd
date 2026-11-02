@@ -120,7 +120,7 @@ func _build_list() -> void:
 			var button := Button.new()
 			button.text = "Buy" if amount == 1 else "x5"
 			button.custom_minimum_size = Vector2(32, 0)
-			button.pressed.connect(func() -> void: buy(item, amount))
+			button.pressed.connect(func() -> void: AudioManager.play_ui(&"confirm" if buy(item, amount) else &"error"))
 			row.add_child(button)
 			buttons.append(button)
 		list.add_child(row)
