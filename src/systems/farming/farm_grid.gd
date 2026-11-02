@@ -35,8 +35,14 @@ const STONE := preload("res://assets/art/environment/rock_small.png")
 const DEBRIS_COUNTS := {"weed": 70, "stone": 35, "branch": 35}
 ## No debris this close (in tiles) to the farmhouse door.
 const CLEAR_AROUND_DOOR := 5
+## Debris the player can't walk through (weeds stay passable).
+const SOLID_DEBRIS := ["stone", "branch"]
+const SOLID_DEBRIS_SIZE := 12.0
 
 var _debris_art: Dictionary = {}  # "kind:variant" -> Texture2D, built in _ready
+## Colliders for solid debris, on the "world" layer.
+var _debris_body := StaticBody2D.new()
+var _debris_shapes: Dictionary = {}  # Vector2i -> CollisionShape2D
 
 var _cursor_cell := Vector2i.MAX
 var _target_cell := Vector2i.MAX
@@ -52,6 +58,9 @@ var _crops: Dictionary = {}
 func _ready() -> void:
 	add_to_group(GROUP)
 	texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS  # HD crop, soil and sprinkler art
+	_debris_body.collision_layer = 1
+	_debris_body.collision_mask = 0
+	add_child(_debris_body)
 	EventBus.farm_changed.connect(func(_cell: Vector2i) -> void: _refresh())
 	EventBus.game_loaded.connect(_refresh)
 	for i in 4:
@@ -230,7 +239,26 @@ func _scatter_debris() -> void:
 			var cell: Vector2i = free_cells.pop_at(rng.randi() % free_cells.size())
 			farm.debris[cell] = kind
 	farm.debris_generated = true
+	_sync_debris_shapes()
 	queue_redraw()
+
+
+## Adds or removes colliders so they match the solid debris on the farm.
+func _sync_debris_shapes() -> void:
+	var debris := GameState.farm.debris
+	for cell: Vector2i in _debris_shapes.keys():
+		if debris.get(cell, "") not in SOLID_DEBRIS:
+			_debris_shapes[cell].queue_free()
+			_debris_shapes.erase(cell)
+	for cell: Vector2i in debris:
+		if debris[cell] in SOLID_DEBRIS and not _debris_shapes.has(cell):
+			var rect := RectangleShape2D.new()
+			rect.size = Vector2.ONE * SOLID_DEBRIS_SIZE
+			var shape := CollisionShape2D.new()
+			shape.shape = rect
+			shape.position = (Vector2(cell) + Vector2(0.5, 0.5)) * CELL_SIZE
+			_debris_body.add_child(shape)
+			_debris_shapes[cell] = shape
 
 
 static func _atlas(sheet: Texture2D, cell: Vector2i) -> AtlasTexture:
@@ -277,6 +305,12 @@ func _plant_seed(item: ItemData, cell: Vector2i) -> bool:
 	if not GameState.farm.plant(cell, crop.id):
 		return false
 	GameState.inventory.remove_item(item.id, 1)
+	var next_season := (TimeManager.season + 1) % TimeManager.SEASON_NAMES.size()
+	var days_left := TimeManager.get_days_left_in_season()
+	if not crop.grows_in(next_season) and crop.get_total_days() > days_left:
+		var season_end := "tonight" if days_left == 0 else "in %d day%s" % [days_left, "" if days_left == 1 else "s"]
+		EventBus.notification_requested.emit("%s needs %d days to grow, but %s ends %s: it will wither" % [
+			crop.display_name, crop.get_total_days(), TimeManager.get_season_name(), season_end])
 	if not GameState.has_story_flag(&"first_crop_planted"):
 		GameState.set_story_flag(&"first_crop_planted")
 	return true
@@ -307,6 +341,7 @@ func _draw() -> void:
 
 func _refresh() -> void:
 	_target_cell = Vector2i.MAX  # Re-check the cursor cell.
+	_sync_debris_shapes()
 	for tile: FarmState.FarmTile in GameState.farm.tiles.values():
 		if tile.has_crop() and not _crops.has(tile.crop_id):
 			var crop := Registry.get_crop(tile.crop_id)

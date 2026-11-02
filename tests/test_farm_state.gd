@@ -38,9 +38,11 @@ func test_soil_dries_overnight() -> void:
 
 func test_out_of_season_crop_dies() -> void:
 	var farm := _planted_farm()
-	farm.advance_day(SUMMER)
+	var withered := farm.advance_day(SUMMER)
 	assert_false(farm.get_tile(CELL).has_crop())
 	assert_true(farm.is_tilled(CELL), "soil stays tilled")
+	assert_eq(withered, [Registry.get_crop(&"carrot").display_name], "reported so the player is told")
+	assert_eq(farm.advance_day(SUMMER), [], "nothing left to wither")
 
 
 func test_save_round_trip() -> void:

@@ -12,6 +12,8 @@ const FRAME := preload("res://assets/art/ui/hotbar_frame.png")
 const SELECTED_FRAME := preload("res://assets/art/ui/hotbar_frame_selected.png")
 ## Solid backing inside the frame, so the map never shows through the slot.
 const BACKING_COLOR := Color(0.07, 0.1, 0.16, 0.94)
+## Border drawn over the selected slot, so it stands out on any ground.
+const SELECTED_BORDER_COLOR := Color("ffd23f")
 
 ## Clickable slots emit `pressed`; the hotbar's slots let clicks through.
 var interactive := false:
@@ -22,6 +24,7 @@ var interactive := false:
 var _backing := ColorRect.new()
 var _icon := TextureRect.new()
 var _label := Label.new()
+var _highlight := Panel.new()
 var _selected := false
 
 
@@ -43,6 +46,14 @@ func _init() -> void:
 	_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(_icon)
 	add_child(_label)
+	var border := StyleBoxFlat.new()
+	border.draw_center = false
+	border.border_color = SELECTED_BORDER_COLOR
+	border.set_border_width_all(2)
+	border.set_expand_margin_all(3)
+	_highlight.add_theme_stylebox_override("panel", border)
+	_highlight.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(_highlight)
 	_apply_frame()
 
 
@@ -88,3 +99,4 @@ func _apply_frame() -> void:
 	style.set_content_margin_all(4)
 	texture_filter = Art.filter_for(texture, SIZE.x)
 	add_theme_stylebox_override("panel", style)
+	_highlight.visible = _selected

@@ -165,6 +165,8 @@ func _end_day() -> void:
 	var morning := "Good morning! %s" % TimeManager.get_date_text()
 	if GameState.last_shipping_income > 0:
 		morning += "  The shipping bin earned %s g." % GameState.format_money(GameState.last_shipping_income)
+	if GameState.last_withered_message != "":
+		morning += "  " + GameState.last_withered_message
 	EventBus.notification_requested.emit(morning)
 
 

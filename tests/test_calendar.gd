@@ -32,3 +32,12 @@ func test_a_day_lasts_nine_minutes() -> void:
 	var ticks := (TimeScript.DAY_END_MINUTES - TimeScript.DAY_START_MINUTES) / TimeScript.MINUTES_PER_TICK
 	assert_eq(ticks * time.seconds_per_tick, 9.0 * 60.0)
 	time.free()
+
+
+func test_days_left_in_season() -> void:
+	var time: Node = TimeScript.new()
+	var cases := {1: 90, 89: 2, 91: 0, 92: 91, 365: 0}
+	for day_of_year: int in cases:
+		time.day_of_year = day_of_year
+		assert_eq(time.get_days_left_in_season(), cases[day_of_year], "day %d" % day_of_year)
+	time.free()

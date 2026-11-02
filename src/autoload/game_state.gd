@@ -55,6 +55,8 @@ var story_flags: Dictionary = {}
 var shipping: Array = []
 ## Money the bin earned last night (shown in the morning).
 var last_shipping_income := 0
+## What withered overnight because the season changed ("" if nothing).
+var last_withered_message := ""
 ## NPC name -> friendship points, changed by dialogue.
 var relationships: Dictionary = {}
 
@@ -202,7 +204,16 @@ func _on_day_started(_day: int, season: int, _year: int) -> void:
 	_sell_shipping()
 	forage_taken.clear()
 	energy = MAX_ENERGY
-	farm.advance_day(season)
+	var withered := farm.advance_day(season)
+	last_withered_message = ""
+	if not withered.is_empty():
+		var names: Array[String] = []
+		for crop_name in withered:
+			if crop_name not in names:
+				names.append(crop_name)
+		last_withered_message = "%d crop%s withered: %s can't grow in %s." % [
+			withered.size(), "" if withered.size() == 1 else "s", ", ".join(names), TimeManager.get_season_name()]
+		EventBus.notification_requested.emit(last_withered_message)
 
 
 func get_save_data() -> Dictionary:

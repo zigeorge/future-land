@@ -69,6 +69,14 @@ func get_season_name() -> String:
 	return SEASON_NAMES[season]
 
 
+## Nights left before the next season starts (0 on a season's last day).
+func get_days_left_in_season() -> int:
+	var last_day := 0
+	for i in (season + 1) * MONTHS_PER_SEASON:
+		last_day += MONTH_DAYS[i]
+	return last_day - day_of_year
+
+
 ## Month within the season (1-3).
 func get_month_of_season() -> int:
 	return (month - 1) % MONTHS_PER_SEASON + 1

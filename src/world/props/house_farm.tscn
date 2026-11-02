@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" path="res://assets/art/environment/house_farm.png" id="tex_0"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_base"]
-size = Vector2(60, 28)
+size = Vector2(74, 34)
 
 [node name="HouseFarm" type="StaticBody2D"]
 collision_mask = 0
@@ -16,5 +16,5 @@ texture = ExtResource("tex_0")
 offset = Vector2(0, -32)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0, -22)
+position = Vector2(0, -19)
 shape = SubResource("RectangleShape2D_base")

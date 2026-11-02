@@ -147,12 +147,16 @@ func harvest(cell: Vector2i) -> CropData:
 
 ## Called once each morning: watered crops grow, out-of-season crops die,
 ## all soil dries out, then sprinklers water the soil around them.
-func advance_day(season: int) -> void:
+## Grows watered crops one day. Crops that can't grow in `season` wither;
+## returns their names (one entry per tile).
+func advance_day(season: int) -> Array[String]:
+	var withered: Array[String] = []
 	for cell: Vector2i in tiles:
 		var tile: FarmTile = tiles[cell]
 		if tile.has_crop():
 			var crop := Registry.get_crop(tile.crop_id)
 			if crop == null or not crop.grows_in(season):
+				withered.append(crop.display_name if crop else String(tile.crop_id))
 				tile.crop_id = &""
 				tile.days_grown = 0
 			elif tile.watered:
@@ -161,6 +165,7 @@ func advance_day(season: int) -> void:
 		cell_changed.emit(cell)
 	for sprinkler: Vector2i in sprinklers:
 		_water_around(sprinkler)
+	return withered
 
 
 func to_data() -> Dictionary:
