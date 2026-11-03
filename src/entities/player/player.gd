@@ -21,6 +21,8 @@ var facing := Vector2.DOWN
 var _avatar: AvatarData
 ## True while waiting for a bite; the player can't move.
 var _fishing := false
+## True while a tool is being swung; the player can't move or use another.
+var _using_tool := false
 
 @onready var sprite: AnimatedSprite2D = $Sprite
 @onready var interact_area: Area2D = $InteractArea
@@ -38,7 +40,7 @@ func _ready() -> void:
 
 func _physics_process(_delta: float) -> void:
 	var direction := Vector2.ZERO
-	if not DialogueManager.is_active() and not _fishing:
+	if not DialogueManager.is_active() and not _fishing and not _using_tool:
 		direction = Input.get_vector("move_left", "move_right", "move_up", "move_down")
 	velocity = direction * speed
 	move_and_slide()
@@ -49,7 +51,7 @@ func _physics_process(_delta: float) -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
-	if DialogueManager.is_active() or _fishing:
+	if DialogueManager.is_active() or _fishing or _using_tool:
 		return
 	if event.is_action_pressed("interact"):
 		# A ripe crop straight ahead comes first: the shipping bin stands next to the field.
@@ -127,10 +129,37 @@ func _use_selected_item() -> void:
 		EventBus.notification_requested.emit("Use this on your farm" if farm_item else "You can't use %s here" % item.display_name)
 		AudioManager.play_ui(&"error")
 		return
-	if farm.use_item(item, farm.world_to_cell(get_target_position())):
+	var cell := farm.world_to_cell(get_target_position())
+	if item.category != ItemData.Category.TOOL or item.tool_type == ItemData.ToolType.SPRINKLER:
+		# Seeds and sprinklers: no swing; seeds are tossed onto the tile.
+		if farm.use_item(item, cell):
+			AudioManager.play_tool(item)
+			if item.category == ItemData.Category.SEED:
+				_show_tool_action(item, farm, cell)
+		else:
+			AudioManager.play_ui(&"error")
+		return
+	# Tools: the swing plays even if nothing is there; the tile changes when it lands.
+	_using_tool = true
+	_update_animation(false)
+	var debris_kind: String = GameState.farm.debris.get(cell, "")
+	var action := _show_tool_action(item, farm, cell)
+	await action.hit
+	if farm.use_item(item, cell):
 		AudioManager.play_tool(item)
+		action.burst(ToolAction.bit_color(item, debris_kind))
 	else:
 		AudioManager.play_ui(&"error")
+	await action.finished
+	_using_tool = false
+
+
+func _show_tool_action(item: ItemData, farm: FarmGrid, cell: Vector2i) -> ToolAction:
+	var action := ToolAction.new()
+	add_child(action)
+	var tile_center := farm.to_global((Vector2(cell) + Vector2(0.5, 0.5)) * FarmGrid.CELL_SIZE)
+	action.play(item, facing, tile_center - global_position)
+	return action
 
 
 func _cast(rod: ItemData) -> void:
