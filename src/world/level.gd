@@ -13,6 +13,7 @@ extends Node2D
 
 
 func _ready() -> void:
+	SeasonLook.apply_to(self)
 	if music:
 		AudioManager.play_music(music)
 

@@ -52,6 +52,12 @@ func _process(delta: float) -> void:
 		_tick()
 
 
+## Minutes since midnight including the part of the current tick, for
+## smooth changes like the light (minutes itself steps every tick).
+func get_exact_minutes() -> float:
+	return minutes + MINUTES_PER_TICK * _accumulator / seconds_per_tick
+
+
 func get_hour() -> int:
 	return (minutes / 60) % 24
 

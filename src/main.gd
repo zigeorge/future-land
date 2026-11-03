@@ -31,6 +31,7 @@ func _ready() -> void:
 	EventBus.end_day_requested.connect(_end_day)
 	EventBus.day_started.connect(func(_d: int, _s: int, _y: int) -> void: _check_deadline())
 	SaveManager.register("world", self)
+	add_child(Daylight.new())
 	_load_level(start_level, &"")
 	_show_title()
 
