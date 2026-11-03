@@ -59,7 +59,7 @@ func focus_first() -> void:
 
 func _unhandled_input(event: InputEvent) -> void:
 	var focused := get_viewport().gui_get_focus_owner() as Button
-	if focused == null:
+	if focused == null or not is_visible_in_tree() or not buttons_box.is_ancestor_of(focused):
 		return
 	if event.is_action_pressed("move_down"):
 		_move_focus(focused, 1)

@@ -4,8 +4,6 @@ extends Control
 ## right side, Animal Crossing style.
 ## Restyle freely in dialogue_box.tscn; keep the %UniqueName nodes.
 
-const CHARACTERS_PER_SECOND := 40.0
-
 var _typing_tween: Tween
 var _pending_choices: Array[String] = []
 ## Highlighted choice. Tracked here rather than read from GUI focus, because
@@ -52,8 +50,12 @@ func _on_line_shown(speaker: String, text: String) -> void:
 	show()
 	if _typing_tween:
 		_typing_tween.kill()
+	var speed := Settings.characters_per_second()
+	if speed <= 0.0:
+		_finish_typing()
+		return
 	_typing_tween = create_tween()
-	_typing_tween.tween_property(text_label, "visible_ratio", 1.0, text.length() / CHARACTERS_PER_SECOND)
+	_typing_tween.tween_property(text_label, "visible_ratio", 1.0, text.length() / speed)
 	_typing_tween.finished.connect(_show_pending_choices)
 
 
@@ -128,6 +130,7 @@ func _is_typing() -> bool:
 
 
 func _finish_typing() -> void:
-	_typing_tween.kill()
+	if _typing_tween:
+		_typing_tween.kill()
 	text_label.visible_ratio = 1.0
 	_show_pending_choices()

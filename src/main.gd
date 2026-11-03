@@ -74,8 +74,8 @@ func _show_title() -> void:
 	_menu = _open_menu("Future Land", true)
 	_menu.add_option(&"continue", "Continue", SaveManager.has_save())
 	_menu.add_option(&"new", "New Game")
-	_menu.focus_first()
-	match await _menu.chosen:
+	_menu.add_option(&"settings", "Settings")
+	match await _choose():
 		&"continue":
 			_close_menu()
 			_load()
@@ -89,9 +89,9 @@ func _show_pause_menu() -> void:
 	_menu.add_option(&"resume", "Resume")
 	_menu.add_option(&"save", "Save Game")
 	_menu.add_option(&"load", "Load Game", SaveManager.has_save())
+	_menu.add_option(&"settings", "Settings")
 	_menu.add_option(&"title", "Quit to Title")
-	_menu.focus_first()
-	match await _menu.chosen:
+	match await _choose():
 		&"resume":
 			_close_menu()
 		&"save":
@@ -102,6 +102,21 @@ func _show_pause_menu() -> void:
 			_load()
 		&"title":
 			_show_title()
+
+
+## Waits for a choice in the open menu; Settings opens over it and returns to it.
+func _choose() -> StringName:
+	while true:
+		_menu.focus_first()
+		var id: StringName = await _menu.chosen
+		if id != &"settings":
+			return id
+		var settings := SettingsMenu.new()
+		_menu.hide()
+		$UI.add_child(settings)
+		await settings.closed
+		_menu.show()
+	return &""
 
 
 ## Opens a shop (after its owner's greeting) and pauses the game until it is closed.

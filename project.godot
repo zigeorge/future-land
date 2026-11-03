@@ -30,6 +30,7 @@ TimeManager="*res://src/autoload/time_manager.gd"
 GameState="*res://src/autoload/game_state.gd"
 DialogueManager="*res://src/autoload/dialogue_manager.gd"
 AudioManager="*res://src/autoload/audio_manager.gd"
+Settings="*res://src/autoload/settings.gd"
 SaveManager="*res://src/autoload/save_manager.gd"
 
 [display]

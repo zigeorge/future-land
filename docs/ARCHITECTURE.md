@@ -16,6 +16,7 @@ flowchart TD
         GS[GameState<br/>money, energy, inventory,<br/>farm, story flags]
         DM[DialogueManager]
         AM[AudioManager]
+        ST[Settings<br/>volume, text speed]
         SM[SaveManager]
     end
 
@@ -77,6 +78,7 @@ Each item or crop is a `.tres` resource whose **file name is its id** (`data/ite
 | `GameState` | Money, energy, inventory, farm, story flags; new game setup |
 | `DialogueManager` | Loads `data/dialogue/<id>.json`, steps through lines, sets story flags |
 | `AudioManager` | `play_music()` with crossfade, `play_sfx()`, bus volumes |
+| `Settings` | music and sound volume, text speed, fullscreen; kept in `user://settings.cfg`, separate from the save so New Game and Load never change them |
 | `SaveManager` | JSON save in `user://savegame.json`; calls `get_save_data()` / `load_save_data()` on saved systems |
 
 Order matters: `EventBus` must stay first because the others use it in `_ready()`.
@@ -101,7 +103,7 @@ The calendar has 365 days a year: 4 seasons of 3 months (`TimeManager.MONTH_DAYS
 
 The story follows `docs/Game story.docx` and the dialogue spreadsheet (repo-level `docs/`):
 
-1. **Start:** the title screen offers *Continue* (when `user://savegame.json` exists) and *New Game*. A new game opens the avatar selection screen (`src/ui/avatar_select/`): pick one of the four looks in `data/avatars/`, then type a name (`GameState.player_name`). Esc opens the pause menu (save, load, quit to title). Saves include the current map and position (`main.gd` registers with `SaveManager`).
+1. **Start:** the title screen offers *Continue* (when `user://savegame.json` exists) and *New Game*. A new game opens the avatar selection screen (`src/ui/avatar_select/`): pick one of the four looks in `data/avatars/`, then type a name (`GameState.player_name`). Esc opens the pause menu (save, load, settings, quit to title); the title screen also has Settings. Saves include the current map and position (`main.gd` registers with `SaveManager`).
 2. **Day 2, farm:** the Government Official waits at the farmhouse door and starts `land_requisition_notice` by himself. It sets `main_quest_started` and `buyback_goal_unlocked`, so the HUD shows the days left and the buy-back price (`GameState.DEADLINE_DAYS`, `GameState.BUYBACK_PRICE`). Then he leaves.
 3. **Village:** the Village Chief and the Merchant have one-time introductions. Afterwards the Merchant's (and later the Inventor's) repeat greeting ends with `open_shop`, and `EventBus.shop_requested` opens the shop screen (`src/ui/shop/`): buy the items `data/shops.json` lists for that shop (seeds only in their season), or open the backpack to sell.
 4. **Day 4, farm:** the Inventor visits and proposes the deal (`inventor_deal_accepted`). Afterwards he is found at his workshop in the village.
@@ -185,4 +187,4 @@ See `assets/ASSET_CHECKLIST.md` for the art status.
 
 ## Planned next systems
 
-From the story and design documents: shipping bin and nightly sales, shop and selling (Merchant), inventor upgrades and the items in `docs/Future_Land_Item_List.xlsx` (sickle, axe, cultivator, lawn mower, sprinkler, chainsaw), clearing weeds/stones/branches, farmhouse interior, Western Beach with fishing, notice board, the two endings at the deadline, seasonal music and weather. Also: inventory screen, pause and settings menu, main menu with save slots.
+From the story and design documents: shipping bin and nightly sales, shop and selling (Merchant), inventor upgrades and the items in `docs/Future_Land_Item_List.xlsx` (sickle, axe, cultivator, lawn mower, sprinkler, chainsaw), clearing weeds/stones/branches, farmhouse interior, Western Beach with fishing, notice board, the two endings at the deadline, seasonal music and weather. Also: inventory screen, main menu with save slots.

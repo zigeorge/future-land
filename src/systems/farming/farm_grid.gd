@@ -19,6 +19,11 @@ const SOIL_COLOR := Color("6b4a2b")
 const WET_SOIL_COLOR := Color("3f2a19")
 const CROP_COLOR := Color("7bd389")
 const READY_COLOR := Color("ffb703")
+## The sparkle over a ripe crop: a shape, not just a colour, so it reads for
+## colour-blind players too. Pulses once per PULSE_SECONDS.
+const SPARKLE_SIZE := 3.5
+const SPARKLE_OUTLINE := Color(0.25, 0.12, 0.0, 0.8)
+const PULSE_SECONDS := 1.2
 const CURSOR_COLOR := Color(1, 1, 1, 0.6)
 
 ## Cells where farming is allowed, relative to this node's position.
@@ -45,6 +50,7 @@ var _debris_body := StaticBody2D.new()
 var _debris_shapes: Dictionary = {}  # Vector2i -> CollisionShape2D
 
 var _cursor_cell := Vector2i.MAX
+var _has_ripe_crop := false
 var _target_cell := Vector2i.MAX
 ## crop id -> CropData, loaded outside _draw(): a texture loaded for the first
 ## time inside _draw() renders as a white box.
@@ -75,6 +81,8 @@ func _ready() -> void:
 
 
 func _process(_delta: float) -> void:
+	if _has_ripe_crop:
+		queue_redraw()  # animate the sparkles
 	var player := get_tree().get_first_node_in_group("player") as Player
 	var target := world_to_cell(player.get_target_position()) if player else Vector2i.MAX
 	if target == _target_cell:
@@ -329,6 +337,7 @@ func _plant_seed(item: ItemData, cell: Vector2i) -> bool:
 
 
 func _draw() -> void:
+	_has_ripe_crop = false
 	for cell: Vector2i in GameState.farm.tiles:
 		var tile: FarmState.FarmTile = GameState.farm.tiles[cell]
 		var rect := Rect2(cell * CELL_SIZE, Vector2.ONE * CELL_SIZE)
@@ -369,12 +378,30 @@ func _draw_crop(tile: FarmState.FarmTile, rect: Rect2) -> void:
 		return
 	var stage := crop.get_stage(tile.days_grown)
 	var texture := crop.get_stage_texture(stage)
+	if crop.is_ready(tile.days_grown):
+		_has_ripe_crop = true
 	if texture:
 		draw_texture_rect(texture, rect, false)
+		if crop.is_ready(tile.days_grown):
+			_draw_sparkle(rect.position + Vector2(rect.size.x - 3.0, 2.0))
 		return
 	var final_stage := crop.days_per_stage.size()
 	var radius := lerpf(2.0, CELL_SIZE * 0.4, float(stage) / final_stage)
 	draw_circle(rect.get_center(), radius, READY_COLOR if stage == final_stage else CROP_COLOR)
+
+
+## A four-point star that grows and shrinks a little.
+func _draw_sparkle(center: Vector2) -> void:
+	var pulse := 0.5 + 0.5 * sin(Time.get_ticks_msec() / 1000.0 * TAU / PULSE_SECONDS)
+	var r := SPARKLE_SIZE * lerpf(0.75, 1.0, pulse)
+	var points := PackedVector2Array()
+	for i in 8:
+		var angle := i * PI / 4.0 - PI / 2.0
+		points.append(center + Vector2.from_angle(angle) * (r if i % 2 == 0 else r * 0.3))
+	var outline := PackedVector2Array(points)
+	outline.append(points[0])
+	draw_polyline(outline, SPARKLE_OUTLINE, 1.2, true)
+	draw_colored_polygon(points, READY_COLOR.lerp(Color.WHITE, 0.4 * pulse))
 
 
 func _find_layers(paths: Array) -> Array[TileMapLayer]:
